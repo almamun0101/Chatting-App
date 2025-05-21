@@ -4,13 +4,16 @@ import { MdMarkEmailUnread } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 
 const SignUp = () => {
+    const 
+
+
   return (
     <div className="min-h-screen flex justify-center items-center relative overflow-hidden bg-black text-white font-sans">
       {/* Background Image with Dark Tech Feel */}
       <img
         src="https://wallpaperaccess.com/full/5651980.jpg"
         alt="Tech Background"
-        className="absolute inset-0 w-full h-full object-cover opacity-30"
+        className="absolute inset-0 w-full h-full object-cover opacity-40"
       />
 
       {/* Dark Glass Overlay */}

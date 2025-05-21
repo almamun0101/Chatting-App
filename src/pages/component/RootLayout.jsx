@@ -9,10 +9,12 @@ const RootLayout = () => {
     <div className=''>
         <div className="flex gap-2">
             <div className="border-r-2 border-gray-300 my-2 pr-2">
-
             <Sidebar/>
             </div>
+            <div className="border-2 border-gray-300 w-full m-6 rounded-xl">
+
             <Outlet/>
+            </div>
 
         </div>
     </div>
