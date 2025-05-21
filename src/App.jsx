@@ -1,13 +1,31 @@
-import React from 'react'
-import Home from './pages/Home'
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router";
+
+import Home from "./pages/Home";
+import RootLayout from "./pages/component/RootLayout";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      Component: RootLayout,
+      children: [
+        { index: true, Component: Home },
+        
+      ],
+    },
+    {
+      path:"*",
+      element: <NotFound/> ,
+    }
+  ]);
+
   return (
     <div>
-      <Home/>
-      {/* <img class="j2x7_17hqRVmwte_tWFa RV8RoaI_SlEMC5CEQ3ms s39ClfdnICIuO9QZ5YG_" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg" alt="illustration"></img> */}
-    </div>
-  )
-}
+      <RouterProvider router={router}/>
+       </div>
+  );
+};
 
-export default App
+export default App;
