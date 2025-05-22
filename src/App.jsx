@@ -25,30 +25,8 @@ const App = () => {
       Component: RootLayout,
       children: [{ index: true, Component: Home }],
     },
-    {
-      path: "/addfriend",
-      element: <AddFriend />,
-    },
-    {
-      path: "/messages",
-      element: <Messages />,
-    },
-    {
-      path: "/notification",
-      element: <Notifications />,
-    },
-    {
-      path: "/friendlist",
-      element: <FriendsList />,
-    },
-    {
-      path: "/setting",
-      element: <Setting />,
-    },
-    {
-      path: "/setting",
-      element: <Setting />,
-    },
+   
+   
     {
       path: "/signup",
       element: <SignUp/>,

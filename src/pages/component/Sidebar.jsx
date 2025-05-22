@@ -9,17 +9,18 @@ import {
   Settings,
   UserPlus,
 } from "lucide-react";
+import { Link } from "react-router";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const options = [
-    { name: "Home", href: "#", icon: <Home/> },
-    { name: "Messages", href: "#", icon: <MessageSquare/> },
-    { name: "Users", href: "#", icon: <Users/> },
-    { name: "Notifications", href: "#", icon: <Bell /> },
-    { name: "Friends", href: "#", icon: <UserPlus/> },
-    { name: "Settings", href: "#", icon: <Settings/> },
+    { name: "Home", to: "//addfriend", icon: <Home/> },
+    { name: "Messages", to: "#", icon: <MessageSquare/> },
+    { name: "Users", to: "/friendlist", icon: <Users/> },
+    { name: "Notifications", to: "/notification", icon: <Bell /> },
+    { name: "Friends", to: "/addfriend", icon: <UserPlus/> },
+    { name: "Settings", to: "#", icon: <Settings/> },
   ];
 
   return (
@@ -46,14 +47,15 @@ const Sidebar = () => {
 
         <nav className="space-y-2 overflow-y-auto max-h-[90vh]">
           {options.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
+              to={item.to}
+
               className="flex items-center gap-4  px-16 py-8 rounded-tl-xl rounded-bl-xl  hover:bg-white hover:text-[#5f36f5] duration-200 "
             >
               {item.icon}
               <span></span>
-            </a>
+            </Link>
           ))}
         </nav>
       </div>
