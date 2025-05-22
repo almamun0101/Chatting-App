@@ -15,21 +15,45 @@ import SignUp from "./pages/SignUp";
 const App = () => {
   const router = createBrowserRouter([
     {
-      path:"/",
-      element:<SignIn/>
+      path: "/",
+      Component: RootLayout,
+      children: [{ index: true, Component: Home },
+        {
+          path:"/messages",
+          element:<Messages/>
+
+        },
+        {
+          path:"/friendlist",
+          element:<FriendsList/>
+
+        },
+        {
+          path:"/notifications",
+          element:<Notifications/>
+
+        },
+        {
+          path:"/addfriend",
+          element:<AddFriend/>
+
+        },
+        {
+          path:"/setting",
+          element:<Setting/>
+
+        },
+      ],
     },
-   
+    {
+      path: "/signin",
+      element: <SignIn />,
+    },
+
 
     {
-      path: "/home",
-      Component: RootLayout,
-      children: [{ index: true, Component: Home }],
-    },
-   
-   
-    {
       path: "/signup",
-      element: <SignUp/>,
+      element: <SignUp />,
     },
     {
       path: "*",
@@ -40,7 +64,7 @@ const App = () => {
   return (
     <div>
       <RouterProvider router={router} />
-        {/* <SignUp/> */}
+      {/* <SignUp/> */}
       {/* <SignIn/> */}
     </div>
   );

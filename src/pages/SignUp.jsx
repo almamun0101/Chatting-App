@@ -10,7 +10,7 @@ import {
   updateProfile,
   sendEmailVerification,
 } from "firebase/auth";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 
 const SignUp = () => {
@@ -183,9 +183,9 @@ const SignUp = () => {
           {/* Log In Link */}
           <p className="text-center mt-5 text-sm text-gray-400">
             Already have an account?{" "}
-            <a href="#" className="text-cyan-400 hover:underline font-medium">
+            <Link to="/signin" className="text-cyan-400 hover:underline font-medium">
               Log In
-            </a>
+            </Link>
           </p>
         </form>
       </div>

@@ -42,7 +42,7 @@ const SignIn = () => {
         const user = userCredential.user;
         console.log("Logged in user:", user);
         toast.success("Login successful!");
-        nevigate('/home')
+        nevigate('/desh')
       })
       .catch((error) => {
         console.error("Login error:", error.message);

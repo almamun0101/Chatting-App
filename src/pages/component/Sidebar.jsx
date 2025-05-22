@@ -15,12 +15,12 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const options = [
-    { name: "Home", to: "//addfriend", icon: <Home/> },
-    { name: "Messages", to: "#", icon: <MessageSquare/> },
+    { name: "Home", to: "/addfriend", icon: <Home/> },
+    { name: "Messages", to: "/messages", icon: <MessageSquare/> },
     { name: "Users", to: "/friendlist", icon: <Users/> },
-    { name: "Notifications", to: "/notification", icon: <Bell /> },
+    { name: "Notifications", to: "/notifications", icon: <Bell /> },
     { name: "Friends", to: "/addfriend", icon: <UserPlus/> },
-    { name: "Settings", to: "#", icon: <Settings/> },
+    { name: "Settings", to: "/setting", icon: <Settings/> },
   ];
 
   return (
