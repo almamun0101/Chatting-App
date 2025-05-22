@@ -9,12 +9,19 @@ import Messages from "./pages/component/Messages";
 import Notifications from "./pages/component/Notifications";
 import FriendsList from "./pages/component/FriendsList";
 import Setting from "./pages/component/Setting";
+import SignIn from "./pages/SingIn";
 import SignUp from "./pages/SignUp";
 
 const App = () => {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path:"/",
+      element:<SignIn/>
+    },
+   
+
+    {
+      path: "/home",
       Component: RootLayout,
       children: [{ index: true, Component: Home }],
     },
@@ -43,6 +50,10 @@ const App = () => {
       element: <Setting />,
     },
     {
+      path: "/signup",
+      element: <SignUp/>,
+    },
+    {
       path: "*",
       element: <NotFound />,
     },
@@ -50,9 +61,9 @@ const App = () => {
 
   return (
     <div>
-      {/* <RouterProvider router={router} /> */}
-
-      <SignUp/>
+      <RouterProvider router={router} />
+        {/* <SignUp/> */}
+      {/* <SignIn/> */}
     </div>
   );
 };

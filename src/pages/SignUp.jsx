@@ -3,18 +3,24 @@ import { CiUser } from "react-icons/ci";
 import { MdMarkEmailUnread } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import toast, { Toaster } from "react-hot-toast";
-import { getAuth, createUserWithEmailAndPassword ,sendEmailVerification  } from "firebase/auth";
-import firebaseConfig from "../../firebase.config";
+import { app, auth } from "../../firebase.config";
+
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+} from "firebase/auth";
+import { useNavigate } from "react-router";
+
 
 const SignUp = () => {
-  const auth = getAuth();
-
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
     password: "",
   });
-
+  
+  const navigate = useNavigate();
   const handleName = (e) => {
     setUserInfo((pre) => {
       return { ...pre, name: e.target.value };
@@ -42,10 +48,30 @@ const SignUp = () => {
     } else {
       createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
         .then((userCredential) => {
-          // Signed up
-          const user = userCredential.user;
-          // ...
-          console.log(user)
+          sendEmailVerification(auth.currentUser)
+            .then(() => {
+              updateProfile(auth.currentUser, {
+                displayName: userInfo.name,
+                photoURL: "https://example.com/jane-q-user/profile.jpg",
+              })
+                .then(() => {
+                  // Profile updated!
+                  // ...
+                  navigate('/')
+                  toast.success("Check Your mail for verification")
+                })
+                .catch((error) => {
+                  // An error occurred
+                  // ...
+                  console.log(error)
+                });
+
+              const user = userCredential.user;
+              console.log(user);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         })
         .catch((error) => {
           const errorCode = error.code;
