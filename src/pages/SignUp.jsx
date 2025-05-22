@@ -1,11 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { MdMarkEmailUnread } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
+import toast, { Toaster } from "react-hot-toast";
+import { getAuth, createUserWithEmailAndPassword ,sendEmailVerification  } from "firebase/auth";
+import firebaseConfig from "../../firebase.config";
 
 const SignUp = () => {
-    const 
+  const auth = getAuth();
 
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleName = (e) => {
+    setUserInfo((pre) => {
+      return { ...pre, name: e.target.value };
+    });
+  };
+  const handleEmail = (e) => {
+    setUserInfo((pre) => {
+      return { ...pre, email: e.target.value };
+    });
+  };
+  const handlePasword = (e) => {
+    setUserInfo((pre) => {
+      return { ...pre, password: e.target.value };
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!userInfo.name || !userInfo.email || !userInfo.password) {
+      toast.error("Fill All Information");
+    } else if (
+      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userInfo.email)
+    ) {
+      toast.error("Vaild Email");
+    } else {
+      createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          // ...
+          console.log(user)
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+          console.log(errorMessage);
+        });
+      // console.log(userInfo);
+    }
+  };
 
   return (
     <div className="min-h-screen flex justify-center items-center relative overflow-hidden bg-black text-white font-sans">
@@ -15,7 +65,7 @@ const SignUp = () => {
         alt="Tech Background"
         className="absolute inset-0 w-full h-full object-cover opacity-40"
       />
-
+      <Toaster position="top-center" reverseOrder={false} />
       {/* Dark Glass Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f0f]/70 via-[#1a1a1a]/60 to-[#0f0f0f]/70 backdrop-blur-md"></div>
 
@@ -35,10 +85,13 @@ const SignUp = () => {
           Create AI Account
         </h2>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           {/* Full Name */}
           <div className="mb-5">
-            <label htmlFor="name" className="block text-gray-300 font-medium mb-1">
+            <label
+              htmlFor="name"
+              className="block text-gray-300 font-medium mb-1"
+            >
               Full Name
             </label>
             <div className="flex items-center gap-3 px-4 py-2 border border-gray-600 rounded-xl focus-within:ring-2 focus-within:ring-cyan-500 bg-black/50">
@@ -46,6 +99,7 @@ const SignUp = () => {
               <input
                 type="text"
                 id="name"
+                onChange={handleName}
                 placeholder="Your Name"
                 className="outline-none bg-transparent text-white w-full placeholder-gray-500"
               />
@@ -54,7 +108,10 @@ const SignUp = () => {
 
           {/* Email */}
           <div className="mb-5">
-            <label htmlFor="email" className="block text-gray-300 font-medium mb-1">
+            <label
+              htmlFor="email"
+              className="block text-gray-300 font-medium mb-1"
+            >
               Email
             </label>
             <div className="flex items-center gap-3 px-4 py-2 border border-gray-600 rounded-xl focus-within:ring-2 focus-within:ring-cyan-500 bg-black/50">
@@ -62,6 +119,7 @@ const SignUp = () => {
               <input
                 type="email"
                 id="email"
+                onChange={handleEmail}
                 placeholder="example@email.com"
                 className="outline-none bg-transparent text-white w-full placeholder-gray-500"
               />
@@ -70,7 +128,10 @@ const SignUp = () => {
 
           {/* Password */}
           <div className="mb-6">
-            <label htmlFor="password" className="block text-gray-300 font-medium mb-1">
+            <label
+              htmlFor="password"
+              className="block text-gray-300 font-medium mb-1"
+            >
               Password
             </label>
             <div className="flex items-center gap-3 px-4 py-2 border border-gray-600 rounded-xl focus-within:ring-2 focus-within:ring-cyan-500 bg-black/50">
@@ -78,6 +139,7 @@ const SignUp = () => {
               <input
                 type="password"
                 id="password"
+                onChange={handlePasword}
                 placeholder="••••••••"
                 className="outline-none bg-transparent text-white w-full placeholder-gray-500"
               />
