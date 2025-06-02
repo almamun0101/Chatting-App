@@ -1,8 +1,10 @@
 import React from "react";
 import SignUp from "./SignUp";
 import Sidebar from "./component/Sidebar";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+ 
   return (
     <div>
       <div className="">
