@@ -5,8 +5,11 @@ import toast, { Toaster } from "react-hot-toast";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.config";
 import { Link, useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { userLoginInfo } from "../slices/userslice";
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const nevigate = useNavigate();
   const [loginInfo, setLoginInfo] = useState({
     email: "",
@@ -29,7 +32,6 @@ const SignIn = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
     const { email, password } = loginInfo;
 
     if (!email || !password) {
@@ -40,9 +42,13 @@ const SignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log("Logged in user:", user);
-        toast.success("Login successful!");
-        nevigate('/desh')
+        if(user.emailVerified){
+          dispatch(userLoginInfo(user))
+          nevigate("/");
+        }
+        else{
+          toast.error("Please verify Your Mail From your email");
+        }
       })
       .catch((error) => {
         console.error("Login error:", error.message);
@@ -59,7 +65,6 @@ const SignIn = () => {
       />
       <Toaster position="top-center" reverseOrder={false} />
       <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f0f]/70 via-[#1a1a1a]/60 to-[#0f0f0f]/70 backdrop-blur-md"></div>
-
       <div className="relative z-10 rounded-2xl shadow-2xl bg-[#111111]/80 p-10 max-w-md w-full border border-gray-700">
         <div className="w-20 h-20 mx-auto -mt-20 mb-4">
           <img
@@ -74,7 +79,6 @@ const SignIn = () => {
         </h2>
 
         <form onSubmit={handleLogin}>
-          {/* Email */}
           <div className="mb-5">
             <label
               htmlFor="email"
@@ -123,8 +127,12 @@ const SignIn = () => {
 
           <p className="text-center mt-5 text-sm text-gray-400">
             Don't have an account?{" "}
-          
-            <Link className="text-cyan-400 hover:underline font-medium" to="/signup">Register Here</Link>
+            <Link
+              className="text-cyan-400 hover:underline font-medium"
+              to="/signup"
+            >
+              Register Here
+            </Link>
           </p>
         </form>
       </div>

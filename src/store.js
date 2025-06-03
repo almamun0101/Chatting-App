@@ -3,6 +3,6 @@ import  userSlice  from "./slices/userslice";
 
 export default configureStore({
   reducer: {
-    userLoginInfo: userSlice,
+    userLogin: userSlice,
   },
 });

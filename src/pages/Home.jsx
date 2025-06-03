@@ -4,6 +4,8 @@ import Sidebar from "./component/Sidebar";
 import { useSelector } from "react-redux";
 
 const Home = () => {
+  const data =  useSelector((state)=>(state.userLogin.value))
+  console.log(data)
  
   return (
     <div>

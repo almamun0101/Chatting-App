@@ -15,7 +15,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const options = [
-    { name: "Home", to: "/addfriend", icon: <Home/> },
+    { name: "Home", to: "/", icon: <Home/> },
     { name: "Messages", to: "/messages", icon: <MessageSquare/> },
     { name: "Users", to: "/friendlist", icon: <Users/> },
     { name: "Notifications", to: "/notifications", icon: <Bell /> },

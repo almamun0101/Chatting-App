@@ -57,7 +57,7 @@ const SignUp = () => {
                 .then(() => {
                   // Profile updated!
                   // ...
-                  navigate('/')
+                  navigate('/signin')
                   toast.success("Check Your mail for verification")
                 })
                 .catch((error) => {
