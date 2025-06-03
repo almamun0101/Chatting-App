@@ -5,14 +5,14 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   const data =  useSelector((state)=>(state.userLogin.value))
-  console.log(data)
+ 
  
   return (
     <div>
       <div className="">
         {/* Main content */}
         <div className="p-6">
-          <h1 className="text-3xl font-bold mb-4">Welcome to ChatApp</h1>
+          <h1 className="text-3xl font-bold mb-4">Welcome to {data.displayName}</h1>
           <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
             <p>Select an option from the sidebar to get started.</p>
           </div>
