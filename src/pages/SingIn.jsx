@@ -44,6 +44,7 @@ const SignIn = () => {
         const user = userCredential.user;
         if(user.emailVerified){
           dispatch(userLoginInfo(user))
+          localStorage.setItem("login", JSON.stringify(user))
           nevigate("/");
         }
         else{
