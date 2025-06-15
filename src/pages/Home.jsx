@@ -2,10 +2,13 @@ import React from "react";
 import SignUp from "./SignUp";
 import Sidebar from "./component/Sidebar";
 import { useSelector } from "react-redux";
+import { getAuth } from "firebase/auth";
 
 const Home = () => {
   const data =  useSelector((state)=>(state.userLogin.value))
- 
+  const auth =  getAuth();
+
+  console.log(auth)
  
   return (
     <div>

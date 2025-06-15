@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MdMarkEmailUnread } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import toast, { Toaster } from "react-hot-toast";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.config";
 import { Link, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,8 @@ import { userLoginInfo } from "../slices/userslice";
 const SignIn = () => {
   const dispatch = useDispatch();
   const nevigate = useNavigate();
+  const auth = getAuth();
+  console.log(auth)
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
