@@ -1,11 +1,22 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { Navigate, useNavigate } from 'react-router'
 
 const Setting = () => {
-   const data = useSelector((state)=>(state));
-  console.log(data);
+  const navigate = useNavigate();
+
+  const handleLogOut = ()=>{
+    navigate('/signup')
+    
+  }
+
   return (
-    <div>Setting</div>
+    <div>
+      <div className="">
+        <button onClick={handleLogOut}>
+          Logout
+        </button>
+      </div>
+    </div>
   )
 }
 

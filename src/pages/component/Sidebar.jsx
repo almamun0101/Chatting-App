@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Menu,
   X,
@@ -12,15 +12,19 @@ import {
 import { Link } from "react-router";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isPage, setIsPage] = useState(1);
+
+ const handlePage=(page)=>{
+ setIsPage(page);
+ }
 
   const options = [
-    { name: "Home", to: "/", icon: <Home/> },
-    { name: "Messages", to: "/messages", icon: <MessageSquare/> },
-    { name: "Users", to: "/friendlist", icon: <Users/> },
-    { name: "Notifications", to: "/notifications", icon: <Bell /> },
-    { name: "Friends", to: "/addfriend", icon: <UserPlus/> },
-    { name: "Settings", to: "/setting", icon: <Settings/> },
+    { name: "Home", value:"1", to: "/", icon: <Home/> },
+    { name: "Messages",value:"2", to: "/messages", icon: <MessageSquare/> },
+    { name: "Users",value:"3", to: "/friendlist", icon: <Users/> },
+    { name: "Notifications",value:"4", to: "/notifications", icon: <Bell /> },
+    { name: "Friends",value:"5", to: "/addfriend", icon: <UserPlus/> },
+    { name: "Settings",value:"6", to: "/setting", icon: <Settings/> },
   ];
 
   return (
@@ -46,13 +50,15 @@ const Sidebar = () => {
         <nav className="space-y-4 overflow-y-auto ">
           {options.map((item) => (
             <Link
+            onClick={()=>handlePage(item.value)}
               key={item.name}
               to={item.to}
 
-              className="flex items-center gap-4  px-16 py-6 rounded-tl-xl rounded-bl-xl  hover:bg-white hover:text-[#5f36f5] duration-200 "
+              className={`flex items-center gap-4  px-16 py-6 rounded-tl-xl rounded-bl-xl duration-200 ${(item.value==isPage)? " bg-white text-[#5f36f5]": ""}`}
             >
               {item.icon}
-              <span></span>
+             
+            
             </Link>
           ))}
         </nav>
