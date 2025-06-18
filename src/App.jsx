@@ -11,6 +11,7 @@ import FriendsList from "./pages/component/FriendsList";
 import Setting from "./pages/component/Setting";
 import SignIn from "./pages/SingIn";
 import SignUp from "./pages/SignUp";
+import Logout from "./pages/Logout";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -41,6 +42,11 @@ const App = () => {
         {
           path:"/setting",
           element:<Setting/>
+
+        },
+        {
+          path:"/logout",
+          element:<Logout/>
 
         },
       ],

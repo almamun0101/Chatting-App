@@ -12,7 +12,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const nevigate = useNavigate();
   const auth = getAuth();
-  console.log(auth)
+  
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",

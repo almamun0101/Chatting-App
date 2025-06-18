@@ -12,9 +12,7 @@ const Setting = () => {
   return (
     <div>
       <div className="">
-        <button onClick={handleLogOut}>
-          Logout
-        </button>
+       
       </div>
     </div>
   )

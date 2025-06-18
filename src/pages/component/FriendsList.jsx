@@ -1,9 +1,15 @@
-import React from 'react'
+import React from "react";
 
 const FriendsList = () => {
   return (
-    <div>FriendsList</div>
-  )
-}
+    <div>
+      <div className="">
+        <h1 className="text-2xl font-bold mb-4">
+          Friend List 
+        </h1>
+      </div>
+    </div>
+  );
+};
 
-export default FriendsList
+export default FriendsList;
