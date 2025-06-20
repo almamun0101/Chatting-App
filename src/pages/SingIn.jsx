@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { MdMarkEmailUnread } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import toast, { Toaster } from "react-hot-toast";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { auth } from "../../firebase.config";
 import { Link, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
@@ -12,7 +17,8 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const nevigate = useNavigate();
   const auth = getAuth();
-  
+  const provider = new GoogleAuthProvider();
+
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
@@ -44,18 +50,41 @@ const SignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        if(user.emailVerified){
-          dispatch(userLoginInfo(user))
-          localStorage.setItem("login", JSON.stringify(user))
+        if (user.emailVerified) {
+          dispatch(userLoginInfo(user));
+          localStorage.setItem("login", JSON.stringify(user));
           nevigate("/");
-        }
-        else{
+        } else {
           toast.error("Please verify Your Mail From your email");
         }
       })
       .catch((error) => {
         console.error("Login error:", error.message);
         toast.error("Invalid email or password.");
+      });
+  };
+  const handleGoogleLogIn = () => {
+    console.log("ggole");
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        dispatch(userLoginInfo(user));
+        nevigate("/");
+      })
+      .catch((error) => {
+        console.log("error" + error);
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
       });
   };
 
@@ -77,10 +106,15 @@ const SignIn = () => {
           />
         </div>
 
-        <h2 className="text-2xl font-bold mb-8 text-center text-cyan-300 tracking-wide">
+        <h2 className="text-2xl font-bold mb-4 text-center text-cyan-300 tracking-wide">
           Login to AI Account
         </h2>
-
+        <button
+          onClick={handleGoogleLogIn}
+          className="text-white bg-cyan-700 px-4 py-1 mb-4 rounded-xl"
+        >
+          Sign With Google
+        </button>
         <form onSubmit={handleLogin}>
           <div className="mb-5">
             <label
