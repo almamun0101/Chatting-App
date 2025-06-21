@@ -70,7 +70,7 @@ const Sidebar = () => {
                 className="w-15  rounded-full object-cover"
               />
               <h2 className="font-bold py-1">{data.name}</h2>
-              <h2 className="text-[10px] font-medium">almamunkhan0101@gmail.con</h2>
+              <h2 className="text-[10px] font-medium">{data.email}</h2>
             </div>
           </div>
           <div className="lg:hidden"></div>

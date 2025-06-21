@@ -17,10 +17,14 @@ const Logout = () => {
   return (
     <div>
       <div className="">
-
-      Logout
+         <div className="">
+          <h1 className="text-2xl font-bold mb-4">
+           LogOut
+          </h1>
+        
+        </div>
       </div>
-      <button onClick={handleSignout}>Sign Out</button>
+      <button onClick={handleSignout} className="border-1 px-3 rounded-2xl py-1 ">Sign Out</button>
     </div>
   );
 };
