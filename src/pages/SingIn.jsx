@@ -14,9 +14,8 @@ import { useDispatch } from "react-redux";
 import { userLoginInfo } from "../slices/userslice";
 import { getDatabase, ref, set } from "firebase/database";
 
-
 const SignIn = () => {
-   const db = getDatabase();
+  const db = getDatabase();
   const dispatch = useDispatch();
   const nevigate = useNavigate();
   const auth = getAuth();
@@ -78,6 +77,7 @@ const SignIn = () => {
         set(ref(db, "userslist/" + user.uid), {
           name: user.displayName,
           email: user.email,
+          img: "https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740",
         })
           .then(() => {
             dispatch(userLoginInfo(user));
@@ -87,7 +87,6 @@ const SignIn = () => {
           .catch((error) => {
             console.log(error);
           });
-       
       })
       .catch((error) => {
         console.log("error" + error);

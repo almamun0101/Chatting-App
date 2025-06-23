@@ -11,7 +11,7 @@ const UserList = () => {
     const userListRef = ref(db, "userslist/");
     onValue(userListRef, (snapshot) => {
       const array = [];
-      console.log(auth.currentUser.uid);
+      
       snapshot.forEach((item) => {
         if(item.key != auth.currentUser.uid){
             array.push(item.val());
@@ -22,7 +22,7 @@ const UserList = () => {
       setUserList(array);
     });
   }, []);
-
+  console.log(userList)
   const addFriend = () => {};
 
   const removeUser = () => {};
@@ -32,13 +32,14 @@ const UserList = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">User List</h2>
       <ul className="space-y-4">
         {userList.map((user) => (
-          <li
+            <li
             key={user.uid}
             className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
-          >
+            >
+         
             <div className="flex items-center">
               <img
-                src={user.avatar}
+                src={user.img }
                 alt={user.name}
                 className="w-12 h-12 rounded-full object-cover mr-4"
               />
@@ -52,6 +53,7 @@ const UserList = () => {
                 onClick={() => addFriend()}
                 className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
               >
+                Add 
                 {/* {friends.includes(userList.id) ? "Friend" : "Add Friend"} */}
               </button>
               <button

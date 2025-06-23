@@ -55,13 +55,15 @@ const SignUp = () => {
             .then(() => {
               updateProfile(auth.currentUser, {
                 displayName: userInfo.name,
-                photoURL: "https://example.com/jane-q-user/profile.jpg",
+                photoURL: "https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740",
               })
                 .then(() => {
                
                   set(ref(db, "userslist/" + user.uid), {
                     name: user.displayName,
                     email: user.email,
+                    img : user.photoURL,
+                  
                   })
                     .then(() => {
                       navigate("/signin");
@@ -87,7 +89,7 @@ const SignUp = () => {
           // ..
           console.log(errorMessage);
         });
-     
+     console.log(auth)
     }
   };
 

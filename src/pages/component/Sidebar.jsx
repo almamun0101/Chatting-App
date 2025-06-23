@@ -44,6 +44,7 @@ const Sidebar = () => {
             name: user.displayName,
             email: user.email,
             uid: user.uid,
+            img:user.photoURL,
           })
         );
         
@@ -65,7 +66,7 @@ const Sidebar = () => {
           <div className="">
             <div className="flex justify-center flex-col items-center">
               <img
-                src="./avater.png"
+                src={data.img}
                 alt="avatar"
                 className="w-15  rounded-full object-cover"
               />
