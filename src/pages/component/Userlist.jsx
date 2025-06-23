@@ -1,29 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 const UserList = () => {
-  const [userList, setUserList] = useState([]);
   const db = getDatabase();
   const auth = getAuth();
+  const [userList, setUserList] = useState([]);
 
   useEffect(() => {
     const userListRef = ref(db, "userslist/");
     onValue(userListRef, (snapshot) => {
       const array = [];
-      
-      snapshot.forEach((item) => {
-        if(item.key != auth.currentUser.uid){
-            array.push(item.val());
-           
-        }
 
+      snapshot.forEach((item) => {
+        const userData = item.val();
+        if (item.key !== auth.currentUser.uid) {
+          array.push({ ...userData, uid: item.key });
+        }
       });
       setUserList(array);
     });
   }, []);
-  console.log(userList)
-  const addFriend = () => {};
+
+  const addFriend = (id) => {
+    const key = auth.currentUser.uid + id;
+    set(ref(db, "friendRequst/" + key), {
+      sender: auth.currentUser.uid,
+      senderName: auth.displayName,
+      reciver: id,
+    })
+      .then(() => {
+        console.log("requst send");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const removeUser = () => {};
 
@@ -32,14 +44,13 @@ const UserList = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">User List</h2>
       <ul className="space-y-4">
         {userList.map((user) => (
-            <li
+          <li
             key={user.uid}
             className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
-            >
-         
+          >
             <div className="flex items-center">
               <img
-                src={user.img }
+                src={user.img}
                 alt={user.name}
                 className="w-12 h-12 rounded-full object-cover mr-4"
               />
@@ -50,10 +61,10 @@ const UserList = () => {
             </div>
             <div className="flex gap-2">
               <button
-                onClick={() => addFriend()}
+                onClick={() => addFriend(user.uid)}
                 className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
               >
-                Add 
+                Add
                 {/* {friends.includes(userList.id) ? "Friend" : "Add Friend"} */}
               </button>
               <button

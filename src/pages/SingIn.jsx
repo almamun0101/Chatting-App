@@ -54,7 +54,6 @@ const SignIn = () => {
         const user = userCredential.user;
         if (user.emailVerified) {
           dispatch(userLoginInfo(user));
-          localStorage.setItem("login", JSON.stringify(user));
           nevigate("/");
         } else {
           toast.error("Please verify Your Mail From your email");
@@ -77,7 +76,7 @@ const SignIn = () => {
         set(ref(db, "userslist/" + user.uid), {
           name: user.displayName,
           email: user.email,
-          img: "https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740",
+          img: user.photoURL,
         })
           .then(() => {
             dispatch(userLoginInfo(user));
