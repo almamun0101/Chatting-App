@@ -3,7 +3,8 @@ import { CiUser } from "react-icons/ci";
 import { MdMarkEmailUnread } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import toast, { Toaster } from "react-hot-toast";
-import { app, auth } from "../../firebase.config";
+import { app, auth  } from "../../firebase.config";
+import { getDatabase, ref, set } from "firebase/database";
 
 import {
   createUserWithEmailAndPassword,
@@ -12,14 +13,14 @@ import {
 } from "firebase/auth";
 import { Link, useNavigate } from "react-router";
 
-
 const SignUp = () => {
+  const db = getDatabase();
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
     password: "",
   });
-  
+
   const navigate = useNavigate();
   const handleName = (e) => {
     setUserInfo((pre) => {
@@ -37,6 +38,7 @@ const SignUp = () => {
     });
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!userInfo.name || !userInfo.email || !userInfo.password) {
@@ -48,6 +50,7 @@ const SignUp = () => {
     } else {
       createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
         .then((userCredential) => {
+           const user = userCredential.user;
           sendEmailVerification(auth.currentUser)
             .then(() => {
               updateProfile(auth.currentUser, {
@@ -55,19 +58,24 @@ const SignUp = () => {
                 photoURL: "https://example.com/jane-q-user/profile.jpg",
               })
                 .then(() => {
-                  // Profile updated!
-                  // ...
-                  navigate('/signin')
-                  toast.success("Check Your mail for verification")
+               
+                  set(ref(db, "userslist/" + user.uid), {
+                    name: user.displayName,
+                    email: user.email,
+                  })
+                    .then(() => {
+                      navigate("/signin");
+                      toast.success("Check Your mail for verification");
+                      console.log("done sending data to rdb")
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
                 })
                 .catch((error) => {
-                  // An error occurred
-                  // ...
-                  console.log(error)
+                  console.log(error);
                 });
 
-              const user = userCredential.user;
-              console.log(user);
             })
             .catch((error) => {
               console.log(error);
@@ -79,7 +87,7 @@ const SignUp = () => {
           // ..
           console.log(errorMessage);
         });
-      // console.log(userInfo);
+     
     }
   };
 
@@ -108,9 +116,8 @@ const SignUp = () => {
 
         {/* Heading */}
         <h2 className="text-2xl font-bold mb-8 text-center text-cyan-300 tracking-wide">
-          Create AI Account
+          Create Your Account
         </h2>
-
         <form onSubmit={handleSubmit}>
           {/* Full Name */}
           <div className="mb-5">
@@ -183,7 +190,10 @@ const SignUp = () => {
           {/* Log In Link */}
           <p className="text-center mt-5 text-sm text-gray-400">
             Already have an account?{" "}
-            <Link to="/signin" className="text-cyan-400 hover:underline font-medium">
+            <Link
+              to="/signin"
+              className="text-cyan-400 hover:underline font-medium"
+            >
               Log In
             </Link>
           </p>

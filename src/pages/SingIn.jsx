@@ -12,8 +12,11 @@ import { auth } from "../../firebase.config";
 import { Link, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { userLoginInfo } from "../slices/userslice";
+import { getDatabase, ref, set } from "firebase/database";
+
 
 const SignIn = () => {
+   const db = getDatabase();
   const dispatch = useDispatch();
   const nevigate = useNavigate();
   const auth = getAuth();
@@ -72,8 +75,19 @@ const SignIn = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        dispatch(userLoginInfo(user));
-        nevigate("/");
+        set(ref(db, "userslist/" + user.uid), {
+          name: user.displayName,
+          email: user.email,
+        })
+          .then(() => {
+            dispatch(userLoginInfo(user));
+            toast.success("Check Your mail for verification");
+            nevigate("/");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+       
       })
       .catch((error) => {
         console.log("error" + error);
