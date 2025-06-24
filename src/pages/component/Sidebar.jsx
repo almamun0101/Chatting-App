@@ -26,9 +26,9 @@ const Sidebar = () => {
   const options = [
     { name: "Home", value: "1", to: "/", icon: <Home /> },
     { name: "Messages", value: "2", to: "/messages", icon: <MessageSquare /> },
-    { name: "Users", value: "3", to: "/friendlist", icon: <Users /> },
+    { name: "Requst", value: "5", to: "/addfriend", icon: <UserPlus /> },
+    { name: "Friends", value: "3", to: "/friendlist", icon: <Users /> },
     { name: "Notifications", value: "4", to: "/notifications", icon: <Bell /> },
-    { name: "Friends", value: "5", to: "/addfriend", icon: <UserPlus /> },
     { name: "Settings", value: "6", to: "/setting", icon: <Settings /> },
     { name: "Logout", value: "7", to: "/logout", icon: <FiLogOut /> },
   ];
