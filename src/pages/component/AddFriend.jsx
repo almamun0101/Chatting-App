@@ -13,7 +13,6 @@ const AddFriend = () => {
     const userListRef = ref(db, "friendRequst/");
     onValue(userListRef, (snapshot) => {
       const array = [];
-
       snapshot.forEach((item) => {
         const userData = item.val();
         if (item.key.includes(auth.currentUser.uid)) {
@@ -54,6 +53,10 @@ const AddFriend = () => {
             key={user.uid}
             className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
           >
+            {/* {console.log("reciver : " +user.reciver)}
+            {console.log("sender : " + user.sender)}
+            {console.log("current" +auth.currentUser.uid)}
+            {console.log(auth.currentUser.uid===user.reciver)} */}
             <div className="flex items-center">
               <img
                 src={user.img}
@@ -62,9 +65,9 @@ const AddFriend = () => {
               />
               <div>
                 <p className="font-semibold text-lg">
-                  {auth.currentUser.uid === user.reciverName
-                    ? user.reciverName
-                    : user.senderName}
+                  {auth.currentUser.uid === user.reciver
+                    ? user.senderName
+                    : user.reciverName}
                 </p>
                 <p className="text-gray-500 text-sm">{user.email}</p>
               </div>
@@ -74,7 +77,8 @@ const AddFriend = () => {
                 onClick={() => addFriend(user)}
                 className="bg-red-500 text-white px-2 py-2 rounded-lg hover:bg-blue-600 text-sm"
               >
-                Cancel Requst
+                {auth.currentUser.uid === user.reciver ? "Accpet" : "Cancel"}
+
                 {/* {friends.includes(userList.id) ? "Friend" : "Add Friend"} */}
               </button>
             </div>

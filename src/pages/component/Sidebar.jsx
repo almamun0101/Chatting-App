@@ -7,17 +7,18 @@ import {
   Settings,
   UserPlus,
 } from "lucide-react";
-import { Link, Navigate, useNavigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { userLoginInfo } from "../../slices/userslice";
 import { FiLogOut } from "react-icons/fi";
 
 const Sidebar = () => {
-   const data = useSelector((state) => state.userLogin.value); 
-  
-  const [isPage, setIsPage] = useState(1);
-  const nevigate  = useNavigate();
+  const data = useSelector((state) => state.userLogin.value);
+
+  const [isPage, setIsPage] = useState("");
+  const nevigate = useNavigate();
+  const location = useLocation();
 
   const handlePage = (page) => {
     setIsPage(page);
@@ -36,6 +37,13 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const auth = getAuth();
 
+  useEffect(()=>{
+    const currentPage = options.find((item)=>item.to===location.pathname)
+    if(currentPage){
+      setIsPage(currentPage.value)
+    }
+  },[location.pathname])
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -44,13 +52,11 @@ const Sidebar = () => {
             name: user.displayName,
             email: user.email,
             uid: user.uid,
-            img:user.photoURL,
+            img: user.photoURL,
           })
         );
-        
       } else {
-        dispatch(userLoginInfo(null)),
-        nevigate("/signin")
+        dispatch(userLoginInfo(null)), nevigate("/signin");
       }
     });
   }, [dispatch]);
@@ -58,7 +64,7 @@ const Sidebar = () => {
   return (
     <div className="flex">
       {/* Fullscreen Sidebar */}
-      
+
       <div
         className={`bg-[#5f36f5] mx-2 my-2 rounded-3xl text-white pl-2 py-5 space-y-5 flex  flex-col items-center inset-0 z-50 transform transition-transform duration-300 translate-x-0 lg:translate-x-0 lg:relative`}
       >
@@ -66,12 +72,14 @@ const Sidebar = () => {
           <div className="">
             <div className="flex justify-center flex-col items-center">
               <img
-                src={data.img}
+                src={
+                  (data.img)? data.img: "/avater.png"
+                }
                 alt="avatar"
                 className="w-15  rounded-full object-cover"
               />
-              <h2 className="font-bold py-1">{data.name}</h2>
-              <h2 className="text-[10px] font-medium">{data.email}</h2>
+              <h2 className="font-bold py-1">{(data.name)?data.name: "Name"}</h2>
+              <h2 className="text-[10px] font-medium">{(data.email)?data.email:"Email"}</h2>
             </div>
           </div>
           <div className="lg:hidden"></div>

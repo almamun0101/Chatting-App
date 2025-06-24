@@ -7,7 +7,23 @@ const UserList = () => {
   const db = getDatabase();
   const auth = getAuth();
   const [userList, setUserList] = useState([]);
-  const [sendRequest, setSendRequest ] = useState(false)
+  const [sendRequest, setSendRequest ] = useState({})
+
+  useEffect(() => {
+      const userListRef = ref(db, "friendRequst/");
+      onValue(userListRef, (snapshot) => {
+        const array = [];
+        snapshot.forEach((item) => {
+          const userData = item.val();
+         
+            array.push({ ...userData, uid: item.key });
+          
+        });
+        setSendRequest(array);
+      });
+    }, []);
+    console.log(sendRequest)
+  
 
   useEffect(() => {
     const userListRef = ref(db, "userslist/");
@@ -26,7 +42,7 @@ const UserList = () => {
 
   const addFriend = (user) => {
     const key = auth.currentUser.uid + user.uid;
-    console.log(user)
+   
     set(ref(db, "friendRequst/" + key), {
       sender: auth.currentUser.uid,
       senderName: auth.currentUser.displayName,
@@ -61,11 +77,7 @@ const UserList = () => {
                 className="w-12 h-12 rounded-full object-cover mr-4"
               />
               <div>
-                <p className="font-semibold text-lg">
-                    {auth.currentUser.uid !== user.reciverName
-                    ? user.reciverName
-                    : user.senderName}
-                </p>
+                <p className="font-semibold text-lg">{user.name}</p>
                 <p className="text-gray-500 text-sm">{user.email}</p>
               </div>
             </div>
