@@ -21,7 +21,7 @@ const UserList = () => {
           userData.reciver.includes(auth.currentUser.uid)
         ) {
           RequestArray.push({ ...userData, uid: item.key });
-        } 
+        }
       });
       setRequestList(RequestArray);
     });
@@ -59,12 +59,18 @@ const UserList = () => {
       });
   };
 
-  const isRequestSend = (userId) => {
-    return requestList.some(
+  const getRequestStatus = (userId) => {
+    const req = requestList.find(
       (req) =>
         (req.sender === auth.currentUser.uid && req.reciver === userId) ||
         (req.reciver === auth.currentUser.uid && req.sender === userId)
     );
+    if (req) {
+      if (req.sender === auth.currentUser.uid) return "sent";
+      if (req.reciver === auth.currentUser.uid) return "received";
+    }
+
+    return null;
   };
 
   return (
@@ -72,43 +78,35 @@ const UserList = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">User List</h2>
       <ul className="space-y-4">
         <Toaster position="bottom-center" reverseOrder={false} />
-        {userList.map((user) => (
-          <li
-            key={user.uid}
-            className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
-          >
-            <div className="flex items-center">
-              <img
-                src={user.img}
-                alt={user.name}
-                className="w-12 h-12 rounded-full object-cover mr-4"
-              />
-              <div>
-                <p className="font-semibold text-lg">{user.name}</p>
-                <p className="text-gray-500 text-sm">{user.email}</p>
+        {userList
+          .filter((user) => getRequestStatus(user.uid) === null)
+          .map((user) => (
+            <li
+              key={user.uid}
+              className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
+            >
+              <div className="flex items-center">
+                <img
+                  src={user.img}
+                  alt={user.name}
+                  className="w-12 h-12 rounded-full object-cover mr-4"
+                />
+                <div>
+                  <p className="font-semibold text-lg">{user.name}</p>
+                  <p className="text-gray-500 text-sm">{user.email}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-2">
-              {isRequestSend(user.uid) ? (
-                <button
-                  
-                  className="bg-green-400 text-white px-3 py-1 rounded text-sm "
-                >
-                   {requestList.map((item) =>
-                    item.reciver === user.uid ? "Requested " : "Accpet "
-                  )}
-                </button>
-              ) : (
+
+              <div className="flex gap-2">
                 <button
                   onClick={() => addFriend(user)}
                   className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
                 >
                   Add Friend
                 </button>
-              )}
-            </div>
-          </li>
-        ))}
+              </div>
+            </li>
+          ))}
       </ul>
     </div>
   );
