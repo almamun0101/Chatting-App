@@ -65,6 +65,7 @@ const UserList = () => {
         (req.sender === auth.currentUser.uid && req.reciver === userId) ||
         (req.reciver === auth.currentUser.uid && req.sender === userId)
     );
+
     if (req) {
       if (req.sender === auth.currentUser.uid) return "sent";
       if (req.reciver === auth.currentUser.uid) return "received";
