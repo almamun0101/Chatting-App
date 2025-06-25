@@ -1,10 +1,12 @@
 import React from "react";
 
 import useFirebaseData from "./useFirebaseData";
+import { getAuth } from "firebase/auth";
 
 const FriendsList = () => {
+  const auth = getAuth();
   const userList = useFirebaseData("friendsList/");
- 
+
   return (
     <div>
       <h2>Friends List</h2>
@@ -12,7 +14,7 @@ const FriendsList = () => {
         <li
           key={user.uid}
           className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
-        >{ console.log(user)}
+        >
           <div className="flex items-center">
             <img
               src={user.img}
@@ -20,8 +22,14 @@ const FriendsList = () => {
               className="w-12 h-12 rounded-full object-cover mr-4"
             />
             <div>
-              <p className="font-semibold text-lg">{user.name}</p>
-              <p className="text-gray-500 text-sm">{user.email}</p>
+              <p className="font-semibold text-lg">
+                {auth.currentUser.uid === user.sender
+                  ? user.receiverName
+                  : user.senderName}
+              </p>
+              <p className="text-gray-500 text-sm">{auth.currentUser.uid === user.sender
+                  ? user.senderName
+                  : user.receiverName}</p>
             </div>
           </div>
 
