@@ -31,17 +31,16 @@ const UserList = () => {
 
   const addFriend = (user) => {
     const key = generateKey(auth.currentUser.uid, user.uid);
-
     const requstData = {
       uid: key,
       sender: auth.currentUser.uid,
       senderName: auth.currentUser.displayName,
-      reciver: user.uid,
-      reciverName: user.name,
+      receiver: user.uid,
+      receiverName: user.name,
     };
     const requestExists = allRequest?.some((item) => item.uid === key);
     if (!requestExists) {
-      set(ref(db, `friendRequest/${key}`), requstData).then(() =>
+      set(ref(db, `friendRequest/`+ key), requstData).then(() =>
         toast.success("Request sent successfully")
       );
     } else {
@@ -52,13 +51,13 @@ const UserList = () => {
   const getRequestStatus = (userId) => {
     const req = allRequest?.find(
       (req) =>
-        (req.sender === auth.currentUser.uid && req.reciver === userId) ||
-        (req.reciver === auth.currentUser.uid && req.sender === userId)
+        (req.sender === auth.currentUser.uid && req.receiver === userId) ||
+        (req.receiver === auth.currentUser.uid && req.sender === userId)
     );
 
     if (req) {
       if (req.sender === auth.currentUser.uid) return "sent";
-      if (req.reciver === auth.currentUser.uid) return "received";
+      if (req.receiver === auth.currentUser.uid) return "received";
     }
 
     return null;
