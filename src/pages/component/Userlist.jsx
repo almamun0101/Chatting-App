@@ -2,30 +2,17 @@ import React, { useEffect, useState } from "react";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
+import useFirebaseData from "./useFirebaseData";
 
 const UserList = () => {
   const db = getDatabase();
   const auth = getAuth();
   const [userList, setUserList] = useState([]);
   const [requestList, setRequestList] = useState([]);
-
-  useEffect(() => {
-    const userListRef = ref(db, "friendRequest/");
-    onValue(userListRef, (snapshot) => {
-      const RequestArray = [];
-      snapshot.forEach((item) => {
-        const userData = item.val();
-        // console.log(userData)
-        if (
-          userData.sender.includes(auth.currentUser.uid) ||
-          userData.reciver.includes(auth.currentUser.uid)
-        ) {
-          RequestArray.push({ ...userData, uid: item.key });
-        }
-      });
-      setRequestList(RequestArray);
-    });
-  }, []);
+  const allRequest = useFirebaseData("friendRequest/");
+  const generateKey = (uid1, uid2) => {
+    return uid1 < uid2 ? uid1 + uid2 : uid2 + uid1;
+  };
 
   useEffect(() => {
     const userListRef = ref(db, "userslist/");
@@ -34,33 +21,36 @@ const UserList = () => {
 
       snapshot.forEach((item) => {
         const userData = item.val();
-        if (item.key !== auth.currentUser.uid) {
+        if (item.key !== auth.currentUser?.uid) {
           Userarray.push({ ...userData, uid: item.key });
         }
       });
       setUserList(Userarray);
     });
-  }, []);
+  }, [auth.currentUser?.uid]);
 
   const addFriend = (user) => {
-    const key = auth.currentUser.uid + user.uid;
-    let requstData = {
+    const key = generateKey(auth.currentUser.uid, user.uid);
+
+    const requstData = {
+      uid: key,
       sender: auth.currentUser.uid,
       senderName: auth.currentUser.displayName,
       reciver: user.uid,
       reciverName: user.name,
     };
-    set(push(ref(db, "friendRequest/")), requstData)
-      .then(() => {
-        toast.success("Request Send Successfully");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const requestExists = allRequest?.some((item) => item.uid === key);
+    if (!requestExists) {
+      set(ref(db, `friendRequest/${key}`), requstData).then(() =>
+        toast.success("Request sent successfully")
+      );
+    } else {
+      toast.error("Request already sent!");
+    }
   };
 
   const getRequestStatus = (userId) => {
-    const req = requestList.find(
+    const req = allRequest?.find(
       (req) =>
         (req.sender === auth.currentUser.uid && req.reciver === userId) ||
         (req.reciver === auth.currentUser.uid && req.sender === userId)

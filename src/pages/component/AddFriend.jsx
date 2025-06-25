@@ -17,10 +17,11 @@ const AddFriend = () => {
       const requestArray = [];
       snapshot.forEach((item) => {
         const allData = item.val();
+      
         requestArray.push({ ...allData, uid: item.key });
       });
       setRequestList(requestArray)
-      console.log(requestArray);
+     
     });
   }, []);
 
