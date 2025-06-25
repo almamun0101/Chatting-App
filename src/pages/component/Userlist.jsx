@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDatabase, ref, onValue, set } from "firebase/database";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -7,50 +7,51 @@ const UserList = () => {
   const db = getDatabase();
   const auth = getAuth();
   const [userList, setUserList] = useState([]);
-  const [sendRequest, setSendRequest ] = useState({})
+  const [requestList, setRequestList] = useState([]);
 
   useEffect(() => {
-      const userListRef = ref(db, "friendRequst/");
-      onValue(userListRef, (snapshot) => {
-        const array = [];
-        snapshot.forEach((item) => {
-          const userData = item.val();
-         
-            array.push({ ...userData, uid: item.key });
-          
-        });
-        setSendRequest(array);
+    const userListRef = ref(db, "friendRequest/");
+    onValue(userListRef, (snapshot) => {
+      const RequestArray = [];
+      snapshot.forEach((item) => {
+        const userData = item.val();
+        // console.log(userData)
+        if (
+          userData.sender.includes(auth.currentUser.uid) ||
+          userData.reciver.includes(auth.currentUser.uid)
+        ) {
+          RequestArray.push({ ...userData, uid: item.key });
+        } 
       });
-    }, []);
-    console.log(sendRequest)
-  
+      setRequestList(RequestArray);
+    });
+  }, []);
 
   useEffect(() => {
     const userListRef = ref(db, "userslist/");
     onValue(userListRef, (snapshot) => {
-      const array = [];
+      const Userarray = [];
 
       snapshot.forEach((item) => {
         const userData = item.val();
         if (item.key !== auth.currentUser.uid) {
-          array.push({ ...userData, uid: item.key });
+          Userarray.push({ ...userData, uid: item.key });
         }
       });
-      setUserList(array);
+      setUserList(Userarray);
     });
   }, []);
 
   const addFriend = (user) => {
     const key = auth.currentUser.uid + user.uid;
-   
-    set(ref(db, "friendRequst/" + key), {
+    let requstData = {
       sender: auth.currentUser.uid,
       senderName: auth.currentUser.displayName,
       reciver: user.uid,
       reciverName: user.name,
-    })
+    };
+    set(push(ref(db, "friendRequest/")), requstData)
       .then(() => {
-        console.log("requst send");
         toast.success("Request Send Successfully");
       })
       .catch((error) => {
@@ -58,7 +59,13 @@ const UserList = () => {
       });
   };
 
-  const removeUser = () => {};
+  const isRequestSend = (userId) => {
+    return requestList.some(
+      (req) =>
+        (req.sender === auth.currentUser.uid && req.reciver === userId) ||
+        (req.reciver === auth.currentUser.uid && req.sender === userId)
+    );
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-4">
@@ -82,19 +89,23 @@ const UserList = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              <button
-                onClick={() => addFriend(user)}
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
-              >
-                Add
-                {/* {friends.includes(userList.id) ? "Friend" : "Add Friend"} */}
-              </button>
-              <button
-                onClick={() => removeUser()}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
-              >
-                Remove
-              </button>
+              {isRequestSend(user.uid) ? (
+                <button
+                  
+                  className="bg-green-400 text-white px-3 py-1 rounded text-sm "
+                >
+                   {requestList.map((item) =>
+                    item.reciver === user.uid ? "Requested " : "Accpet "
+                  )}
+                </button>
+              ) : (
+                <button
+                  onClick={() => addFriend(user)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                >
+                  Add Friend
+                </button>
+              )}
             </div>
           </li>
         ))}

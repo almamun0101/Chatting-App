@@ -7,7 +7,7 @@ const AddFriend = () => {
   const db = getDatabase();
   const auth = getAuth();
   const [userList, setUserList] = useState([]);
-  const [sendRequest, setSendRequest] = useState(false);
+  const [request, setRequest] = useState([]);
 
   useEffect(() => {
     const userListRef = ref(db, "friendRequst/");
@@ -15,7 +15,10 @@ const AddFriend = () => {
       const array = [];
       snapshot.forEach((item) => {
         const userData = item.val();
-        if (item.key.includes(auth.currentUser.uid)) {
+        if (
+          userData.sender.includes(auth.currentUser.uid) ||
+          userData.reciver.includes(auth.currentUser.uid)
+        ) {
           array.push({ ...userData, uid: item.key });
         }
       });
