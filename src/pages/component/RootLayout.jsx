@@ -6,11 +6,11 @@ import Home from "../Home";
 const RootLayout = () => {
   return (
     <div className="">
-      <div className="flex gap-2 ">
-        <div className=" border-gray-300 my-2 pr-2">
+      <div className="flex">
+        <div className=" border-gray-300 my-2">
           <Sidebar />
         </div>
-        <div className=" border-gray-300 w-full m-6 rounded-xl">
+        <div className=" border-gray-300 shadow-2xl border px-5 w-full my-4 rounded-tr-xl rounded-br-3xl">
           <Outlet />
         </div>
       </div>

@@ -66,7 +66,7 @@ const Sidebar = () => {
       {/* Fullscreen Sidebar */}
 
       <div
-        className={`bg-[#5f36f5] mx-2 my-2 rounded-3xl text-white pl-2 py-5 space-y-5 flex  flex-col items-center inset-0 z-50 transform transition-transform duration-300 translate-x-0 lg:translate-x-0 lg:relative`}
+        className={`bg-[#5f36f5] shadow-xl30 ml-2 my-2 rounded-tl-3xl rounded-bl-3xl text-white pl-1 py-5 space-y-5 flex  flex-col items-center inset-0 z-50 transform transition-transform duration-300 translate-x-0 lg:translate-x-0 lg:relative`}
       >
         <div className="flex items-center justify-between">
           <div className="">
@@ -91,7 +91,7 @@ const Sidebar = () => {
               onClick={() => handlePage(item.value)}
               key={item.name}
               to={item.to}
-              className={`flex items-center gap-4  px-16 py-6  rounded-tl-xl rounded-bl-xl duration-200 ${
+              className={`flex items-center gap-4  px-13 py-6  rounded-tl-xl rounded-bl-xl duration-200 ${
                 item.value == isPage ? " bg-white text-[#5f36f5]" : ""
               }`}
             >
