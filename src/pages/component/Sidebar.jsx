@@ -91,7 +91,7 @@ const Sidebar = () => {
               onClick={() => handlePage(item.value)}
               key={item.name}
               to={item.to}
-              className={`flex items-center gap-4  px-13 py-6  rounded-tl-xl rounded-bl-xl duration-200 ${
+              className={`flex items-center gap-4  px-15 py-6  rounded-tl-xl rounded-bl-xl duration-200 ${
                 item.value == isPage ? " bg-white text-[#5f36f5]" : ""
               }`}
             >

@@ -7,9 +7,10 @@ import toast, { Toaster } from "react-hot-toast";
 const AddFriend = () => {
   const db = getDatabase();
   const auth = getAuth();
-  const [userList, setUserList] = useState([]);
+
   const [requestList, setRequestList] = useState([]);
   const allUser = useFirebaseData("userslist/");
+
   const generateKey = (uid1, uid2) => {
     return uid1 < uid2 ? uid1 + uid2 : uid2 + uid1;
   };
@@ -65,19 +66,27 @@ const AddFriend = () => {
         console.log(error);
       });
   };
+  const sentRequest = allUser.filter(
+    (user) =>
+      user.uid !== auth.currentUser.uid && getRequestStatus(user.uid) === "sent"
+  );
+  const receiveRequest = allUser.filter(
+    (user) =>
+      user.uid !== auth.currentUser.uid &&
+      getRequestStatus(user.uid) === "received"
+  );
   return (
-    <div>
-      <div className="">
-       <h1 className="text-2xl font-bold mb-4">
-         Friend Request
-          </h1>  <ul className="space-y-4">
-          {allUser
-            .filter(
-              (user) =>
-                user.uid !== auth.currentUser.uid && getRequestStatus(user.uid)
-            )
-            .map((user) => {
+    <div className="grid h-full grid-cols-1 lg:grid-cols-2 text-left">
+      {/* Request Sent */}
+      <div className="w-full mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Send Request</h1>{" "}
+        {sentRequest.length == 0 ? (
+          <h2>There is no Request yet</h2>
+        ) : (
+          <ul className="space-y-4">
+            {sentRequest.map((user) => {
               const status = getRequestStatus(user.uid);
+
               return (
                 <li
                   key={user.uid}
@@ -94,7 +103,7 @@ const AddFriend = () => {
                       <p className="text-gray-500 text-sm">{user.email}</p>
                     </div>
                   </div>
-                  {console.log(user)}
+
                   <div className="flex gap-2">
                     {status === "sent" && (
                       <button
@@ -125,7 +134,71 @@ const AddFriend = () => {
                 </li>
               );
             })}
-        </ul>
+          </ul>
+        )}
+      </div>
+
+      {/* Request Received */}
+      <div className="w-full mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Request</h1>
+        {(receiveRequest.length==0)?(
+          <h2>There is No request yet</h2>
+        ):(
+            <ul className="space-y-4">
+              {
+                receiveRequest.map((user) => {
+              const status = getRequestStatus(user.uid);
+
+              return (
+                <li
+                  key={user.uid}
+                  className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
+                >
+                  <div className="flex items-center">
+                    <img
+                      src={user.img}
+                      alt={user.name}
+                      className="w-12 h-12 rounded-full object-cover mr-4"
+                    />
+                    <div>
+                      <p className="font-semibold text-lg">{user.name}</p>
+                      <p className="text-gray-500 text-sm">{user.email}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {status === "sent" && (
+                      <button
+                        onClick={() => {
+                          handleRequest(user.uid);
+                        }}
+                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                      >
+                        Requested
+                      </button>
+                    )}
+                    {status === "received" && (
+                      <button
+                        onClick={() => {
+                          handleAccpet(user);
+                        }}
+                        className="bg-green-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                      >
+                        Acpet
+                      </button>
+                    )}
+                    {!status && (
+                      <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
+                        None
+                      </button>
+                    )}
+                  </div>
+                </li>
+              );
+            })
+              }
+            </ul>
+        )}
       </div>
     </div>
   );
