@@ -1,18 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import useFirebaseData from "./useFirebaseData";
 import { getAuth } from "firebase/auth";
 
 const FriendsList = () => {
   const auth = getAuth();
-  const userList = useFirebaseData("friendsList/");
+  const friendList = useFirebaseData("friendsList/");
+  const userList = useFirebaseData("userslist/");
 
+  useEffect(() => {}, []);
+
+  const friendUid = friendList.filter((user) =>
+    user.sender === auth.currentUser.uid ? user.receiver : user.sender
+  );
+  const friendInfo = (friendId) => {
+    const userInfo =  userList.find((user) => user.uid === friendId);
+    return userInfo
+  };
+  console.log(friendInfo);
   return (
     <div>
-     <h1 className="text-2xl font-bold mb-4">
-          Friend List
-          </h1>
-      {userList.map((user) => (
+      <h1 className="text-2xl font-bold mb-4">Friend List</h1>
+      {friendList.map((user) => (
         <li
           key={user.uid}
           className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
@@ -29,9 +38,11 @@ const FriendsList = () => {
                   ? user.receiverName
                   : user.senderName}
               </p>
-              <p className="text-gray-500 text-sm">{auth.currentUser.uid === user.sender
+              <p className="text-gray-500 text-sm">
+                {auth.currentUser.uid === user.sender
                   ? user.senderName
-                  : user.receiverName}</p>
+                  : user.receiverName}
+              </p>
             </div>
           </div>
 
@@ -40,7 +51,13 @@ const FriendsList = () => {
               onClick={() => addFriend(user)}
               className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
             >
-              Add Friend
+              Unfriend
+            </button>
+            <button
+              onClick={() => addFriend(user)}
+              className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+            >
+              Block
             </button>
           </div>
         </li>
