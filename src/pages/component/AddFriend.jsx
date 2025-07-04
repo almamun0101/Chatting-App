@@ -78,7 +78,7 @@ const AddFriend = () => {
   return (
     <div className="grid h-full grid-cols-1 lg:grid-cols-2 text-left">
       {/* Request Sent */}
-      <div className="w-full mx-auto p-4">
+      <div className="w-full mx-auto">
         <h1 className="text-2xl font-bold mb-4">Send Request</h1>{" "}
         {sentRequest.length == 0 ? (
           <h2>There is no Request yet</h2>
@@ -139,10 +139,10 @@ const AddFriend = () => {
       </div>
 
       {/* Request Received */}
-      <div className="w-full mx-auto p-4">
+      <div className="w-full mx-auto ">
         <h1 className="text-2xl font-bold mb-4">Request</h1>
         {(receiveRequest.length==0)?(
-          <h2>There is No request yet</h2>
+          <h2>There is no Request yet</h2>
         ):(
             <ul className="space-y-4">
               {
