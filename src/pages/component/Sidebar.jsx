@@ -66,7 +66,7 @@ const Sidebar = () => {
       {/* Fullscreen Sidebar */}
 
       <div
-        className={`bg-[#5f36f5] shadow-xl30 ml-2 my-2 rounded-tl-3xl rounded-bl-3xl text-white pl-1 py-5 space-y-5 flex  flex-col items-center inset-0 z-50 transform transition-transform duration-300 translate-x-0 lg:translate-x-0 lg:relative`}
+        className={`bg-[#5f36f5] h-screen shadow-xl30  text-white pl-1 py-5 space-y-6 flex  flex-col items-center inset-0 z-50 transform transition-transform duration-300 translate-x-0 lg:translate-x-0 lg:relative`}
       >
         <div className="flex items-center justify-between">
           <div className="">
@@ -85,7 +85,7 @@ const Sidebar = () => {
           <div className="lg:hidden"></div>
         </div>
 
-        <nav className=" overflow-y-auto ">
+        <nav className=" overflow-y-auto">
           {options.map((item) => (
             <Link
               onClick={() => handlePage(item.value)}

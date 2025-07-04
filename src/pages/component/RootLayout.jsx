@@ -7,10 +7,10 @@ const RootLayout = () => {
   return (
     <div className="">
       <div className="flex">
-        <div className=" border-gray-300 my-2">
+        <div className="">
           <Sidebar />
         </div>
-        <div className=" border-gray-300 shadow-2xl border px-5 w-full my-4 rounded-tr-xl rounded-br-3xl">
+        <div className="bg-white shadow-2xl px-5 w-full my-4 rounded-xl mr-3 p-2">
           <Outlet />
         </div>
       </div>
