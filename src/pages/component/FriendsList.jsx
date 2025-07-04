@@ -9,7 +9,9 @@ const FriendsList = () => {
 
   return (
     <div>
-      <h2>Friends List</h2>
+     <h1 className="text-2xl font-bold mb-4">
+          Friend List
+          </h1>
       {userList.map((user) => (
         <li
           key={user.uid}
