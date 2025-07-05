@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import useFirebaseData from "./useFirebaseData";
 import { getAuth } from "firebase/auth";
-import { getDatabase, ref, remove } from "firebase/database";
+import { getDatabase, ref, remove, set } from "firebase/database";
 import toast from "react-hot-toast";
 
 const FriendsList = () => {
@@ -44,24 +44,34 @@ const FriendsList = () => {
 
   const handleBlock = (user) => {
     const key = generateKey(auth.currentUser.uid, user.uid);
-    const friendsData = {
+    const blockData = {
       uid: key,
-      sender: auth.currentUser.uid,
-      senderName: auth.currentUser.displayName,
-      receiver: user.uid,
-      receiverName: user.name,
+      blockBy: auth.currentUser.uid,
+      blockByName: auth.currentUser.displayName,
+      blockUser: user.uid,
+      blockUserName: user.name,
     };
 
-    set(ref(db, `friendsList/${key}`), friendsData)
+    set(ref(db, `blockList/${key}`), blockData)
       .then(() => {
-        remove(ref(db, "friendRequest/" + key));
-        toast.success("Friends successfully");
+        remove(ref(db, "friendsList/" + key));
+        toast.success("bLock successfully");
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  const blockInfo = (user) => {
+    const blocked = blockList?.find((b) => {
+      return b;
+    });
+    const blockId = (blocked.blockBy === auth.currentUser.uid )? blocked.blockUser : blocked.blockBy;
+    const blockUser = userList?.filter((user) => user.uid===blockId);
+    console.log(blockUser)
+    return blockUser;
+  };
+  
   return (
     <div className="h-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
@@ -108,7 +118,9 @@ const FriendsList = () => {
         {/* block LIst  */}
         <div className="h-70 overflow-auto">
           <h1 className="text-2xl font-bold">Block List</h1>
-          {blockList.map((user) => {
+          {userList.filter((user)=> user.uid === blockInfo(user)).map((user) => {
+         
+          
             return (
               <li
                 key={user.uid}
