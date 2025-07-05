@@ -12,19 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { userLoginInfo } from "../../slices/userslice";
 import { FiLogOut } from "react-icons/fi";
-
-const Sidebar = () => {
-  const data = useSelector((state) => state.userLogin.value);
-
-  const [isPage, setIsPage] = useState("");
-  const nevigate = useNavigate();
-  const location = useLocation();
-
-  const handlePage = (page) => {
-    setIsPage(page);
-  };
-
-  const options = [
+const options = [
     { name: "Home", value: "1", to: "/", icon: <Home /> },
     { name: "Messages", value: "2", to: "/messages", icon: <MessageSquare /> },
     { name: "Requst", value: "5", to: "/addfriend", icon: <UserPlus /> },
@@ -33,16 +21,27 @@ const Sidebar = () => {
     { name: "Settings", value: "6", to: "/setting", icon: <Settings /> },
     { name: "Logout", value: "7", to: "/logout", icon: <FiLogOut /> },
   ];
+const Sidebar = () => {
+  const data = useSelector((state) => state.userLogin.value);
+  const [isPage, setIsPage] = useState("");
+  const nevigate = useNavigate();
+  const location = useLocation();
+  const [alert ,setAlert ] = useState('')
+  const handlePage = (page) => {
+    setIsPage(page);
+  };
+
+  
 
   const dispatch = useDispatch();
   const auth = getAuth();
 
-  useEffect(()=>{
-    const currentPage = options.find((item)=>item.to===location.pathname)
-    if(currentPage){
-      setIsPage(currentPage.value)
+  useEffect(() => {
+    const currentPage = options.find((item) => item.to === location.pathname);
+    if (currentPage) {
+      setIsPage(currentPage.value);
     }
-  },[location.pathname])
+  }, [location.pathname]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -53,6 +52,7 @@ const Sidebar = () => {
             email: user.email,
             uid: user.uid,
             img: user.photoURL,
+            alert: 0,
           })
         );
       } else {
@@ -72,14 +72,16 @@ const Sidebar = () => {
           <div className="">
             <div className="flex justify-center flex-col items-center">
               <img
-                src={
-                  (data.img)? data.img: "/avater.png"
-                }
+                src={data.img ? data.img : "/avater.png"}
                 alt="avatar"
                 className="w-15  rounded-full object-cover"
               />
-              <h2 className="font-bold py-1">{(data.name)?data.name: "Name"}</h2>
-              <h2 className="text-[10px] font-medium">{(data.email)?data.email:"Email"}</h2>
+              <h2 className="font-bold py-1">
+                {data.name ? data.name : "Name"}
+              </h2>
+              <p className="text-[8px] font-medium">
+                {data.email ? data.email : "Email"}
+              </p>
             </div>
           </div>
           <div className="lg:hidden"></div>
@@ -91,11 +93,12 @@ const Sidebar = () => {
               onClick={() => handlePage(item.value)}
               key={item.name}
               to={item.to}
-              className={`flex items-center gap-4  px-15 py-6  rounded-tl-xl rounded-bl-xl duration-200 ${
+              className={`flex relative items-center gap-4  px-13 py-6  rounded-tl-xl rounded-bl-xl duration-200 ${
                 item.value == isPage ? " bg-white text-[#5f36f5]" : ""
               }`}
             >
               {item.icon}
+              {alert && <span className="absolute right-8 top-3 bg-red-500 w-2 h-2 mb-4 rounded-full"></span>}
             </Link>
           ))}
         </nav>
