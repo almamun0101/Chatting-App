@@ -3,31 +3,19 @@ import useFirebaseData from "./useFirebaseData";
 import { getDatabase, onValue, ref } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
-
-const initialMessages = {
-  1: [
-    { text: "Hi Alice!", sender: "me" },
-    { text: "Hello!", sender: "friend" },
-  ],
-  2: [
-    { text: "Hey Bob!", sender: "me" },
-    { text: "Yo!", sender: "friend" },
-  ],
-  3: [
-    { text: "Hello Charlie!", sender: "me" },
-    { text: "Hi!", sender: "friend" },
-  ],
-};
-
 const Messages = () => {
   const db = getDatabase();
   const auth = getAuth();
   // const [friends , setFriends ] = useState([]);
   const friendList = useFirebaseData("friendsList/");
-   const userList = useFirebaseData("userslist/");
-  const [selectedFriend, setSelectedFriend] = useState(friendList);
-  const [messages, setMessages] = useState(initialMessages);
+  const userList = useFirebaseData("userslist/");
+  const messagesData = useFirebaseData("messages/");
+  const [selectedFriend, setSelectedFriend] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const generateKey = (uid1, uid2) => {
+    return uid1 < uid2 ? uid1 + uid2 : uid2 + uid1;
+  };
 
   const getFriendInfo = () => {
     const myFriendUid = friendList?.map((f) => {
@@ -41,13 +29,26 @@ const Messages = () => {
     return friendInfo;
   };
   const friends = getFriendInfo();
-console.log(friends)
-  const handleSendMessage = () => {
-    if (newMessage.trim() === "") return;
-    setMessages((prev) => ({
-      ...prev,
-      [selectedFriend.uid]: [...prev[selectedFriend.uid], { text: newMessage, sender: "me" }],
-    }));
+
+  const handleSendMessage = (user) => {
+    const key = generateKey(auth.currentUser.uid, user.uid);
+    const blockData = {
+      uid: key,
+      sender: auth.currentUser.uid,
+      senderName: auth.currentUser.displayName,
+      receiver: user.uid,
+      receiverName: user.name,
+      messages: newMessage,
+    };
+
+    set(ref(db, `messages/${key}`), blockData)
+      .then(() => {
+        remove(ref(db, "friendsList/" + key));
+        toast.success("Block successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     setNewMessage("");
   };
 
@@ -59,8 +60,10 @@ console.log(friends)
           {friends?.map((friend) => (
             <li
               key={friend.uid}
-              className={`rounded-l-2xl p-2 cursor-pointer hover:bg-gray-100 ${
-                selectedFriend.uid === friend.uid ? "bg-gray-200 font-semibold" : ""
+              className={`rounded-l-2xl p-2 text-base cursor-pointer hover:bg-gray-100 ${
+                selectedFriend.uid === friend.uid
+                  ? "bg-gray-200 font-semibold"
+                  : ""
               }`}
               onClick={() => setSelectedFriend(friend)}
             >
@@ -76,14 +79,18 @@ console.log(friends)
         </div>
 
         <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-2">
-          {messages[selectedFriend.id]?.map((msg, index) => (
+          {messages[selectedFriend.uid]?.map((msg, uid) => (
             <div
-              key={index}
-              className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"}`}
+              key={uid}
+              className={`flex ${
+                msg.sender === "me" ? "justify-end" : "justify-start"
+              }`}
             >
               <div
                 className={`px-3 py-2 rounded max-w-xs break-words ${
-                  msg.sender === "me" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
+                  msg.sender === "me"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-800"
                 }`}
               >
                 {msg.text}
@@ -104,7 +111,7 @@ console.log(friends)
             }}
           />
           <button
-            onClick={handleSendMessage}
+            onClick={()=>handleSendMessage(friend)}
             className="ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
           >
             Send
