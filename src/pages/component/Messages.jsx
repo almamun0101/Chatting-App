@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import useFirebaseData from "./useFirebaseData";
+import { getDatabase, onValue, ref } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
-const friends = [
-  { id: 1, name: "Alice" },
-  { id: 2, name: "Bob" },
-  { id: 3, name: "Charlie" },
-];
 
 const initialMessages = {
   1: [
@@ -22,29 +20,47 @@ const initialMessages = {
 };
 
 const Messages = () => {
-  const [selectedFriend, setSelectedFriend] = useState(friends[0]);
+  const db = getDatabase();
+  const auth = getAuth();
+  // const [friends , setFriends ] = useState([]);
+  const friendList = useFirebaseData("friendsList/");
+   const userList = useFirebaseData("userslist/");
+  const [selectedFriend, setSelectedFriend] = useState(friendList);
   const [messages, setMessages] = useState(initialMessages);
   const [newMessage, setNewMessage] = useState("");
 
+  const getFriendInfo = () => {
+    const myFriendUid = friendList?.map((f) => {
+      if (f.sender === auth.currentUser.uid) return f.receiver;
+      else if (f.receiver === auth.currentUser.uid) return f.sender;
+    });
+
+    const friendInfo = userList?.filter((user) =>
+      myFriendUid.includes(user.uid)
+    );
+    return friendInfo;
+  };
+  const friends = getFriendInfo();
+console.log(friends)
   const handleSendMessage = () => {
     if (newMessage.trim() === "") return;
     setMessages((prev) => ({
       ...prev,
-      [selectedFriend.id]: [...prev[selectedFriend.id], { text: newMessage, sender: "me" }],
+      [selectedFriend.uid]: [...prev[selectedFriend.uid], { text: newMessage, sender: "me" }],
     }));
     setNewMessage("");
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/4 border-r border-gray-300 p-4 overflow-y-auto">
+    <div className="flex h-full w-full">
+      <div className="w-35 border-r border-gray-300 py-4 overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Friends</h2>
         <ul>
-          {friends.map((friend) => (
+          {friends?.map((friend) => (
             <li
-              key={friend.id}
-              className={`p-2 cursor-pointer hover:bg-gray-100 ${
-                selectedFriend.id === friend.id ? "bg-gray-200 font-semibold" : ""
+              key={friend.uid}
+              className={`rounded-l-2xl p-2 cursor-pointer hover:bg-gray-100 ${
+                selectedFriend.uid === friend.uid ? "bg-gray-200 font-semibold" : ""
               }`}
               onClick={() => setSelectedFriend(friend)}
             >
