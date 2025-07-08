@@ -11,6 +11,7 @@ const FriendsList = () => {
   const friendList = useFirebaseData("friendsList/");
   const userList = useFirebaseData("userslist/");
   const blockList = useFirebaseData("blockList/");
+
   const generateKey = (uid1, uid2) => {
     return uid1 < uid2 ? uid1 + uid2 : uid2 + uid1;
   };
@@ -55,26 +56,35 @@ const FriendsList = () => {
     set(ref(db, `blockList/${key}`), blockData)
       .then(() => {
         remove(ref(db, "friendsList/" + key));
-        toast.success("bLock successfully");
+        toast.success("Block successfully");
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const blockInfo = (user) => {
-    const blocked = blockList?.find((b) => {
-      return b;
-    });
-    const blockId = (blocked.blockBy === auth.currentUser.uid )? blocked.blockUser : blocked.blockBy;
-    const blockUser = userList?.filter((user) => user.uid===blockId);
-    console.log(blockUser)
-    return blockUser;
-  };
+  const handleUnblock = (user)=>{
+   
+   const key = generateKey(auth.currentUser.uid, user.uid);
+      remove(ref(db, "blockList/" + key)).then(()=>{
+
+       console.log("sucess")
+        toast.success("Unblock successfully")
+     }
+    ).catch((err)=>
+      console.log(err)
+    )
+  }
+
   
+  const myBlocks =  blockList?.filter((b)=> b.blockBy === auth.currentUser.uid) || [];
+  const blockUid = myBlocks.map((b)=>b.blockUser)
+  const myBlockList =  userList?.filter((user)=> blockUid.includes(user.uid)) || []; 
+
+
   return (
     <div className="h-full">
-      <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+      <div className="grid gap-5 grid-cols-1 lg:grid-cols-2 h-full">
         {/* Friend List  */}
         <div className="h-70 overflow-auto">
           <h1 className="text-2xl font-bold ">Friend List</h1>
@@ -118,9 +128,9 @@ const FriendsList = () => {
         {/* block LIst  */}
         <div className="h-70 overflow-auto">
           <h1 className="text-2xl font-bold">Block List</h1>
-          {userList.filter((user)=> user.uid === blockInfo(user)).map((user) => {
-         
-          
+          {myBlockList?.map((user) => {
+           
+            // console.log(b)
             return (
               <li
                 key={user.uid}
@@ -140,7 +150,7 @@ const FriendsList = () => {
 
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleUnfriend(user)}
+                    onClick={() => handleUnblock(user)}
                     className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
                   >
                     Unblock
