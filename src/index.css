@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 body{
-    background: #5f36f5;
+background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+
+
 }
 @custom-variant dark (&:where(.dark, .dark *));

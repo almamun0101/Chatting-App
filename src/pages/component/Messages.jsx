@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FiSearch } from "react-icons/fi";
+import useFirebaseData from "./useFirebaseData";
 
 export default function MessagingUI() {
-  const friends = useSelector((state) => state?.friends?.list || []);
+  const friends = useFirebaseData("friendsList/" || []);
   const messages = useSelector((state) => state?.messages?.conversation || []);
   const [inputText, setInputText] = useState("");
   const [activeFriend, setActiveFriend] = useState(null);
@@ -32,7 +33,7 @@ export default function MessagingUI() {
           type="text"
           placeholder="Search friends..."
           className="mb-4 p-2 w-30 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-300"
-          disabled
+          
         />
         <ul className="space-y-3 overflow-y-auto flex-1">
           {friends.length === 0 ? (

@@ -7,32 +7,27 @@ import {
   Settings,
   UserPlus,
 } from "lucide-react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { userLoginInfo } from "../../slices/userslice";
 import { FiLogOut } from "react-icons/fi";
+
 const options = [
-    { name: "Home", value: "1", to: "/", icon: <Home /> },
-    { name: "Messages", value: "2", to: "/messages", icon: <MessageSquare /> },
-    { name: "Requst", value: "5", to: "/addfriend", icon: <UserPlus /> },
-    { name: "Friends", value: "3", to: "/friendlist", icon: <Users /> },
-    { name: "Notifications", value: "4", to: "/notifications", icon: <Bell /> },
-    { name: "Settings", value: "6", to: "/setting", icon: <Settings /> },
-    { name: "Logout", value: "7", to: "/logout", icon: <FiLogOut /> },
-  ];
+  { name: "Home", value: "1", to: "/", icon: <Home size={20} /> },
+  { name: "Messages", value: "2", to: "/messages", icon: <MessageSquare size={20} /> },
+  { name: "Request", value: "5", to: "/addfriend", icon: <UserPlus size={20} /> },
+  { name: "Friends", value: "3", to: "/friendlist", icon: <Users size={20} /> },
+  { name: "Notifications", value: "4", to: "/notifications", icon: <Bell size={20} /> },
+  { name: "Settings", value: "6", to: "/setting", icon: <Settings size={20} /> },
+  { name: "Logout", value: "7", to: "/logout", icon: <FiLogOut size={20} /> },
+];
+
 const Sidebar = () => {
   const data = useSelector((state) => state.userLogin.value);
   const [isPage, setIsPage] = useState("");
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
-  const [alert ,setAlert ] = useState('')
-  const handlePage = (page) => {
-    setIsPage(page);
-  };
-
-  
-
   const dispatch = useDispatch();
   const auth = getAuth();
 
@@ -56,49 +51,49 @@ const Sidebar = () => {
           })
         );
       } else {
-        dispatch(userLoginInfo(null)), nevigate("/signin");
+        dispatch(userLoginInfo(null));
+        navigate("/signin");
       }
     });
   }, [dispatch]);
 
+  const handlePage = (page) => {
+    setIsPage(page);
+  };
+
   return (
     <div className="flex">
-      {/* Fullscreen Sidebar */}
-
       <div
-        className={`bg-[#5f36f5] h-screen shadow-xl30  text-white pl-1 py-5 space-y-6 flex  flex-col items-center inset-0 z-50 transform transition-transform duration-300 translate-x-0 lg:translate-x-0 lg:relative`}
+        className="bg-gradient-to-b from-[#00c6ff] via-[#0072ff] to-[#1e3c72] h-screen w-20 lg:w-64 shadow-2xl text-white py-5 flex flex-col items-center  transition-all duration-300"
       >
-        <div className="flex items-center justify-between">
-          <div className="">
-            <div className="flex justify-center flex-col items-center">
-              <img
-                src={data.img ? data.img : "/avater.png"}
-                alt="avatar"
-                className="w-15  rounded-full object-cover"
-              />
-              <h2 className="font-bold py-1">
-                {data.name ? data.name : "Name"}
-              </h2>
-              <p className="text-[8px] font-medium">
-                {data.email ? data.email : "Email"}
-              </p>
-            </div>
-          </div>
-          <div className="lg:hidden"></div>
+        <div className="flex flex-col items-center mb-8">
+          <img
+            src={data.img ? data.img : "/avater.png"}
+            alt="avatar"
+            className="w-12 h-12 lg:w-20 lg:h-20 rounded-full object-cover ring-4 ring-white hover:scale-105 duration-300"
+          />
+          <h2 className="hidden lg:block font-semibold mt-2 text-center">{data.name ? data.name : "Name"}</h2>
+          <p className="hidden lg:block text-xs opacity-80 text-center">{data.email ? data.email : "Email"}</p>
         </div>
 
-        <nav className=" overflow-y-auto">
+        <nav className="flex-1 w-full overflow-y-auto">
           {options.map((item) => (
             <Link
-              onClick={() => handlePage(item.value)}
               key={item.name}
               to={item.to}
-              className={`flex relative items-center gap-4  px-13 py-6  rounded-tl-xl rounded-bl-xl duration-200 ${
-                item.value == isPage ? " bg-white text-[#5f36f5]" : ""
-              }`}
+              onClick={() => handlePage(item.value)}
+              className={`group relative flex items-center gap-4 px-4 py-4 my-1 mx-2 rounded-xl transition-all duration-300 
+                ${item.value == isPage ? "bg-white text-[#0072ff] shadow-lg" : "hover:bg-white/10 hover:shadow-md"}`}
             >
-              {item.icon}
-              {alert && <span className="absolute right-8 top-3 bg-red-500 w-2 h-2 mb-4 rounded-full"></span>}
+              <div className="flex justify-center lg:justify-start w-full">
+                {item.icon}
+                <span
+                  className={`hidden lg:inline-block ml-3 text-sm font-medium 
+                    group-hover:scale-105 group-hover:ml-4 duration-300`}
+                >
+                  {item.name}
+                </span>
+              </div>
             </Link>
           ))}
         </nav>
