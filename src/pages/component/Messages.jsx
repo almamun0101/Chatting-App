@@ -111,7 +111,7 @@ const Messages = () => {
             }}
           />
           <button
-            onClick={()=>handleSendMessage(friend)}
+            onClick={() => handleSendMessage(friend)}
             className="ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
           >
             Send
