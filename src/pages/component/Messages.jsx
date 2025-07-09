@@ -2,17 +2,21 @@ import React, { useEffect, useState } from "react";
 import useFirebaseData from "./useFirebaseData";
 import { getDatabase, onValue, ref } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import  {chattingInfo}  from "../../slices/chatSlice";
 
 const Messages = () => {
   const db = getDatabase();
   const auth = getAuth();
-  // const [friends , setFriends ] = useState([]);
+  const dispatch  = useDispatch();
   const friendList = useFirebaseData("friendsList/");
   const userList = useFirebaseData("userslist/");
   const messagesData = useFirebaseData("messages/");
   const [selectedFriend, setSelectedFriend] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+const chatInfo = useSelector((state)=>state.chatInfo.value);
+console.log(chatInfo)
   const generateKey = (uid1, uid2) => {
     return uid1 < uid2 ? uid1 + uid2 : uid2 + uid1;
   };
@@ -51,6 +55,12 @@ const Messages = () => {
       });
     setNewMessage("");
   };
+  const selectFriend = (friend)=>{
+    setSelectedFriend(friend)
+    dispatch(chattingInfo(friend))
+    
+  }
+  
 
   return (
     <div className="flex h-full w-full">
@@ -65,7 +75,7 @@ const Messages = () => {
                   ? "bg-gray-200 font-semibold"
                   : ""
               }`}
-              onClick={() => setSelectedFriend(friend)}
+              onClick={() => selectFriend(friend)}
             >
               {friend.name}
             </li>
