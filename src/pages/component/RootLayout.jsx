@@ -10,7 +10,7 @@ const RootLayout = () => {
         <div className="">
           <Sidebar />
         </div>
-        <div className="bg-white shadow-2xl px-5 w-full my-4 rounded-xl mr-3 p-2">
+        <div className="bg-white shadow-2xl w-full my-4 rounded-xl mr-3">
           <Outlet />
         </div>
       </div>
