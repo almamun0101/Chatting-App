@@ -11,7 +11,7 @@ const Home = () => {
  
   return (
     <div>
-      <div className="">
+      <div className="p-4">
         {/* Main content */}
         <div className="">
           <h1 className="text-2xl font-bold mb-4">

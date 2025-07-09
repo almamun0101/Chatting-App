@@ -25,7 +25,7 @@ const Setting = () => {
 
   return (
     <div>
-      <div className="">
+      <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Settings</h1>
 
         <div className="pb-10">

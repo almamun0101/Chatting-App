@@ -76,7 +76,7 @@ const AddFriend = () => {
       getRequestStatus(user.uid) === "received"
   );
   return (
-    <div className="grid h-full grid-cols-1 lg:grid-cols-2 text-left">
+    <div className="p-4 grid h-full grid-cols-1 lg:grid-cols-2 text-left">
       {/* Request Sent */}
       <div className="w-full mx-auto">
         <h1 className="text-2xl font-bold mb-4">Send Request</h1>{" "}

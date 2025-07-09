@@ -83,7 +83,7 @@ const FriendsList = () => {
 
 
   return (
-    <div className="h-full">
+    <div className="h-full p-4">
       <div className="grid gap-5 grid-cols-1 lg:grid-cols-2 h-full">
         {/* Friend List  */}
         <div className="h-70 overflow-auto">
