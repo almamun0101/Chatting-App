@@ -53,8 +53,8 @@ export default function MessagingUI() {
   };
 
   return (
-    <div className="p-4 rounded-2xl flex h-full bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100">
-      <div className="md:flex flex-col w-2/5 bg-white/70 backdrop-blur-md p-4 border-r border-gray-200 shadow-md">
+    <div className="rounded-2xl flex justify-between  h-full bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100">
+      <div className="md:flex flex-col bg-white/70 backdrop-blur-md p-4 border-r border-gray-200 shadow-md">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-extrabold text-gray-700">Friends</h2>
           <button className="p-2 rounded-full bg-purple-100 hover:bg-purple-200 transition">
@@ -83,8 +83,8 @@ export default function MessagingUI() {
         </ul>
       </div>
 
-      <div className="flex-1 flex flex-col p-4 md:p-6 relative">
-        <h2 className="text-xl md:text-2xl font-extrabold text-gray-700 mb-4 md:mb-6">
+      <div className=" flex flex-col justify-end relative w-full max-h-screen p-4 overflow-hidden">
+        <h2 className="text-xl md:text-2xl font-extrabold text-gray-700 ">
           {activeFriend ? activeFriend.name : "Select a friend to chat"}
         </h2>
         <div className="flex-1 overflow-y-auto space-y-4 pr-0 md:pr-2">
