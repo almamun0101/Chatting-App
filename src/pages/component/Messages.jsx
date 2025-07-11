@@ -125,7 +125,7 @@ export default function MessagingUI() {
                     className={`px-4 py-2 md:px-5 md:py-3 rounded-2xl max-w-xs md:max-w-sm shadow-md ${
                       msg.sender === auth.currentUser.uid
                         ? "bg-gradient-to-br from-blue-500 to-purple-500 text-white text-right"
-                        : "bg-white text-gray-800 border border-gray-200"
+                        : "bg-white text-gray-800 border border-gray-200 text-left"
                     }`}
                   >
                    <h2 className="text-lg">

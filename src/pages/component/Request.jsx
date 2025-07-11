@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import useFirebaseData from "./useFirebaseData";
 import toast from "react-hot-toast";
 
-const AddFriend = () => {
+const Request = () => {
   const db = getDatabase();
   const auth = getAuth();
 
@@ -116,17 +116,7 @@ const AddFriend = () => {
 
   return (
     <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 bg-gray-50 min-h-full">
-      {/* Sent Requests */}
-      <div className="bg-white shadow rounded-2xl p-6">
-        <h2 className="text-xl font-bold mb-4 border-b pb-2">Sent Requests</h2>
-        {sentRequests.length === 0 ? (
-          <p className="text-gray-500">No sent requests yet.</p>
-        ) : (
-          <div className="space-y-4">
-            {sentRequests.map((user) => renderRequestCard(user, "sent"))}
-          </div>
-        )}
-      </div>
+     
 
       {/* Received Requests */}
       <div className="bg-white shadow rounded-2xl p-6">
@@ -147,4 +137,4 @@ const AddFriend = () => {
   );
 };
 
-export default AddFriend;
+export default Request;

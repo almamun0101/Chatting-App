@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { userLoginInfo } from "../slices/userslice";
 import Userlist from "./component/Userlist";
+import Request from "./component/Request";
 
 const Home = () => {
   const data = useSelector((state) => state.userLogin.value); 
@@ -17,9 +18,12 @@ const Home = () => {
           <h1 className="text-2xl font-bold mb-4">
             Welcome 
           </h1>
-     
-
+     <div className="flex flex-wrap items-center ">
           <Userlist/>
+          <Request/>
+
+     </div>
+
 
          
         </div>
