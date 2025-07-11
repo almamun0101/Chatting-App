@@ -5,6 +5,8 @@ import useFirebaseData from "./useFirebaseData";
 import { getAuth } from "firebase/auth";
 import { chattingInfo } from "../../slices/chatSlice";
 import { getDatabase, push, ref } from "firebase/database";
+import date from "./date";
+import moment from "moment";
 
 export default function MessagingUI() {
   const auth = getAuth();
@@ -16,6 +18,7 @@ export default function MessagingUI() {
   const [activeFriend, setActiveFriend] = useState(null);
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
+  const NowTime = date();
 
   const generateKey = (uid1, uid2) => (uid1 < uid2 ? uid1 + uid2 : uid2 + uid1);
 
@@ -36,6 +39,7 @@ export default function MessagingUI() {
       sender: auth.currentUser.uid,
       receiver: activeFriend.uid,
       messages: inputText,
+      date : NowTime,
     };
 
     push(ref(db, "messages/"), messageData)
@@ -62,7 +66,7 @@ export default function MessagingUI() {
   }, [messages, activeFriend]);
 
   return (
-    <div className="rounded-2xl flex flex-col md:flex-row h-screen overflow-hidden bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100">
+    <div className="rounded-2xl flex h-full overflow-hidden bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100">
       {/* Friends sidebar */}
       <div className="flex-shrink-0 md:w-1/4 bg-white/70 backdrop-blur-md p-4 border-r border-gray-200 shadow-md overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
@@ -120,11 +124,14 @@ export default function MessagingUI() {
                   <div
                     className={`px-4 py-2 md:px-5 md:py-3 rounded-2xl max-w-xs md:max-w-sm shadow-md ${
                       msg.sender === auth.currentUser.uid
-                        ? "bg-gradient-to-br from-blue-500 to-purple-500 text-white"
+                        ? "bg-gradient-to-br from-blue-500 to-purple-500 text-white text-right"
                         : "bg-white text-gray-800 border border-gray-200"
                     }`}
                   >
-                    {msg.messages}
+                   <h2 className="text-lg">
+                     {msg.messages}
+                    </h2>
+                    <p className="text-[9px]">{moment(msg.date, "YYYYMMDD,h:mm").fromNow()}</p>
                   </div>
                 </div>
               ))
