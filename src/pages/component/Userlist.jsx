@@ -3,11 +3,12 @@ import { getDatabase, ref, onValue, set } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import useFirebaseData from "./useFirebaseData";
-
+import date from "./date";
 const UserList = () => {
   const db = getDatabase();
   const auth = getAuth();
-
+  const nowTime = date();
+ 
   const [userList, setUserList] = useState([]);
 
   const allRequest = useFirebaseData("friendRequest/");
@@ -44,7 +45,8 @@ const UserList = () => {
   const isFriend = (userId) => {
     return friendsList.some(
       (friend) =>
-        (friend.sender === auth.currentUser.uid && friend.receiver === userId) ||
+        (friend.sender === auth.currentUser.uid &&
+          friend.receiver === userId) ||
         (friend.receiver === auth.currentUser.uid && friend.sender === userId)
     );
   };
@@ -76,11 +78,20 @@ const UserList = () => {
       senderName: auth.currentUser.displayName,
       receiver: user.uid,
       receiverName: user.name,
+      date: nowTime,
     };
 
     set(ref(db, `friendRequest/${key}`), requestData).then(() => {
       toast.success("Friend request sent!");
     });
+    set(ref(db, `notification/${user.uid}`), {
+      notfi: `${auth.currentUser.displayName}`,
+      type : "SentRequest",
+      id : user.uid,
+      date : nowTime,
+    }).then(() => {
+      toast.success("Friend request sent!");
+    }).catch((err)=>console.log(err))
   };
 
   // Only users not already friends or with pending requests
@@ -93,7 +104,9 @@ const UserList = () => {
   return (
     <div className="max-w-3xl mx-auto p-6">
       <Toaster position="bottom-center" />
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Add New Friends</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+        Add New Friends
+      </h2>
 
       {filteredUsers.length > 0 ? (
         <ul className="space-y-4">
@@ -103,13 +116,18 @@ const UserList = () => {
               className="flex items-center bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300"
             >
               <img
-                src={user.img || `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
+                src={
+                  user.img ||
+                  `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`
+                }
                 alt={user.name}
                 className="w-14 h-14 rounded-full object-cover border-2 border-blue-500 shadow-sm"
               />
 
               <div className="ml-4 flex-1">
-                <p className="font-semibold text-lg text-gray-700">{user.name}</p>
+                <p className="font-semibold text-lg text-gray-700">
+                  {user.name}
+                </p>
                 <p className="text-gray-500 text-sm">{user.email}</p>
               </div>
 

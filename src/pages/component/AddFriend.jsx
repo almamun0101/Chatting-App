@@ -1,12 +1,21 @@
 import { getAuth } from "firebase/auth";
-import { getDatabase, onValue, ref, remove, set } from "firebase/database";
+import {
+  getDatabase,
+  onValue,
+  push,
+  ref,
+  remove,
+  set,
+} from "firebase/database";
 import React, { useEffect, useState } from "react";
 import useFirebaseData from "./useFirebaseData";
 import toast from "react-hot-toast";
+import date from "./date"
 
 const AddFriend = () => {
   const db = getDatabase();
   const auth = getAuth();
+  const nowTime = date();
 
   const [requestList, setRequestList] = useState([]);
   const allUser = useFirebaseData("userslist/");
@@ -63,6 +72,17 @@ const AddFriend = () => {
       .then(() => {
         remove(ref(db, "friendRequest/" + key));
         toast.success("Friend request accepted");
+
+        set(ref(db, `notification/${user.uid}`), {
+          notfi: `${auth.currentUser.displayName}`,
+          type: "AcpetRequest",
+          id: user.uid,
+          date: nowTime,
+        })
+          .then(() => {
+           remove(ref(db, `notification/${user.uid}`));
+          })
+          .catch((err) => console.log(err));
       })
       .catch((error) => {
         console.error(error);

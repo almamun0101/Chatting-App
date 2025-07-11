@@ -20,7 +20,7 @@ const Home = () => {
           </h1>
      <div className="flex flex-wrap items-center ">
           <Userlist/>
-          <Request/>
+         
 
      </div>
 
