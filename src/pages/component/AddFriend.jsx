@@ -3,8 +3,8 @@ import {
   getDatabase,
   onValue,
   remove,
-  ref,
   set,
+  ref,
 } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import useFirebaseData from "./useFirebaseData";
@@ -74,62 +74,75 @@ const AddFriend = () => {
       });
   };
 
-  const renderRequest = (user) => {
-    if (user.uid === auth.currentUser.uid) return null;
+  const sentRequests = allUser.filter((user) => {
     const request = getRequest(user);
-    if (!request) return null;
+    return request && request.sender === auth.currentUser.uid;
+  });
 
-    let status = null;
-    if (request.sender === auth.currentUser.uid) {
-      status = "sent";
-    } else if (request.receiver === auth.currentUser.uid) {
-      status = "received";
-    }
+  const receivedRequests = allUser.filter((user) => {
+    const request = getRequest(user);
+    return request && request.receiver === auth.currentUser.uid;
+  });
 
-    return (
-      <div
-        key={user.uid}
-        className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-md transition-all duration-300"
-      >
-        <img
-          src={user.img}
-          alt={user.name}
-          className="w-14 h-14 rounded-full object-cover"
-        />
-        <div className="flex-1">
-          <h2 className="font-semibold text-lg">{user.name}</h2>
-          <p className="text-gray-500 text-sm">{user.email}</p>
-          <p className="text-gray-400 text-xs mt-1">
-            {moment(request.date, "YYYYMMDD, h:mm").fromNow()}
-          </p>
-        </div>
-        <div className="flex flex-col gap-2">
-          {status === "sent" && (
-            <span
-              onClick={() => handleCancelRequest(user.uid)}
-              className="cursor-pointer bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-1 rounded text-center"
-            >
-              Cancel
-            </span>
-          )}
-          {status === "received" && (
-            <span
-              onClick={() => handleAccept(user)}
-              className="cursor-pointer bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-1 rounded text-center"
-            >
-              Accept
-            </span>
+  const renderRequestCard = (user, status) => (
+    <div
+      key={user.uid}
+      className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-md transition-all duration-300"
+    >
+      <img
+        src={user.img}
+        alt={user.name}
+        className="w-14 h-14 rounded-full object-cover"
+      />
+      <div className="flex-1">
+        <h2 className="font-semibold text-lg">{user.name}</h2>
+        <p className="text-gray-500 text-sm">{user.email}</p>
+        <p className="text-gray-400 text-xs mt-1">
+          {moment(getRequest(user).date, "YYYYMMDD, h:mm").fromNow()}
+        </p>
+      </div>
+      <div className="flex flex-col gap-2">
+        {status === "sent" && (
+          <span
+            onClick={() => handleCancelRequest(user.uid)}
+            className="cursor-pointer bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-1 rounded text-center"
+          >
+            Cancel
+          </span>
+        )}
+        {status === "received" && (
+          <span
+            onClick={() => handleAccept(user)}
+            className="cursor-pointer bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-1 rounded text-center"
+          >
+            Accept
+          </span>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="max-w-5xl mx-auto py-10 px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="bg-gray-50 p-5 rounded-xl shadow">
+        <h2 className="text-xl font-bold mb-4">Sent Requests</h2>
+        <div className="space-y-4">
+          {sentRequests.length > 0 ? (
+            sentRequests.map((user) => renderRequestCard(user, "sent"))
+          ) : (
+            <p className="text-gray-500">No sent requests</p>
           )}
         </div>
       </div>
-    );
-  };
-
-  return (
-    <div className="max-w-4xl mx-auto py-10 px-4">
-      <h2 className="text-2xl font-bold mb-6">Friend Requests</h2>
-      <div className="space-y-5">
-        {allUser.map((user) => renderRequest(user))}
+      <div className="bg-gray-50 p-5 rounded-xl shadow">
+        <h2 className="text-xl font-bold mb-4">Received Requests</h2>
+        <div className="space-y-4">
+          {receivedRequests.length > 0 ? (
+            receivedRequests.map((user) => renderRequestCard(user, "received"))
+          ) : (
+            <p className="text-gray-500">No received requests</p>
+          )}
+        </div>
       </div>
     </div>
   );
