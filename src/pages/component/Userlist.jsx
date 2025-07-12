@@ -115,7 +115,7 @@ const UserList = () => {
               key={user.uid}
               className="flex items-center bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300"
             >
-              <img
+            <img
                 src={
                   user.img ||
                   `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`
