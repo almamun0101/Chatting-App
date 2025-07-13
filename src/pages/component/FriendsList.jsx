@@ -71,7 +71,7 @@ const FriendsList = () => {
 
   return (
     <div className="h-full p-6 bg-gradient-to-b from-blue-50 to-white">
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="h-full grid gap-6 grid-cols-1 lg:grid-cols-2">
         {/* Friend List */}
         <div className="bg-white rounded-xl shadow-lg p-5 flex flex-col h-full">
           <h2 className="text-xl font-bold mb-4 text-blue-600">Friends</h2>

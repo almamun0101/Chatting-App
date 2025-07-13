@@ -68,7 +68,7 @@ const UserList = () => {
 
     const requestExists = allRequest?.some((item) => item.uid === key);
     if (requestExists) {
-      toast.error("Request already sent!");
+     
       return;
     }
 
@@ -90,7 +90,7 @@ const UserList = () => {
       id : user.uid,
       date : nowTime,
     }).then(() => {
-      toast.success("Friend request sent!");
+      
     }).catch((err)=>console.log(err))
   };
 

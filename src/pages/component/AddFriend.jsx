@@ -1,11 +1,5 @@
 import { getAuth } from "firebase/auth";
-import {
-  getDatabase,
-  onValue,
-  remove,
-  set,
-  ref,
-} from "firebase/database";
+import { getDatabase, onValue, remove, set, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import useFirebaseData from "./useFirebaseData";
 import toast from "react-hot-toast";
@@ -124,7 +118,7 @@ const AddFriend = () => {
 
   return (
     <div className="h-full mx-auto py-10 px-4 grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div className="bg-gray-50 p-5 rounded-xl shadow">
+      <div className=" p-5 ">
         <h2 className="text-xl font-bold mb-4">Sent Requests</h2>
         <div className="space-y-4">
           {sentRequests.length > 0 ? (
@@ -134,7 +128,7 @@ const AddFriend = () => {
           )}
         </div>
       </div>
-      <div className="bg-gray-50 p-5 rounded-xl shadow">
+      <div className="p-5 ">
         <h2 className="text-xl font-bold mb-4">Received Requests</h2>
         <div className="space-y-4">
           {receivedRequests.length > 0 ? (
