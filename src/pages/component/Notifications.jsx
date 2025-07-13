@@ -4,21 +4,24 @@ import useFirebaseData from "./useFirebaseData";
 import { BsPersonAdd } from "react-icons/bs";
 import { getAuth } from "firebase/auth";
 import moment from "moment";
+import { useNavigate } from "react-router";
+import { FaUserCheck } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
 const Notifications = () => {
   const notifi = useFirebaseData("notification/");
   const auth = getAuth();
-  const getIcon = (type) => {
-    switch (type) {
-      case "success":
-        return <CheckCircleIcon className="text-green-500" size={24} />;
-      case "error":
-        return <XCircleIcon className="text-red-500" size={24} />;
-      case "info":
-      default:
-        return <BellIcon className="text-blue-500" size={24} />;
-    }
-  };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+
+  const handleMessage = (user)=>{
+    navigate("/messages")  
+    // dispatch(chattingInfo(friend));
+    console.log(user)
+  }
+ 
+
 
   return (
     <div className="min-h-full flex justify-center py-10 px-4">
@@ -35,10 +38,14 @@ const Notifications = () => {
               .map((notification) => (
                 <div
                   key={notification.id}
-                  className=" flex items-center gap-3 px-6 py-2 hover:bg-gray-50 transition-colors border-b last:border-b-0"
+                  className=" flex justify-between items-center gap-3 px-6 py-2 hover:bg-gray-50 transition-colors border-b last:border-b-0"
                 >
+                  {console.log(notification)}
                   {notification.type === "SentRequest" && (
                     <BsPersonAdd size={25} className="text-green-500" />
+                  )}
+                  {notification.type === "AcceptRequest" && (
+                    <FaUserCheck  size={25} className="text-green-500" />
                   )}
 
                   <div>
@@ -48,10 +55,20 @@ const Notifications = () => {
                       </span>
                       {notification.type === "SentRequest" &&
                         "    Sent you a Freind Request "}
+                      {notification.type === "AcceptRequest" &&
+                        "   Accpet you a Freind Request "}
                     </p>
                     <span className="text-xs text-gray-400">
                       {moment(notification.date, "YYYYMMDD,h:mm").fromNow()}
                     </span>
+                  </div>
+                  <div className="">
+                    <button
+                      onClick={() => handleMessage(notification)}
+                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                    >
+                      Message
+                    </button>
                   </div>
                 </div>
               ))
@@ -61,8 +78,6 @@ const Notifications = () => {
             </div>
           )}
         </div>
-
-      
       </div>
     </div>
   );

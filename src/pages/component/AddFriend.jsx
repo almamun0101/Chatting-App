@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { getDatabase, onValue, remove, set, ref } from "firebase/database";
+import { getDatabase, onValue, remove, set, ref, push } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import useFirebaseData from "./useFirebaseData";
 import toast from "react-hot-toast";
@@ -54,13 +54,14 @@ const AddFriend = () => {
         remove(ref(db, "friendRequest/" + key));
         toast.success("Friend request accepted");
 
-        set(ref(db, `notification/${user.uid}`), {
-          notfi: `${auth.currentUser.displayName}`,
+        set(push(ref(db, `notification/`)), {
+          notifi: auth.currentUser.displayName,
           type: "AcceptRequest",
           id: user.uid,
           date: nowTime,
         }).then(() => {
-          remove(ref(db, `notification/${user.uid}`));
+          console.log("sent notfication")
+         
         });
       })
       .catch((error) => {
