@@ -1,0 +1,289 @@
+[33mcommit 34ac33fc9cc74eb311d067830f974eaf2375bf90[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sun Jul 13 15:13:55 2025 +0600
+
+    notifi uix update
+
+[33mcommit 6fa47e3c3b3c099fad256bc5550d694996535b42[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sun Jul 13 13:05:33 2025 +0600
+
+    box delete shaodw
+
+[33mcommit baf454b125be1badb3d1e153b977514031eb2dc0[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sun Jul 13 12:56:20 2025 +0600
+
+    add rest update
+
+[33mcommit 6c5ce504fd9178b7f70176d82bf987c04471783a[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sun Jul 13 01:14:56 2025 +0600
+
+    request time done
+
+[33mcommit de464ef60aa30d4c383deb4061887decebd6d8b0[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sun Jul 13 01:14:26 2025 +0600
+
+    reqst update
+
+[33mcommit d792e551d499d1582fbf355cefd3384c336243c3[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Fri Jul 11 13:11:56 2025 +0600
+
+    done
+
+[33mcommit 768f53520aca5c79a3bfacf03eba8a3ad9ace3de[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Fri Jul 11 11:38:28 2025 +0600
+
+    all page fix
+
+[33mcommit 70fa1d76bfe37d488bc6990e2a8fb12c8c9c2019[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Fri Jul 11 10:33:54 2025 +0600
+
+    msge time done
+
+[33mcommit 89bb40318125114940c623909146b727c8194114[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Fri Jul 11 04:03:48 2025 +0600
+
+    msge update not fixed all
+
+[33mcommit 5f8c55fadfe0e1bc371d41b060c02e4f052207e0[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Fri Jul 11 02:35:42 2025 +0600
+
+    mesege uix
+
+[33mcommit 610c6aab6bff99e25c668f27ef057605b1fa4335[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Fri Jul 11 02:04:50 2025 +0600
+
+    mesges send and recved done
+
+[33mcommit 5e6e4b798790e759bc7c5356b87268b118e0abed[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Thu Jul 10 01:03:32 2025 +0600
+
+    mesge send db
+
+[33mcommit f79787eee26dfcb55a71a82907f1c4258e4c2ac8[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jul 9 22:17:56 2025 +0600
+
+    sidebar design update
+
+[33mcommit f1b20dd879b471fe3554a5dae45eb58c92a59d5e[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jul 9 17:44:53 2025 +0600
+
+    uix design update
+
+[33mcommit 30bb639d0bc3d26e0955888038ecacc12f900f02[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jul 9 15:05:29 2025 +0600
+
+    redux update done
+
+[33mcommit cc931386bf5d068ddb54efe40dbe119a388d7230[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jul 9 13:06:35 2025 +0600
+
+    chatslice added
+
+[33mcommit 78956bbdb0d5d9bd86acfdd219b91620c94e23a1[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jul 9 01:39:47 2025 +0600
+
+    mesge half done
+
+[33mcommit 8cdca75f2e866892d836b3cdae327f8a893cb519[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jul 9 00:55:04 2025 +0600
+
+    messagwe frnd list done
+
+[33mcommit 0109ab699108986c77bb1c3bda60104bc6d0c03b[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Tue Jul 8 20:23:02 2025 +0600
+
+    block and unblock done
+
+[33mcommit 103e2b06dee1848b306ccd0aa3e75d5ff82419f8[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sun Jul 6 02:59:04 2025 +0600
+
+    block side working
+
+[33mcommit 8955fc227d057889ddc8a18950c4dac80a7bd204[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sat Jul 5 20:55:47 2025 +0600
+
+    block me
+
+[33mcommit db3a9d9e07c08c716513d6057c2deb29676ef8a1[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sat Jul 5 12:50:02 2025 +0600
+
+    unfriend
+
+[33mcommit 0180d3c168f89b15c30812ef86624eae481adda9[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sat Jul 5 03:55:42 2025 +0600
+
+    friendlist
+
+[33mcommit f905fc1f9993223464c24df6c5a5740c10e489ec[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sat Jul 5 02:43:53 2025 +0600
+
+    request design done
+
+[33mcommit 43bb8fadd918e69290c3f928ac3b139a99d2c260[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sat Jul 5 02:27:46 2025 +0600
+
+    request sent and receive diffeernt grid
+
+[33mcommit b3b5b371a0cc61d0750bcc2b57032208e2463384[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Fri Jul 4 23:18:27 2025 +0600
+
+    design updated
+
+[33mcommit 254ba41e1386ffa3f239fb199ede0083f1b678b1[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Fri Jul 4 20:30:01 2025 +0600
+
+    design update
+
+[33mcommit a3ac0d32e2644aa98b03a49b8dcf12da17b9c656[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Fri Jul 4 02:04:32 2025 +0600
+
+    border changed
+
+[33mcommit 7d37a62974424a4956f2e15d9139a8737cd49ec1[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Thu Jun 26 04:18:44 2025 +0600
+
+    friends list start
+
+[33mcommit 8a92f9852f573a95ba784f58173007837071b19e[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Thu Jun 26 04:10:18 2025 +0600
+
+    request accpet done
+
+[33mcommit 6568b2425c2c9f750d25e338ff3a82b12661ff73[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Thu Jun 26 02:30:34 2025 +0600
+
+    userlist bugs fix
+
+[33mcommit b3dd7b29cfff78b1cf00000563d22b5528deaa96[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Thu Jun 26 00:23:53 2025 +0600
+
+    userList done
+
+[33mcommit e5ecce88a9d906990debbfb6dadea9153b5aa606[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jun 25 20:26:51 2025 +0600
+
+    requst list hide
+
+[33mcommit 5c76c90fa784ad7d5471a4c53ac769bd8bca079d[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jun 25 17:17:28 2025 +0600
+
+    reqst send and accpet button
+
+[33mcommit 5d5a56e9dd019a59941fb008a608335c9fe13344[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Tue Jun 24 17:12:09 2025 +0600
+
+    requst test
+
+[33mcommit 66d91cc4531585e6b532eb4fe71b816ae483068b[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Tue Jun 24 14:31:11 2025 +0600
+
+    friedn reqst send
+
+[33mcommit f1537fcfefc9e6297a056916fd31ada73d33f09a[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Tue Jun 24 01:20:02 2025 +0600
+
+    freid requst on work
+
+[33mcommit c5ac90ad908ab433f9b0ee4b44fa56b16445bf3d[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Mon Jun 23 18:43:31 2025 +0600
+
+    update profile
+
+[33mcommit a97fb8cae6915c35a1d74ff94309dad152c9c58d[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Mon Jun 23 11:26:00 2025 +0600
+
+    user list from db
+
+[33mcommit 1ca5f0bb37ceb0ae041b7ef8cc91541812457c7e[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sun Jun 22 01:27:30 2025 +0600
+
+    google signin
+
+[33mcommit bab44cac50e337fdff1564e4bedf69135fb9b280[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Sat Jun 21 03:09:34 2025 +0600
+
+    Google Sign iN
+
+[33mcommit 87420eaf6bba38fac75004713496acdcb5f70f6c[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jun 18 17:47:31 2025 +0600
+
+    signout from auth
+
+[33mcommit cfe9edfe90871a5a327b15354e3ffc043f22c08e[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Wed Jun 18 13:09:48 2025 +0600
+
+    remvoe local store
+
+[33mcommit 24e946a87614e896c6253850431580792b1f04a8[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Mon Jun 16 02:37:56 2025 +0600
+
+    design
+
+[33mcommit c9cf3d51e775c69c3308ffeb08eb63b358d3078d[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Mon Jun 16 02:12:30 2025 +0600
+
+    design fix height
+
+[33mcommit 14debdcc821f7c206d4c83d977247f630704441c[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Tue Jun 3 15:15:03 2025 +0600
+
+    local storgae
+
+[33mcommit e36e939c4b561aec8e3d6da9cd805135293e2d73[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Tue Jun 3 15:03:24 2025 +0600
+
+    redux dispay name
+
+[33mcommit 9c9c6a4990a5aa994f38712fb16434f441757077[m
+Author: Al Mamun Khan <almamunkhan0101@gmail.com>
+Date:   Tue Jun 3 14:19:54 2025 +0600
+
+    dispatch
+
+[33mcommit 2eeec085cb0fc

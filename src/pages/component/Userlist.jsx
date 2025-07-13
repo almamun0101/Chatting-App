@@ -1,46 +1,92 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { getDatabase, ref, onValue, set } from "firebase/database";
+import React, { useEffect, useState } from "react";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import useFirebaseData from "./useFirebaseData";
-import date from "./date";
+import date from "./date"
+
 const UserList = () => {
   const db = getDatabase();
   const auth = getAuth();
   const nowTime = date();
- 
   const [userList, setUserList] = useState([]);
+  const [friendsList, setFriendsList] = useState([]);
 
   const allRequest = useFirebaseData("friendRequest/");
   const allFriends = useFirebaseData("friendsList/");
+  const allBlocks = useFirebaseData("blockList/");
 
-  // Fetch all users except the current user
+  const generateKey = (uid1, uid2) => {
+    return uid1 < uid2 ? uid1 + uid2 : uid2 + uid1;
+  };
+
   useEffect(() => {
     const userListRef = ref(db, "userslist/");
     onValue(userListRef, (snapshot) => {
-      const users = [];
+      const Userarray = [];
       snapshot.forEach((item) => {
+        const userData = item.val();
         if (item.key !== auth.currentUser?.uid) {
-          users.push({ ...item.val(), uid: item.key });
+          Userarray.push({ ...userData, uid: item.key });
         }
       });
-      setUserList(users);
+      setUserList(Userarray);
     });
   }, [auth.currentUser?.uid]);
 
-  // Helper to generate consistent key
-  const generateKey = (uid1, uid2) => (uid1 < uid2 ? uid1 + uid2 : uid2 + uid1);
-
-  // Find all current friends
-  const friendsList = useMemo(() => {
-    return allFriends
-      ? allFriends.filter(
-          (friend) =>
-            friend.sender === auth.currentUser?.uid ||
-            friend.receiver === auth.currentUser?.uid
-        )
-      : [];
+  useEffect(() => {
+    if (allFriends) {
+      const myFriends = allFriends.filter(
+        (friend) =>
+          friend.sender === auth.currentUser?.uid ||
+          friend.receiver === auth.currentUser?.uid
+      );
+      setFriendsList(myFriends);
+    }
   }, [allFriends, auth.currentUser?.uid]);
+
+  const addFriend = (user) => {
+    const key = generateKey(auth.currentUser.uid, user.uid);
+    const requstData = {
+      uid: key,
+      sender: auth.currentUser.uid,
+      senderName: auth.currentUser.displayName,
+      receiver: user.uid,
+      receiverName: user.name,
+    };
+    const requestExists = allRequest?.some((item) => item.uid === key);
+    if (!requestExists) {
+      set(ref(db, `friendRequest/${key}`), requstData)
+        .then(() => {
+          const notifiData = {
+            id: user.uid,
+            notifi: user.name,
+            type: "SentRequest",
+            date:nowTime,
+          };
+          set(push(ref(db, `notification/`)), notifiData)
+            .then(() => console.log())
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
+    } else {
+      toast.error("Request already sent!");
+    }
+  };
+
+  const getRequestStatus = (userId) => {
+    const req = allRequest?.find(
+      (req) =>
+        (req.sender === auth.currentUser.uid && req.receiver === userId) ||
+        (req.receiver === auth.currentUser.uid && req.sender === userId)
+    );
+
+    if (req) {
+      if (req.sender === auth.currentUser.uid) return "sent";
+      if (req.receiver === auth.currentUser.uid) return "received";
+    }
+    return null;
+  };
 
   const isFriend = (userId) => {
     return friendsList.some(
@@ -50,99 +96,55 @@ const UserList = () => {
         (friend.receiver === auth.currentUser.uid && friend.sender === userId)
     );
   };
-
-  const getRequestStatus = (userId) => {
-    const req = allRequest?.find(
-      (r) =>
-        (r.sender === auth.currentUser.uid && r.receiver === userId) ||
-        (r.receiver === auth.currentUser.uid && r.sender === userId)
+  const isBlock = (userId) => {
+    return allBlocks.some(
+      (friend) =>
+        (friend.blockBy === auth.currentUser.uid &&
+          friend.blockUser === userId) ||
+        (friend.blockUser === auth.currentUser.uid && friend.blockBy === userId)
     );
-    if (req) {
-      return req.sender === auth.currentUser.uid ? "sent" : "received";
-    }
-    return null;
   };
 
-  const addFriend = (user) => {
-    const key = generateKey(auth.currentUser.uid, user.uid);
-
-    const requestExists = allRequest?.some((item) => item.uid === key);
-    if (requestExists) {
-     
-      return;
-    }
-
-    const requestData = {
-      uid: key,
-      sender: auth.currentUser.uid,
-      senderName: auth.currentUser.displayName,
-      receiver: user.uid,
-      receiverName: user.name,
-      date: nowTime,
-    };
-
-    set(ref(db, `friendRequest/${key}`), requestData).then(() => {
-      toast.success("Friend request sent!");
-    });
-    set(ref(db, `notification/${user.uid}`), {
-      notfi: `${auth.currentUser.displayName}`,
-      type : "SentRequest",
-      id : user.uid,
-      date : nowTime,
-    }).then(() => {
-      
-    }).catch((err)=>console.log(err))
-  };
-
-  // Only users not already friends or with pending requests
-  const filteredUsers = useMemo(() => {
-    return userList.filter(
-      (user) => !getRequestStatus(user.uid) && !isFriend(user.uid)
-    );
-  }, [userList, allRequest, friendsList]);
+  const filteredUsers = userList.filter(
+    (user) =>
+      getRequestStatus(user.uid) === null &&
+      !isFriend(user.uid) &&
+      !isBlock(user.uid)
+  );
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <Toaster position="bottom-center" />
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-        Add New Friends
-      </h2>
-
-      {filteredUsers.length > 0 ? (
-        <ul className="space-y-4">
-          {filteredUsers.map((user) => (
-            <li
-              key={user.uid}
-              className="flex items-center bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300"
-            >
-            <img
-                src={
-                  user.img ||
-                  `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`
-                }
+    <div className="mx-auto p-4">
+      <ul className="space-y-4">
+        <Toaster position="bottom-center" reverseOrder={false} />
+        {filteredUsers.map((user) => (
+          <li
+            key={user.uid}
+            className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
+          >
+            <div className="flex items-center">
+              <img
+                src={user.img}
                 alt={user.name}
-                className="w-14 h-14 rounded-full object-cover border-2 border-blue-500 shadow-sm"
+                className="w-12 h-12 rounded-full object-cover mr-4"
               />
-
-              <div className="ml-4 flex-1">
-                <p className="font-semibold text-lg text-gray-700">
-                  {user.name}
-                </p>
+              <div>
+                <p className="font-semibold text-lg">{user.name}</p>
                 <p className="text-gray-500 text-sm">{user.email}</p>
               </div>
+            </div>
 
+            <div className="flex gap-2">
               <button
                 onClick={() => addFriend(user)}
-                className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow hover:scale-105 hover:shadow-lg transition"
+                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
               >
+              
                 Add Friend
               </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-center text-gray-500">No users available to add.</p>
-      )}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

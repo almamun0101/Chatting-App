@@ -44,7 +44,7 @@ const Notifications = () => {
                   <div>
                     <p className="text-gray-700  ">
                       <span className="text-lg font-bold">
-                        {notification.notfi + "   "}
+                        {notification.notifi + "   "}
                       </span>
                       {notification.type === "SentRequest" &&
                         "    Sent you a Freind Request "}
