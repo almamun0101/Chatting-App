@@ -21,8 +21,8 @@ const Notifications = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex justify-center py-10 px-4">
-      <div className="w-full  bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div className="min-h-full flex justify-center py-10 px-4">
+      <div className="w-full overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <h1 className="text-xl font-semibold">Notifications</h1>
           <BellIcon className="text-gray-500" size={24} />
@@ -62,11 +62,7 @@ const Notifications = () => {
           )}
         </div>
 
-        <div className="px-6 py-3 border-t bg-gray-50 text-center">
-          <button className="text-blue-600 text-sm hover:underline">
-            Mark all as read
-          </button>
-        </div>
+      
       </div>
     </div>
   );

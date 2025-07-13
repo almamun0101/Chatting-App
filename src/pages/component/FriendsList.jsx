@@ -70,10 +70,10 @@ const FriendsList = () => {
   };
 
   return (
-    <div className="h-full p-6 bg-gradient-to-b from-blue-50 to-white">
+    <div className="h-full ">
       <div className="h-full grid gap-6 grid-cols-1 lg:grid-cols-2">
         {/* Friend List */}
-        <div className="bg-white rounded-xl shadow-lg p-5 flex flex-col h-full">
+        <div className="bg-white  p-5 flex flex-col h-full">
           <h2 className="text-xl font-bold mb-4 text-blue-600">Friends</h2>
           <div className="overflow-y-auto space-y-4 flex-1">
             {friends.length ? (

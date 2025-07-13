@@ -118,7 +118,7 @@ const AddFriend = () => {
 
   return (
     <div className="h-full mx-auto py-10 px-4 grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div className=" p-5 ">
+      <div className=" p-5">
         <h2 className="text-xl font-bold mb-4">Sent Requests</h2>
         <div className="space-y-4">
           {sentRequests.length > 0 ? (
