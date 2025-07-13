@@ -7,18 +7,22 @@ import moment from "moment";
 import { useNavigate } from "react-router";
 import { FaUserCheck } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+import { chattingInfo } from "../../slices/chatSlice";
+
 
 const Notifications = () => {
   const notifi = useFirebaseData("notification/");
   const auth = getAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userList = useFirebaseData("userslist/") || [];
 
 
-  const handleMessage = (user)=>{
+  const handleMessage = (message)=>{
     navigate("/messages")  
-    // dispatch(chattingInfo(friend));
-    console.log(user)
+    const getUid = userList.find((user)=>user.uid === message.id )
+    dispatch(chattingInfo(getUid));
+    console.log(getUid)
   }
  
 
@@ -40,7 +44,7 @@ const Notifications = () => {
                   key={notification.id}
                   className=" flex justify-between items-center gap-3 px-6 py-2 hover:bg-gray-50 transition-colors border-b last:border-b-0"
                 >
-                  {console.log(notification)}
+                  {/* {console.log(notification)} */}
                   {notification.type === "SentRequest" && (
                     <BsPersonAdd size={25} className="text-green-500" />
                   )}

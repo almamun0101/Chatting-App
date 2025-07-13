@@ -56,6 +56,7 @@ export default function MessagingUI() {
   const handleActive = (friend) => {
     dispatch(chattingInfo(friend));
     setActiveFriend(friend);
+    console.log(friend)
   };
 
   // Auto scroll to bottom when messages change
