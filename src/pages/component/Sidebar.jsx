@@ -12,14 +12,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { userLoginInfo } from "../../slices/userslice";
 import { FiLogOut } from "react-icons/fi";
+import useFirebaseData from "./useFirebaseData";
 
 const options = [
   { name: "Home", value: "1", to: "/", icon: <Home size={20} /> },
-  { name: "Messages", value: "2", to: "/messages", icon: <MessageSquare size={20} /> },
-  { name: "Request", value: "5", to: "/addfriend", icon: <UserPlus size={20} /> },
+  {
+    name: "Messages",
+    value: "2",
+    to: "/messages",
+    icon: <MessageSquare size={20} />,
+  },
+  {
+    name: "Request",
+    value: "5",
+    to: "/addfriend",
+    icon: <UserPlus size={20} />,
+  },
   { name: "Friends", value: "3", to: "/friendlist", icon: <Users size={20} /> },
-  { name: "Notifications", value: "4", to: "/notifications", icon: <Bell size={20} /> },
-  { name: "Settings", value: "6", to: "/setting", icon: <Settings size={20} /> },
+  {
+    name: "Notifications",
+    value: "4",
+    to: "/notifications",
+    icon: <Bell size={20} />,
+  },
+  {
+    name: "Settings",
+    value: "6",
+    to: "/setting",
+    icon: <Settings size={20} />,
+  },
   { name: "Logout", value: "7", to: "/logout", icon: <FiLogOut size={20} /> },
 ];
 
@@ -30,6 +51,7 @@ const Sidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const auth = getAuth();
+  const notifi = useFirebaseData("notification/");
 
   useEffect(() => {
     const currentPage = options.find((item) => item.to === location.pathname);
@@ -61,21 +83,26 @@ const Sidebar = () => {
     setIsPage(page);
   };
 
+  useEffect(() => {
+    const read = notifi?.map((p) => p);
+    // console.log(read)
+  }, []);
   return (
     <div className="flex">
-      <div
-        className="bg-gradient-to-b from-[#00c6ff] via-[#0072ff] to-[#1e3c72] h-screen w-20 lg:w-64 shadow-2xl text-white py-5 flex flex-col items-center  transition-all duration-300"
-      >
+      <div className="bg-gradient-to-b from-[#00c6ff] via-[#0072ff] to-[#1e3c72] h-screen w-20 lg:w-64 shadow-2xl text-white py-5 flex flex-col items-center  transition-all duration-300">
         <div className="flex flex-col items-center mb-8">
           <img
             src={data.img ? data.img : "/avater.png"}
             alt="avatar"
             className="w-12 h-12 lg:w-20 lg:h-20 rounded-full object-cover ring-4 ring-white hover:scale-105 duration-300"
           />
-          <h2 className="hidden lg:block font-semibold mt-2 text-center">{data.name ? data.name : "Name"}</h2>
-          <p className="hidden lg:block text-xs opacity-80 text-center">{data.email ? data.email : "Email"}</p>
+          <h2 className="hidden lg:block font-semibold mt-2 text-center">
+            {data.name ? data.name : "Name"}
+          </h2>
+          <p className="hidden lg:block text-xs opacity-80 text-center">
+            {data.email ? data.email : "Email"}
+          </p>
         </div>
-
         <nav className="flex-1 w-full overflow-y-auto">
           {options.map((item) => (
             <Link
@@ -83,7 +110,11 @@ const Sidebar = () => {
               to={item.to}
               onClick={() => handlePage(item.value)}
               className={`group relative flex items-center gap-4 px-4 py-4 my-1 mx-2 rounded-xl transition-all duration-300 
-                ${item.value == isPage ? "bg-white text-[#0072ff] shadow-lg" : "hover:bg-white/10 hover:shadow-md"}`}
+              ${
+                item.value == isPage
+                  ? "bg-white text-[#0072ff] shadow-lg"
+                  : "hover:bg-white/10 hover:shadow-md"
+              }`}
             >
               <div className="flex justify-center lg:justify-start w-full">
                 {item.icon}
@@ -93,6 +124,7 @@ const Sidebar = () => {
                 >
                   {item.name}
                 </span>
+                  <span className={`${item.value==="4"? "opacity-100":"opacity-0" } w-2 h-2 bg-red-500 rounded absolute top-2 right-3`}></span>
               </div>
             </Link>
           ))}

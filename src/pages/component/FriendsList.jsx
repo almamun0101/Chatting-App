@@ -3,10 +3,12 @@ import useFirebaseData from "./useFirebaseData";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, remove, set } from "firebase/database";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const FriendsList = () => {
   const auth = getAuth();
   const db = getDatabase();
+  const navigate = useNavigate();
   const friendList = useFirebaseData("friendsList/");
   const userList = useFirebaseData("userslist/");
   const blockList = useFirebaseData("blockList/");
@@ -69,6 +71,14 @@ const FriendsList = () => {
       .catch((err) => console.log(err));
   };
 
+   const handleMessage = (message)=>{
+    navigate("/messages")  
+    const getUid = userList.find((user)=>user.uid === message.id )
+    dispatch(chattingInfo(getUid));
+    console.log(getUid)
+  }
+ 
+
   return (
     <div className="h-full ">
       <div className="h-full grid gap-6 grid-cols-1 lg:grid-cols-2">
@@ -94,6 +104,12 @@ const FriendsList = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
+                    <button
+                      onClick={() => handleMessage(user)}
+                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs"
+                    >
+                      Message
+                    </button>
                     <button
                       onClick={() => handleUnfriend(user)}
                       className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs"

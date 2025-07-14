@@ -64,6 +64,7 @@ const UserList = () => {
             notifi: user.name,
             type: "SentRequest",
             date:nowTime,
+            read:"unread"
           };
           set(push(ref(db, `notification/`)), notifiData)
             .then(() => console.log())

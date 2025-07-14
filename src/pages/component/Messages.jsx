@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FiSearch } from "react-icons/fi";
 import useFirebaseData from "./useFirebaseData";
 import { getAuth } from "firebase/auth";
@@ -7,6 +7,7 @@ import { chattingInfo } from "../../slices/chatSlice";
 import { getDatabase, push, ref } from "firebase/database";
 import date from "./date";
 import moment from "moment";
+
 
 export default function MessagingUI() {
   const auth = getAuth();
@@ -19,6 +20,8 @@ export default function MessagingUI() {
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
   const NowTime = date();
+  const reduxUser  =  useSelector((s)=>s.chatInfo.value)
+  
 
   const generateKey = (uid1, uid2) => (uid1 < uid2 ? uid1 + uid2 : uid2 + uid1);
 
@@ -58,6 +61,15 @@ export default function MessagingUI() {
     setActiveFriend(friend);
     console.log(friend)
   };
+useEffect(() => {
+  if (reduxUser && userList.length > 0) {
+    const fullUser = userList.find((user) => user.uid === reduxUser.uid);
+    if (fullUser && (!activeFriend || activeFriend.uid !== fullUser.uid)) {
+      handleActive(fullUser);
+      console.log(fullUser)
+    }
+  }
+}, [reduxUser, userList]);
 
   // Auto scroll to bottom when messages change
   useEffect(() => {
