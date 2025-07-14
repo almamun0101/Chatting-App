@@ -29,8 +29,14 @@ const Notifications = () => {
     const notificationRef = ref(db, `notification/${notification.uid}`);
     update(notificationRef, { read: "read" })
       .then(() => {
-        console.log("Notification marked as read");
-           navigate("/addfriend");
+        
+        if ((notification.type === "SentRequest")) {
+          navigate("/addfriend");
+           console.log(notification.type)
+        } else if ((notification.type === "AcceptRequest")) {
+          navigate("/friendlist");
+          console.log(notification.type)
+        }
       })
       .catch((err) => {
         console.log("Error updating notification:", err);
@@ -60,7 +66,8 @@ const Notifications = () => {
                     }
                     hover:shadow-md`}
                   onClick={() => handleRead(notification)}
-                >
+                  >
+                {console.log(notification)}
                   <div className="flex-shrink-0">
                     {notification.type === "SentRequest" && (
                       <BsPersonAdd size={28} className="text-green-500" />
@@ -71,9 +78,7 @@ const Notifications = () => {
                   </div>
                   <div className="flex-1">
                     <p className="text-gray-800 text-sm md:text-base">
-                      <span className="font-bold">
-                        {notification.notifi}
-                      </span>{" "}
+                      <span className="font-bold">{notification.notifi}</span>{" "}
                       {notification.type === "SentRequest" &&
                         "sent you a friend request."}
                       {notification.type === "AcceptRequest" &&

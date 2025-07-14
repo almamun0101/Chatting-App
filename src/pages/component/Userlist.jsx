@@ -61,7 +61,7 @@ const UserList = () => {
         .then(() => {
           const notifiData = {
             id: user.uid,
-            notifi: user.name,
+            notifi: auth.currentUser.displayName,
             type: "SentRequest",
             date:nowTime,
             read:"unread"

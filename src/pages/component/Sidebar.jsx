@@ -101,7 +101,7 @@ const Sidebar = () => {
     }, [auth.currentUser?.uid]);
 
     const hasNotifi = notifi?.some((n)=>(n.id===auth.currentUser.uid) && (n.read === "unread"))
-    console.log(hasNotifi)
+   
     
 
   return (
@@ -147,7 +147,7 @@ const Sidebar = () => {
                     className={`w-3 h-3 bg-red-500 rounded-full absolute top-1 right-3`}
                   ></span>
                 )}
-                {console.log(hasNotifi)}
+               
               </div>
             </Link>
           ))}
