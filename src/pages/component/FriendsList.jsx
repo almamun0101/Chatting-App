@@ -106,7 +106,7 @@ const FriendsList = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleMessage(user)}
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs"
+                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-xs"
                     >
                       Message
                     </button>

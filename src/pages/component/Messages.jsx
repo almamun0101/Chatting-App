@@ -8,7 +8,6 @@ import { getDatabase, push, ref } from "firebase/database";
 import date from "./date";
 import moment from "moment";
 
-
 export default function MessagingUI() {
   const auth = getAuth();
   const db = getDatabase();
@@ -20,8 +19,7 @@ export default function MessagingUI() {
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
   const NowTime = date();
-  const reduxUser  =  useSelector((s)=>s.chatInfo.value)
-  
+  const reduxUser = useSelector((s) => s.chatInfo.value);
 
   const generateKey = (uid1, uid2) => (uid1 < uid2 ? uid1 + uid2 : uid2 + uid1);
 
@@ -42,7 +40,7 @@ export default function MessagingUI() {
       sender: auth.currentUser.uid,
       receiver: activeFriend.uid,
       messages: inputText,
-      date : NowTime,
+      date: NowTime,
     };
 
     push(ref(db, "messages/"), messageData)
@@ -59,17 +57,17 @@ export default function MessagingUI() {
   const handleActive = (friend) => {
     dispatch(chattingInfo(friend));
     setActiveFriend(friend);
-    console.log(friend)
+    console.log(friend);
   };
-useEffect(() => {
-  if (reduxUser && userList.length > 0) {
-    const fullUser = userList.find((user) => user.uid === reduxUser.uid);
-    if (fullUser && (!activeFriend || activeFriend.uid !== fullUser.uid)) {
-      handleActive(fullUser);
-      console.log(fullUser)
+  useEffect(() => {
+    if (reduxUser && userList.length > 0) {
+      const fullUser = userList.find((user) => user.uid === reduxUser.uid);
+      if (fullUser && (!activeFriend || activeFriend.uid !== fullUser.uid)) {
+        handleActive(fullUser);
+        console.log(fullUser);
+      }
     }
-  }
-}, [reduxUser, userList]);
+  }, [reduxUser, userList]);
 
   // Auto scroll to bottom when messages change
   useEffect(() => {
@@ -97,7 +95,9 @@ useEffect(() => {
                 key={friend.uid}
                 onClick={() => handleActive(friend)}
                 className={`flex items-center px-3 py-3 bg-white/80 rounded-xl shadow hover:scale-105 transition-all cursor-pointer ${
-                  activeFriend?.uid === friend.uid ? "ring-2 ring-purple-400" : ""
+                  activeFriend?.uid === friend.uid
+                    ? "ring-2 ring-purple-400"
+                    : ""
                 }`}
               >
                 <img
@@ -117,21 +117,27 @@ useEffect(() => {
       {/* Chat area */}
       <div className="flex flex-col flex-1 bg-white/50 backdrop-blur-md p-4 overflow-hidden">
         <h2 className="text-xl md:text-2xl font-extrabold text-gray-700 border-b pb-2">
-          {activeFriend ? activeFriend.name : "Select a friend to chat"}
+          {(friends.length !== 0 && activeFriend)
+            ? activeFriend.name
+            : "Select a friend to chat"}
         </h2>
         <div className="flex-1 overflow-y-auto pt-4 pr-2">
-          {activeFriend ? (
+          {(friends.length !== 0 && activeFriend) ? (
             messages
               .filter(
                 (msg) =>
-                  (msg.receiver === activeFriend.uid && msg.sender === auth.currentUser.uid) ||
-                  (msg.sender === activeFriend.uid && msg.receiver === auth.currentUser.uid)
+                  (msg.receiver === activeFriend.uid &&
+                    msg.sender === auth.currentUser.uid) ||
+                  (msg.sender === activeFriend.uid &&
+                    msg.receiver === auth.currentUser.uid)
               )
               .map((msg, idx) => (
                 <div
                   key={idx}
                   className={`flex mb-2 ${
-                    msg.sender === auth.currentUser.uid ? "justify-end" : "justify-start"
+                    msg.sender === auth.currentUser.uid
+                      ? "justify-end"
+                      : "justify-start"
                   }`}
                 >
                   <div
@@ -141,10 +147,10 @@ useEffect(() => {
                         : "bg-white text-gray-800 border border-gray-200 text-left"
                     }`}
                   >
-                   <h2 className="text-lg">
-                     {msg.messages}
-                    </h2>
-                    <p className="text-[9px]">{moment(msg.date, "YYYYMMDD,h:mm").fromNow()}</p>
+                    <h2 className="text-lg">{msg.messages}</h2>
+                    <p className="text-[9px]">
+                      {moment(msg.date, "YYYYMMDD,h:mm").fromNow()}
+                    </p>
                   </div>
                 </div>
               ))
