@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router";
-import { userLoginInfo } from "../../slices/userslice";
 import { getAuth, updateProfile } from "firebase/auth";
 
 const Setting = () => {
   const auth = getAuth();
-  const [userName, setUserName] = useState("");
   const data = useSelector((state) => state.userLogin.value);
+  const [userName, setUserName] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+
   const handleUserName = (e) => {
     setUserName(e.target.value);
   };
@@ -15,37 +15,48 @@ const Setting = () => {
   const handleUpdateProfile = () => {
     updateProfile(auth.currentUser, {
       displayName: userName,
-    }).then(()=>{
-      window.location.reload();
-      console.log(" data UpdATE SUCCEESSFULL")
-    }).catch((error)=>{
-      console.log(error)
     })
+      .then(() => {
+        setSuccessMsg("Profile updated successfully!");
+        setTimeout(() => {
+          setSuccessMsg("");
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
     <div>
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Settings</h1>
+    <div className="max-w-md mx-auto mt-10 p-6 ">
+      <h1 className="text-3xl font-bold mb-6 text-left">Settings</h1>
 
-        <div className="pb-10">
-          <label htmlFor="" className="flex  items-center gap-5  ">
-            <h2>Name </h2>
-            <input
-              onChange={handleUserName}
-              type="text"
-              className="border rounded-xl p-1"
-              placeholder={data.name}
-            />
-          </label>
-        </div>
-        <button
-          onClick={handleUpdateProfile}
-          className="bg-blue-600  text-white border px-5 py-1 "
-        >
-          Save
-        </button>
+      <div className="mb-6">
+        <label className="block text-gray-700 mb-2 font-medium">Name</label>
+        <input
+          onChange={handleUserName}
+          type="text"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          placeholder={data.name}
+          value={userName}
+        />
       </div>
+
+      <button
+        onClick={handleUpdateProfile}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition duration-300"
+      >
+        Save
+      </button>
+
+      {successMsg && (
+        <p className="mt-4 text-green-600 text-center font-medium transition">
+          {successMsg}
+        </p>
+      )}
+    </div>
     </div>
   );
 };

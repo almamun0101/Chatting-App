@@ -115,7 +115,7 @@ const UserList = () => {
   );
 
   return (
-    <div className="mx-auto p-4">
+    <div className="mx-auto p-4 w-full">
       <ul className="space-y-4">
         <Toaster position="bottom-center" reverseOrder={false} />
         {filteredUsers.map((user) => (
