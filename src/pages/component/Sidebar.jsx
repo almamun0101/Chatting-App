@@ -13,6 +13,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { userLoginInfo } from "../../slices/userslice";
 import { FiLogOut } from "react-icons/fi";
 import useFirebaseData from "./useFirebaseData";
+import { getDatabase, onValue, ref } from "firebase/database";
 
 const options = [
   { name: "Home", value: "1", to: "/", icon: <Home size={20} /> },
@@ -51,7 +52,9 @@ const Sidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const auth = getAuth();
-  const notifi = useFirebaseData("notification/");
+  const db = getDatabase();
+  // const notifi = useFirebaseData("notification/");
+  const [notifi, setNotifi] = useState([]);
 
   useEffect(() => {
     const currentPage = options.find((item) => item.to === location.pathname);
@@ -84,9 +87,23 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    const read = notifi?.map((p) => p);
-    // console.log(read)
-  }, []);
+     const userListRef = ref(db, "notification/");
+     onValue(userListRef, (snapshot) => {
+       const Userarray = [];
+       snapshot.forEach((item) => {
+         const userData = item.val();
+         Userarray.push({ ...userData});
+        //  if (item.id !== auth.currentUser.uid) {
+        //  }
+       });
+       setNotifi(Userarray);
+     });
+    }, [auth.currentUser?.uid]);
+
+    const hasNotifi = notifi?.some((n)=>(n.id===auth.currentUser.uid) && (n.read === "unread"))
+    console.log(hasNotifi)
+    
+
   return (
     <div className="flex">
       <div className="bg-gradient-to-b from-[#00c6ff] via-[#0072ff] to-[#1e3c72] h-screen w-20 lg:w-64 shadow-2xl text-white py-5 flex flex-col items-center  transition-all duration-300">
@@ -103,6 +120,7 @@ const Sidebar = () => {
             {data.email ? data.email : "Email"}
           </p>
         </div>
+        {/* {const id = hasNotification()} */}
         <nav className="flex-1 w-full overflow-y-auto">
           {options.map((item) => (
             <Link
@@ -124,7 +142,12 @@ const Sidebar = () => {
                 >
                   {item.name}
                 </span>
-                  <span className={`${item.value==="4"? "opacity-100":"opacity-0" } w-2 h-2 bg-red-500 rounded absolute top-2 right-3`}></span>
+                {hasNotifi && item.value ==="4" && (
+                  <span
+                    className={`w-3 h-3 bg-red-500 rounded-full absolute top-1 right-3`}
+                  ></span>
+                )}
+                {console.log(hasNotifi)}
               </div>
             </Link>
           ))}

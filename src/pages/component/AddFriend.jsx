@@ -59,6 +59,7 @@ const AddFriend = () => {
           type: "AcceptRequest",
           id: user.uid,
           date: nowTime,
+          read : "unread"
         }).then(() => {
           console.log("sent notfication")
          
