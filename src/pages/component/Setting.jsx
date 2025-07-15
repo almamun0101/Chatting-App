@@ -34,7 +34,7 @@ const Setting = () => {
       <h1 className="text-3xl font-bold mb-6 text-left">Settings</h1>
 
       <div className="mb-6">
-        <label className="block text-gray-700 mb-2 font-medium">Name</label>
+        <label className="block text-gray-700 mb-2 font-medium">Update Name</label>
         <input
           onChange={handleUserName}
           type="text"

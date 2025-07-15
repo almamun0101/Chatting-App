@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { CiUser } from "react-icons/ci";
-import { MdMarkEmailUnread } from "react-icons/md";
-import { TbLockPassword } from "react-icons/tb";
+import { motion } from "framer-motion";
+import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
-import { app, auth  } from "../../firebase.config";
+import { app, auth } from "../../firebase.config";
 import { getDatabase, ref, set } from "firebase/database";
-
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -13,210 +11,99 @@ import {
 } from "firebase/auth";
 import { Link, useNavigate } from "react-router";
 
-// const SignUp = () => {
-//   const db = getDatabase();
-//   const [userInfo, setUserInfo] = useState({
-//     name: "",
-//     email: "",
-//     password: "",
-//   });
+const SignUp = () => {
+  const db = getDatabase();
+  const navigate = useNavigate();
 
-//   const navigate = useNavigate();
-//   const handleName = (e) => {
-//     setUserInfo((pre) => {
-//       return { ...pre, name: e.target.value };
-//     });
-//   };
-//   const handleEmail = (e) => {
-//     setUserInfo((pre) => {
-//       return { ...pre, email: e.target.value };
-//     });
-//   };
-//   const handlePasword = (e) => {
-//     setUserInfo((pre) => {
-//       return { ...pre, password: e.target.value };
-//     });
-//   };
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
+  // Handle input changes
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setUserInfo((prev) => ({ ...prev, [id]: value }));
+  };
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     if (!userInfo.name || !userInfo.email || !userInfo.password) {
-//       toast.error("Fill All Information");
-//     } else if (
-//       !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userInfo.email)
-//     ) {
-//       toast.error("Vaild Email");
-//     } else {
-//       createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
-//         .then((userCredential) => {
-//            const user = userCredential.user;
-//           sendEmailVerification(auth.currentUser)
-//             .then(() => {
-//               updateProfile(auth.currentUser, {
-//                 displayName: userInfo.name,
-//                 photoURL: "https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740",
-//               })
-//                 .then(() => {
-               
-//                   set(ref(db, "userslist/" + user.uid), {
-//                     name: user.displayName,
-//                     email: user.email,
-//                     img : user.photoURL,
-                  
-//                   })
-//                     .then(() => {
-//                       navigate("/signin");
-//                       toast.success("Check Your mail for verification");
-//                       console.log("done sending data to rdb")
-//                     })
-//                     .catch((error) => {
-//                       console.log(error);
-//                     });
-//                 })
-//                 .catch((error) => {
-//                   console.log(error);
-//                 });
+  // Handle form submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-//             })
-//             .catch((error) => {
-//               console.log(error);
-//             });
-//         })
-//         .catch((error) => {
-//           const errorCode = error.code;
-//           const errorMessage = error.message;
-//           // ..
-//           console.log(errorMessage);
-//         });
-//      console.log(auth)
-//     }
-//   };
+    const { name, email, password } = userInfo;
 
-//   return (
-//     <div className="min-h-screen flex justify-center items-center relative overflow-hidden bg-black text-white font-sans">
-//       {/* Background Image with Dark Tech Feel */}
-//       <img
-//         src="https://wallpaperaccess.com/full/5651980.jpg"
-//         alt="Tech Background"
-//         className="absolute inset-0 w-full h-full object-cover opacity-40"
-//       />
-//       <Toaster position="top-center" reverseOrder={false} />
-//       {/* Dark Glass Overlay */}
-//       <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f0f]/70 via-[#1a1a1a]/60 to-[#0f0f0f]/70 backdrop-blur-md"></div>
+    if (!name || !email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
 
-//       {/* Card */}
-//       <div className="relative z-10 rounded-2xl shadow-2xl bg-[#111111]/80 p-10 max-w-md w-full border border-gray-700">
-//         {/* Avatar Image */}
-//         <div className="w-20 h-20 mx-auto -mt-20 mb-4">
-//           <img
-//             src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png"
-//             alt="Avatar"
-//             className="w-full h-full object-cover rounded-full border-4 border-cyan-500 shadow-md"
-//           />
-//         </div>
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
 
-//         {/* Heading */}
-//         <h2 className="text-2xl font-bold mb-8 text-center text-cyan-300 tracking-wide">
-//           Create Your Account
-//         </h2>
-//         <form onSubmit={handleSubmit}>
-//           {/* Full Name */}
-//           <div className="mb-5">
-//             <label
-//               htmlFor="name"
-//               className="block text-gray-300 font-medium mb-1"
-//             >
-//               Full Name
-//             </label>
-//             <div className="flex items-center gap-3 px-4 py-2 border border-gray-600 rounded-xl focus-within:ring-2 focus-within:ring-cyan-500 bg-black/50">
-//               <CiUser className="text-xl text-cyan-400" />
-//               <input
-//                 type="text"
-//                 id="name"
-//                 onChange={handleName}
-//                 placeholder="Your Name"
-//                 className="outline-none bg-transparent text-white w-full placeholder-gray-500"
-//               />
-//             </div>
-//           </div>
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
 
-//           {/* Email */}
-//           <div className="mb-5">
-//             <label
-//               htmlFor="email"
-//               className="block text-gray-300 font-medium mb-1"
-//             >
-//               Email
-//             </label>
-//             <div className="flex items-center gap-3 px-4 py-2 border border-gray-600 rounded-xl focus-within:ring-2 focus-within:ring-cyan-500 bg-black/50">
-//               <MdMarkEmailUnread className="text-xl text-cyan-400" />
-//               <input
-//                 type="email"
-//                 id="email"
-//                 onChange={handleEmail}
-//                 placeholder="example@email.com"
-//                 className="outline-none bg-transparent text-white w-full placeholder-gray-500"
-//               />
-//             </div>
-//           </div>
+        sendEmailVerification(user)
+          .then(() => {
+            updateProfile(user, {
+              displayName: name,
+              photoURL:
+                "https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740",
+            })
+              .then(() => {
+                set(ref(db, "userslist/" + user.uid), {
+                  name,
+                  email: user.email,
+                  img: user.photoURL,
+                })
+                  .then(() => {
+                    toast.success("Check your email for verification");
+                    navigate("/signin");
+                  })
+                  .catch((error) => console.error("DB Error:", error));
+              })
+              .catch((error) => console.error("Profile Update Error:", error));
+          })
+          .catch((error) => console.error("Email Verification Error:", error));
+      })
+      .catch((error) => {
+        toast.error(error.message);
+        console.error("Signup Error:", error);
+      });
+  };
+const handleGoogleLogIn = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
 
-//           {/* Password */}
-//           <div className="mb-6">
-//             <label
-//               htmlFor="password"
-//               className="block text-gray-300 font-medium mb-1"
-//             >
-//               Password
-//             </label>
-//             <div className="flex items-center gap-3 px-4 py-2 border border-gray-600 rounded-xl focus-within:ring-2 focus-within:ring-cyan-500 bg-black/50">
-//               <TbLockPassword className="text-xl text-cyan-400" />
-//               <input
-//                 type="password"
-//                 id="password"
-//                 onChange={handlePasword}
-//                 placeholder="••••••••"
-//                 className="outline-none bg-transparent text-white w-full placeholder-gray-500"
-//               />
-//             </div>
-//           </div>
-
-//           {/* Submit Button */}
-//           <button
-//             type="submit"
-//             className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white w-full py-3 rounded-xl font-semibold hover:shadow-cyan-400/50 hover:shadow-md transition-all duration-200"
-//           >
-//             Sign Up
-//           </button>
-
-//           {/* Log In Link */}
-//           <p className="text-center mt-5 text-sm text-gray-400">
-//             Already have an account?{" "}
-//             <Link
-//               to="/signin"
-//               className="text-cyan-400 hover:underline font-medium"
-//             >
-//               Log In
-//             </Link>
-//           </p>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SignUp;
-
-
-
-
-
-import { motion } from "framer-motion";
-import { FaGoogle, FaFacebookF } from "react-icons/fa";
-
-const SignUpPage = () => {
+        set(ref(db, "userslist/" + user.uid), {
+          name: user.displayName,
+          email: user.email,
+          img: user.photoURL,
+        })
+          .then(() => {
+            dispatch(userLoginInfo(user));
+            toast.success("Login successful!");
+            navigate("/");
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error("Failed to save user data.");
+          });
+      })
+      .catch((error) => {
+        console.log("Google login error:", error);
+        toast.error("Google login failed.");
+      });
+  };
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-500 via-cyan-400 to-blue-500 overflow-hidden">
+      <Toaster position="top-center" reverseOrder={false} />
+
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -226,20 +113,30 @@ const SignUpPage = () => {
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
           Create Account
         </h2>
-        <form className="flex flex-col space-y-4">
+
+        <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Full Name"
+            id="name"
+            value={userInfo.name}
+            onChange={handleChange}
+            placeholder="Your Name"
             className="px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           />
           <input
             type="email"
-            placeholder="Email"
+            id="email"
+            value={userInfo.email}
+            onChange={handleChange}
+            placeholder="example@email.com"
             className="px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           />
           <input
             type="password"
-            placeholder="Password"
+            id="password"
+            value={userInfo.password}
+            onChange={handleChange}
+            placeholder="••••••••"
             className="px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           />
           <button
@@ -256,25 +153,17 @@ const SignUpPage = () => {
           <hr className="flex-grow border-t border-gray-300" />
         </div>
 
-        <div className="flex justify-center space-x-4">
-          <button className="p-3 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition">
-            <FaGoogle />
-          </button>
-          <button className="p-3 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition">
-            <FaFacebookF />
-          </button>
-        </div>
+        
 
         <p className="text-center text-gray-600 text-sm mt-6">
           Already have an account?{" "}
-          <a href="#" className="underline hover:text-cyan-500">
+          <Link to="/signin" className="underline hover:text-cyan-500">
             Login
-          </a>
+          </Link>
         </p>
       </motion.div>
     </div>
   );
 };
 
-export default SignUpPage;
-
+export default SignUp;
