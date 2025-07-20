@@ -1,11 +1,12 @@
 import { getAuth } from "firebase/auth";
-import { get, getDatabase, push, ref, set } from "firebase/database";
+import { get, getDatabase, push, ref, set, update } from "firebase/database";
 import React, { useState } from "react";
 import date from "./date";
 import useFirebaseData from "./useFirebaseData";
 import UserList from "./Userlist";
 import { img } from "framer-motion/client";
 import moment from "moment";
+import { FcLike, FcLikePlaceholder } from "react-icons/fc";
 
 const Post = () => {
   const [input, setInput] = useState("");
@@ -14,15 +15,19 @@ const Post = () => {
   const nowTime = date();
   const allFeeds = useFirebaseData("feeds/");
   const allUser = useFirebaseData("userslist/");
+  const [liked, setLiked] = useState(false);
 
   const handlePost = () => {
+    const newPostRef = push(ref(db, "feeds"));
     const postData = {
       post: input,
       postBy: auth.currentUser?.uid,
       name: auth.currentUser?.displayName || "Anonymous",
       time: nowTime,
+      like: "",
+      id: newPostRef.key,
     };
-    set(push(ref(db, `feeds/`)), postData)
+    set(newPostRef, postData)
       .then(() => setInput(""))
       .catch((err) => console.log(err));
   };
@@ -38,7 +43,16 @@ const Post = () => {
     });
     return pp;
   };
-  // console.log(p("toRRCiTYkPccnrPCv7HpPZ2ywdN2"));
+  const handleLike = (feed) => {
+    const postRef = ref(db, `feeds/${feed.id}`);
+    
+    update(postRef, {
+      like: [...feed.like,auth.currentUser.displayName]
+    })
+      .then(() => {})
+      .catch((err) => console.log(err));
+    console.log(updateLike);
+  };
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-[#f1f5f9] to-[#e2e8f0] flex flex-col lg:flex-row px-4 pt-3 gap-6">
@@ -76,7 +90,7 @@ const Post = () => {
               .reverse()
               .map((feed, index) => {
                 const user = getPoster(feed.postBy);
-              
+
                 return (
                   <div
                     key={index}
@@ -88,10 +102,13 @@ const Post = () => {
 
                       {user?.img ? (
                         <div className="">
-                          <img src={user.img} alt={user.name}  className="w-10 h-10 rounded-full"/>
+                          <img
+                            src={user.img}
+                            alt={user.name}
+                            className="w-10 h-10 rounded-full"
+                          />
                         </div>
-                      ):(
-
+                      ) : (
                         <div className="w-10 h-10 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-bold">
                           {feed.name?.charAt(0) || "U"}
                         </div>
@@ -99,10 +116,10 @@ const Post = () => {
                       <div>
                         <h4 className="text-md font-semibold text-gray-800">
                           {/* {p(feed.postBy) } */}
-                          {user.name}
+                          {user?.name}
                         </h4>
                         <span className="text-sm text-gray-400 flex items-center gap-1">
-                          🕒 {moment(feed.time, "YYYYMMDD, h:mm").fromNow()}
+                          {moment(feed.time, "YYYYMMDD, h:mm").fromNow()}
                         </span>
                       </div>
                     </div>
@@ -114,8 +131,13 @@ const Post = () => {
 
                     {/* Action Buttons */}
                     <div className="flex gap-6 text-sm font-medium text-gray-500">
-                      <button className="hover:text-indigo-500 transition flex items-center gap-1">
-                        👍 Like
+                      <button
+                        onClick={() => handleLike(feed)}
+                        className="hover:text-emerald-500 transition flex items-center gap-1"
+                      >
+                        {feed.like?.length}
+                        {console.log(feed.like[1])}
+                        {/* {liked && <FcLikePlaceholder className="font-blue-500" />} */}
                       </button>
                       <button className="hover:text-emerald-500 transition flex items-center gap-1">
                         💬 Comment
