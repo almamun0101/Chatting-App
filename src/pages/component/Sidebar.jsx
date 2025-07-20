@@ -106,7 +106,7 @@ const Sidebar = () => {
 
   return (
     <div className="flex">
-      <div className="bg-gradient-to-b from-[#00c6ff] via-[#0072ff] to-[#1e3c72] h-screen w-20 lg:w-64 shadow-2xl text-white py-5 flex flex-col items-center  transition-all duration-300">
+      <div className="bg-gradient-to-br from-teal-500 via-cyan-400 to-blue-500 h-screen w-20 lg:w-64 shadow-2xl text-white py-5 flex flex-col items-center  transition-all duration-300">
         <div className="flex flex-col items-center mb-8">
           <img
             src={data.img ? data.img : "/avater.png"}

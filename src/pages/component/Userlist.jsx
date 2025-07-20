@@ -115,14 +115,13 @@ const UserList = () => {
   );
 
   return (
-    <div className="mx-auto p-4 w-full">
-      <h1 className="text-2xl font-bold mb-4">Welcome</h1>
+    <div className="mx-auto w-full">
          <ul className="space-y-4">
         <Toaster position="bottom-center" reverseOrder={false} />
         {filteredUsers.map((user) => (
           <li
             key={user.uid}
-            className="flex items-center bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition justify-between"
+            className="flex items-center bg-white shadow rounded-lg py-4 px-2 hover:bg-gray-50 transition justify-between"
           >
             <div className="flex items-center">
               <img
@@ -139,7 +138,7 @@ const UserList = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => addFriend(user)}
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm"
               >
               
                 Add Friend
