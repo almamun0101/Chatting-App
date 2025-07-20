@@ -1,9 +1,11 @@
 import { getAuth } from "firebase/auth";
-import { getDatabase, push, ref, set } from "firebase/database";
+import { get, getDatabase, push, ref, set } from "firebase/database";
 import React, { useState } from "react";
 import date from "./date";
 import useFirebaseData from "./useFirebaseData";
 import UserList from "./Userlist";
+import { img } from "framer-motion/client";
+import moment from "moment";
 
 const Post = () => {
   const [input, setInput] = useState("");
@@ -11,6 +13,7 @@ const Post = () => {
   const db = getDatabase();
   const nowTime = date();
   const allFeeds = useFirebaseData("feeds/");
+  const allUser = useFirebaseData("userslist/");
 
   const handlePost = () => {
     const postData = {
@@ -23,6 +26,19 @@ const Post = () => {
       .then(() => setInput(""))
       .catch((err) => console.log(err));
   };
+
+  const findUser = (userUid) => {
+    return allUser.find((u) => u.uid === userUid); // return the matched user object
+  };
+
+  const poster = allFeeds.map((f) => findUser(f.postBy)); // now this will be an array of matched users
+  const getPoster = (postByUid) => {
+    const pp = poster.find((n) => {
+      return n && n.uid === postByUid; // make sure n is not undefined
+    });
+    return pp;
+  };
+  // console.log(p("toRRCiTYkPccnrPCv7HpPZ2ywdN2"));
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-[#f1f5f9] to-[#e2e8f0] flex flex-col lg:flex-row px-4 pt-3 gap-6">
@@ -58,44 +74,59 @@ const Post = () => {
             allFeeds
               .slice()
               .reverse()
-              .map((feed, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition"
-                >
-                  {/* Header */}
-                  <div className="flex items-center gap-4 mb-3">
-                    {/* Avatar */}
-                    <div className="w-10 h-10 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-bold">
-                      {feed.name?.charAt(0) || "U"}
+              .map((feed, index) => {
+                const user = getPoster(feed.postBy);
+              
+                return (
+                  <div
+                    key={index}
+                    className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition"
+                  >
+                    {/* Header */}
+                    <div className="flex items-center gap-4 mb-3">
+                      {/* Avatar */}
+
+                      {user?.img ? (
+                        <div className="">
+                          <img src={user.img} alt={user.name}  className="w-10 h-10 rounded-full"/>
+                        </div>
+                      ):(
+
+                        <div className="w-10 h-10 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-bold">
+                          {feed.name?.charAt(0) || "U"}
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="text-md font-semibold text-gray-800">
+                          {/* {p(feed.postBy) } */}
+                          {user.name}
+                        </h4>
+                        <span className="text-sm text-gray-400 flex items-center gap-1">
+                          🕒 {moment(feed.time, "YYYYMMDD, h:mm").fromNow()}
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="text-md font-semibold text-gray-800">
-                        {feed.name || "Unknown User"}
-                      </h4>
-                      <span className="text-sm text-gray-400 flex items-center gap-1">
-                        🕒 {feed.time}
-                      </span>
+
+                    {/* Post Body */}
+                    <p className="text-gray-800 mb-4 leading-relaxed">
+                      {feed.post}
+                    </p>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-6 text-sm font-medium text-gray-500">
+                      <button className="hover:text-indigo-500 transition flex items-center gap-1">
+                        👍 Like
+                      </button>
+                      <button className="hover:text-emerald-500 transition flex items-center gap-1">
+                        💬 Comment
+                      </button>
+                      <button className="hover:text-pink-500 transition flex items-center gap-1">
+                        🔁 Share
+                      </button>
                     </div>
                   </div>
-
-                  {/* Post Body */}
-                  <p className="text-gray-800 mb-4 leading-relaxed">{feed.post}</p>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-6 text-sm font-medium text-gray-500">
-                    <button className="hover:text-indigo-500 transition flex items-center gap-1">
-                      👍 Like
-                    </button>
-                    <button className="hover:text-emerald-500 transition flex items-center gap-1">
-                      💬 Comment
-                    </button>
-                    <button className="hover:text-pink-500 transition flex items-center gap-1">
-                      🔁 Share
-                    </button>
-                  </div>
-                </div>
-              ))
+                );
+              })
           )}
         </div>
       </div>
