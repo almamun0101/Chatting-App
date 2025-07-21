@@ -19,12 +19,14 @@ import { AiFillHeart } from "react-icons/ai";
 import { FaShare } from "react-icons/fa";
 const Post = () => {
   const [input, setInput] = useState("");
+  const [inputComment, setInputComment] = useState("");
   const auth = getAuth();
   const db = getDatabase();
   const nowTime = date();
   const allFeeds = useFirebaseData("feeds/");
   const allUser = useFirebaseData("userslist/");
-  const [liked, setLiked] = useState(false);
+  const [activeComent, setActiveComent] = useState(null);
+
   const userId = auth?.currentUser?.uid;
 
   const handlePost = () => {
@@ -67,6 +69,12 @@ const Post = () => {
         like: updateLiked,
       }).catch((err) => console.log(err));
     }
+  };
+  const handleComent = (id) => {
+    setActiveComent((prev) => (prev === id ? null : id));
+  };
+  const handleAddComent = (id) => {
+    console.log(id);
   };
 
   return (
@@ -158,16 +166,35 @@ const Post = () => {
                         {feed.like?.length - 1}
                         {/* {liked && <FcLikePlaceholder className="font-blue-500" />} */}
                       </button>
-                      <div className="">
-                        <input type="text" className="border w-full" />
-                      <button className="hover:text-emerald-500 transition flex items-center gap-1">
-                        💬 Comment
-                      </button>
+                      <div className="flex items-center gap-2 ">
+                        <button
+                          onClick={() => handleComent(feed.id)}
+                          className="hover:text-emerald-500 transition flex items-center gap-1"
+                        >
+                          Comment
+                        </button>
                       </div>
                       <button className="hover:text-pink-500 transition flex items-center gap-1">
-                      <FaShare />
+                        <FaShare />
                       </button>
                     </div>
+                    {activeComent === feed.id && (
+                      <div className=" py-2  my-2 gap-10 flex justify-between items-center">
+                        <input
+                          onChange={(e) => setInputComment(e.target.value)}
+                          placeholder="Write Your coment"
+                          type="text"
+                          className="text-sm p-1 not-last:w-full rounded-lg border "
+                        />
+                        <button
+                          onClick={() => handleAddComent(feed.id)}
+                          className="border px-4 py-1 bg-blue-400 text-white rounded-3xl"
+                        >
+                          {" "}
+                          Done
+                        </button>
+                      </div>
+                    )}
                   </div>
                 );
               })
