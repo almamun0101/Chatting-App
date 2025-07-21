@@ -1,13 +1,22 @@
 import { getAuth } from "firebase/auth";
-import { get, getDatabase, push, ref, set, update } from "firebase/database";
+import {
+  get,
+  getDatabase,
+  push,
+  ref,
+  remove,
+  set,
+  update,
+} from "firebase/database";
 import React, { useState } from "react";
 import date from "./date";
 import useFirebaseData from "./useFirebaseData";
 import UserList from "./Userlist";
-import { img } from "framer-motion/client";
+import { h2, img } from "framer-motion/client";
 import moment from "moment";
 import { FcLike, FcLikePlaceholder } from "react-icons/fc";
-
+import { AiFillHeart } from "react-icons/ai";
+import { FaShare } from "react-icons/fa";
 const Post = () => {
   const [input, setInput] = useState("");
   const auth = getAuth();
@@ -16,6 +25,7 @@ const Post = () => {
   const allFeeds = useFirebaseData("feeds/");
   const allUser = useFirebaseData("userslist/");
   const [liked, setLiked] = useState(false);
+  const userId = auth?.currentUser?.uid;
 
   const handlePost = () => {
     const newPostRef = push(ref(db, "feeds"));
@@ -24,7 +34,8 @@ const Post = () => {
       postBy: auth.currentUser?.uid,
       name: auth.currentUser?.displayName || "Anonymous",
       time: nowTime,
-      like: "",
+      like: "0",
+      coment: "",
       id: newPostRef.key,
     };
     set(newPostRef, postData)
@@ -44,14 +55,18 @@ const Post = () => {
     return pp;
   };
   const handleLike = (feed) => {
-    const postRef = ref(db, `feeds/${feed.id}`);
-    
-    update(postRef, {
-      like: [...feed.like,auth.currentUser.displayName]
-    })
-      .then(() => {})
-      .catch((err) => console.log(err));
-    console.log(updateLike);
+    const postRef = ref(db, `feeds/${feed?.uid}`);
+    const hasLiked = feed?.like.includes(userId);
+    if (!hasLiked) {
+      update(postRef, {
+        like: [...feed.like, userId],
+      }).catch((err) => console.log(err));
+    } else {
+      const updateLiked = feed.like.filter((u) => u !== userId);
+      update(postRef, {
+        like: updateLiked,
+      }).catch((err) => console.log(err));
+    }
   };
 
   return (
@@ -135,15 +150,22 @@ const Post = () => {
                         onClick={() => handleLike(feed)}
                         className="hover:text-emerald-500 transition flex items-center gap-1"
                       >
-                        {feed.like?.length}
-                        {console.log(feed.like[1])}
+                        {feed?.like.includes(userId) ? (
+                          <AiFillHeart size={20} color="red" />
+                        ) : (
+                          <AiFillHeart size={20} color="" />
+                        )}
+                        {feed.like?.length - 1}
                         {/* {liked && <FcLikePlaceholder className="font-blue-500" />} */}
                       </button>
+                      <div className="">
+                        <input type="text" className="border w-full" />
                       <button className="hover:text-emerald-500 transition flex items-center gap-1">
                         💬 Comment
                       </button>
+                      </div>
                       <button className="hover:text-pink-500 transition flex items-center gap-1">
-                        🔁 Share
+                      <FaShare />
                       </button>
                     </div>
                   </div>
