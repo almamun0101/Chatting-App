@@ -37,7 +37,7 @@ const Post = () => {
       name: auth.currentUser?.displayName || "Anonymous",
       time: nowTime,
       like: "0",
-      coment: "",
+      comment: "",
       id: newPostRef.key,
     };
     set(newPostRef, postData)
@@ -45,17 +45,10 @@ const Post = () => {
       .catch((err) => console.log(err));
   };
 
-  const findUser = (userUid) => {
-    return allUser.find((u) => u.uid === userUid); // return the matched user object
+  const getPoster = (postByUid) => {
+    return allUser.find((n) => n && n.uid === postByUid);
   };
 
-  const poster = allFeeds.map((f) => findUser(f.postBy)); // now this will be an array of matched users
-  const getPoster = (postByUid) => {
-    const pp = poster.find((n) => {
-      return n && n.uid === postByUid; // make sure n is not undefined
-    });
-    return pp;
-  };
   const handleLike = (feed) => {
     const postRef = ref(db, `feeds/${feed?.uid}`);
     const hasLiked = feed?.like.includes(userId);
@@ -70,11 +63,27 @@ const Post = () => {
       }).catch((err) => console.log(err));
     }
   };
-  const handleComent = (id) => {
-    setActiveComent((prev) => (prev === id ? null : id));
+
+  const handleComent = (feed) => {
+    setActiveComent((prev) => (prev === feed.id ? null : feed.id));
   };
-  const handleAddComent = (id) => {
-    console.log(id);
+
+  const handleAddComent = (feed) => {
+    const postRef = ref(db, `feeds/${feed.id}`);
+    const commentInfo = {
+      text: inputComment,
+      commentBy: auth.currentUser.uid,
+      time: nowTime,
+    };
+    const updateComment = feed.comment
+      ? [...feed.comment, commentInfo]
+      : [commentInfo]; // make sure it's an array
+    update(postRef, {
+      comment: updateComment,
+    })
+      .then(() => setInputComment(""))
+      .catch((err) => console.log(err));
+    // console.log(inputComment);
   };
 
   return (
@@ -126,8 +135,8 @@ const Post = () => {
                       {user?.img ? (
                         <div className="">
                           <img
-                            src={user.img}
-                            alt={user.name}
+                            src={user?.img}
+                            alt={user?.name}
                             className="w-10 h-10 rounded-full"
                           />
                         </div>
@@ -158,7 +167,7 @@ const Post = () => {
                         onClick={() => handleLike(feed)}
                         className="hover:text-emerald-500 transition flex items-center gap-1"
                       >
-                        {feed?.like.includes(userId) ? (
+                        {feed.like?.includes(userId) ? (
                           <AiFillHeart size={20} color="red" />
                         ) : (
                           <AiFillHeart size={20} color="" />
@@ -168,10 +177,10 @@ const Post = () => {
                       </button>
                       <div className="flex items-center gap-2 ">
                         <button
-                          onClick={() => handleComent(feed.id)}
+                          onClick={() => handleComent(feed)}
                           className="hover:text-emerald-500 transition flex items-center gap-1"
                         >
-                          Comment
+                          {feed.comment.length} Comment
                         </button>
                       </div>
                       <button className="hover:text-pink-500 transition flex items-center gap-1">
@@ -181,19 +190,58 @@ const Post = () => {
                     {activeComent === feed.id && (
                       <div className=" py-2  my-2 gap-10 flex justify-between items-center">
                         <input
+                          value={inputComment}
                           onChange={(e) => setInputComment(e.target.value)}
                           placeholder="Write Your coment"
                           type="text"
                           className="text-sm p-1 not-last:w-full rounded-lg border "
                         />
                         <button
-                          onClick={() => handleAddComent(feed.id)}
+                          onClick={() => handleAddComent(feed)}
                           className="border px-4 py-1 bg-blue-400 text-white rounded-3xl"
                         >
                           {" "}
                           Done
                         </button>
                       </div>
+                    )}
+                    {feed.comment && feed.comment.length > 0 ? (
+                      <div className="px-4 pt-3 space-y-2">
+                        {feed.comment.map((c, i) => {
+                          const commentUser = getPoster(c.commentBy);
+                          return (
+                            <div
+                              className="flex gap-2 items-start text-sm"
+                              key={i}
+                            >
+                              <img
+                                src={commentUser?.img || "/default-user.png"}
+                                alt={commentUser?.name || "User"}
+                                className="w-8 h-8 rounded-full object-cover"
+                              />
+                              <div className="bg-gray-100 p-2 rounded-md w-full">
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="font-medium text-[13px] text-gray-800">
+                                    {commentUser?.name || "Unknown"}
+                                  </span>
+                                  <span className="text-[11px] text-gray-500">
+                                    {c.time
+                                      ? moment(c.time, "YYYYMMDD").fromNow()
+                                      : ""}
+                                  </span>
+                                </div>
+                                <p className="text-[13px] text-gray-700">
+                                  {c.text}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="px-4 pt-3 text-gray-400 text-sm italic">
+                        No comments yet.
+                      </p>
                     )}
                   </div>
                 );
