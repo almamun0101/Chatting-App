@@ -226,7 +226,7 @@ const Post = () => {
                                   </span>
                                   <span className="text-[11px] text-gray-500">
                                     {c.time
-                                      ? moment(c.time, "YYYYMMDD").fromNow()
+                                      ? moment(c.time, "YYYYMMDD, h:mm").fromNow()
                                       : ""}
                                   </span>
                                 </div>
