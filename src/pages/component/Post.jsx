@@ -1,89 +1,85 @@
 import { getAuth } from "firebase/auth";
 import {
-  get,
   getDatabase,
   push,
   ref,
-  remove,
-  set,
   update,
+  set,
 } from "firebase/database";
 import React, { useState } from "react";
 import date from "./date";
 import useFirebaseData from "./useFirebaseData";
 import UserList from "./Userlist";
-import { h2, img } from "framer-motion/client";
 import moment from "moment";
-import { FcLike, FcLikePlaceholder } from "react-icons/fc";
 import { AiFillHeart } from "react-icons/ai";
 import { FaShare } from "react-icons/fa";
+
 const Post = () => {
-  const [input, setInput] = useState("");
-  const [inputComment, setInputComment] = useState("");
+  const [postInput, setPostInput] = useState("");
+  const [commentInput, setCommentInput] = useState("");
+  const [activeCommentId, setActiveCommentId] = useState(null);
+
   const auth = getAuth();
   const db = getDatabase();
   const nowTime = date();
+
   const allFeeds = useFirebaseData("feeds/");
-  const allUser = useFirebaseData("userslist/");
-  const [activeComent, setActiveComent] = useState(null);
+  const allUsers = useFirebaseData("userslist/");
 
   const userId = auth?.currentUser?.uid;
 
+  const getPoster = (uid) => allUsers.find((user) => user?.uid === uid);
+
   const handlePost = () => {
+    if (!postInput.trim()) return;
+
     const newPostRef = push(ref(db, "feeds"));
     const postData = {
-      post: input,
-      postBy: auth.currentUser?.uid,
+      post: postInput.trim(),
+      postBy: userId,
       name: auth.currentUser?.displayName || "Anonymous",
       time: nowTime,
-      like: "0",
-      comment: "",
+      like: [],
+      comment: [],
       id: newPostRef.key,
     };
-    set(newPostRef, postData)
-      .then(() => setInput(""))
-      .catch((err) => console.log(err));
-  };
 
-  const getPoster = (postByUid) => {
-    return allUser.find((n) => n && n.uid === postByUid);
+    set(newPostRef, postData)
+      .then(() => setPostInput(""))
+      .catch(console.error);
   };
 
   const handleLike = (feed) => {
-    const postRef = ref(db, `feeds/${feed?.uid}`);
-    const hasLiked = feed?.like.includes(userId);
-    if (!hasLiked) {
-      update(postRef, {
-        like: [...feed.like, userId],
-      }).catch((err) => console.log(err));
-    } else {
-      const updateLiked = feed.like.filter((u) => u !== userId);
-      update(postRef, {
-        like: updateLiked,
-      }).catch((err) => console.log(err));
-    }
+    const postRef = ref(db, `feeds/${feed?.id}`);
+    const hasLiked = feed?.like?.includes(userId);
+    const updatedLikes = hasLiked
+      ? feed.like.filter((uid) => uid !== userId)
+      : [...(feed.like || []), userId];
+
+    update(postRef, { like: updatedLikes }).catch(console.error);
   };
 
-  const handleComent = (feed) => {
-    setActiveComent((prev) => (prev === feed.id ? null : feed.id));
+  const toggleCommentBox = (feedId) => {
+    setActiveCommentId((prevId) => (prevId === feedId ? null : feedId));
   };
 
-  const handleAddComent = (feed) => {
+  const handleAddComment = (feed) => {
+    if (!commentInput.trim()) return;
+
     const postRef = ref(db, `feeds/${feed.id}`);
-    const commentInfo = {
-      text: inputComment,
-      commentBy: auth.currentUser.uid,
+    const comment = {
+      text: commentInput.trim(),
+      commentBy: userId,
       time: nowTime,
     };
-    const updateComment = feed.comment
-      ? [...feed.comment, commentInfo]
-      : [commentInfo]; // make sure it's an array
-    update(postRef, {
-      comment: updateComment,
-    })
-      .then(() => setInputComment(""))
-      .catch((err) => console.log(err));
-    // console.log(inputComment);
+
+    const updatedComments = Array.isArray(feed.comment)
+      ? [...feed.comment, comment]
+      : [comment];
+
+    update(postRef, { comment: updatedComments })
+      .then(() => setCommentInput(""))
+      .catch(console.error);
   };
 
   return (
@@ -91,28 +87,31 @@ const Post = () => {
       {/* Main Feed Section */}
       <div className="lg:w-2/3 w-full space-y-4">
         {/* Create Post */}
-        <div className="flex items-center justify-between gap-2 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-4">
-          <h2 className="w-30 text-sm lg:text-xl font-semibold text-gray-800 ">
-            Create a Post
-          </h2>
+        <div className="flex flex-col gap-3 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-4">
+          <h2 className="text-lg font-semibold text-gray-800">Create a Post</h2>
           <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
+            value={postInput}
+            onChange={(e) => setPostInput(e.target.value)}
             placeholder="What's on your mind?"
-            rows={4}
-            className="w-full h-20 border border-gray-300 rounded-xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white bg-opacity-80"
+            rows={3}
+            className="w-full border border-gray-300 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white bg-opacity-80"
           />
           <div className="text-right">
             <button
               onClick={handlePost}
-              className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-2 rounded-full font-medium hover:from-indigo-600 hover:to-purple-600 transition"
+              disabled={!postInput.trim()}
+              className={`bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-2 rounded-full font-medium transition ${
+                !postInput.trim()
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:from-indigo-600 hover:to-purple-600"
+              }`}
             >
               Post
             </button>
           </div>
         </div>
 
-        {/* Post Feed */}
+        {/* Feed List */}
         <div className="space-y-4 max-h-[78vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-indigo-300">
           {allFeeds.length === 0 ? (
             <p className="text-center text-gray-500 text-sm">No posts yet</p>
@@ -126,120 +125,106 @@ const Post = () => {
                 return (
                   <div
                     key={index}
-                    className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition"
+                    className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition"
                   >
-                    {/* Header */}
+                    {/* Post Header */}
                     <div className="flex items-center gap-4 mb-3">
-                      {/* Avatar */}
-
                       {user?.img ? (
-                        <div className="">
-                          <img
-                            src={user?.img}
-                            alt={user?.name}
-                            className="w-10 h-10 rounded-full"
-                          />
-                        </div>
+                        <img
+                          src={user.img}
+                          alt={user.name}
+                          className="w-10 h-10 rounded-full"
+                        />
                       ) : (
                         <div className="w-10 h-10 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-bold">
                           {feed.name?.charAt(0) || "U"}
                         </div>
                       )}
                       <div>
-                        <h4 className="text-md font-semibold text-gray-800">
-                          {/* {p(feed.postBy) } */}
-                          {user?.name}
+                        <h4 className="font-semibold text-gray-800 text-md">
+                          {user?.name || "Unknown"}
                         </h4>
-                        <span className="text-sm text-gray-400 flex items-center gap-1">
+                        <span className="text-sm text-gray-400">
                           {moment(feed.time, "YYYYMMDD, h:mm").fromNow()}
                         </span>
                       </div>
                     </div>
 
-                    {/* Post Body */}
-                    <p className="text-gray-800 mb-4 leading-relaxed">
-                      {feed.post}
-                    </p>
+                    {/* Post Content */}
+                    <p className="text-gray-800 mb-4">{feed.post}</p>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-6 text-sm font-medium text-gray-500">
+                    <div className="flex gap-6 text-sm font-medium text-gray-600 mb-3">
                       <button
                         onClick={() => handleLike(feed)}
-                        className="hover:text-emerald-500 transition flex items-center gap-1"
+                        className="flex items-center gap-1 hover:text-rose-500"
                       >
-                        {feed.like?.includes(userId) ? (
-                          <AiFillHeart size={20} color="red" />
-                        ) : (
-                          <AiFillHeart size={20} color="" />
-                        )}
-                        {feed.like?.length - 1}
-                        {/* {liked && <FcLikePlaceholder className="font-blue-500" />} */}
+                        <AiFillHeart
+                          size={20}
+                          color={feed.like?.includes(userId) ? "red" : ""}
+                        />
+                        {feed.like?.length || 0}
                       </button>
-                      <div className="flex items-center gap-2 ">
-                        <button
-                          onClick={() => handleComent(feed)}
-                          className="hover:text-emerald-500 transition flex items-center gap-1"
-                        >
-                          {feed.comment.length} Comment
-                        </button>
-                      </div>
-                      <button className="hover:text-pink-500 transition flex items-center gap-1">
+                      <button
+                        onClick={() => toggleCommentBox(feed.id)}
+                        className="hover:text-blue-500 flex items-center gap-1"
+                      >
+                        💬 {feed.comment?.length || 0} Comment
+                      </button>
+                      <button className="hover:text-green-500 flex items-center gap-1">
                         <FaShare />
+                        Share
                       </button>
                     </div>
-                    {activeComent === feed.id && (
-                      <div className=" py-2  my-2 gap-10 flex justify-between items-center">
+
+                    {/* Comment Input Box */}
+                    {activeCommentId === feed.id && (
+                      <div className="flex items-center gap-3 mb-3">
                         <input
-                          value={inputComment}
-                          onChange={(e) => setInputComment(e.target.value)}
-                          placeholder="Write Your coment"
+                          value={commentInput}
+                          onChange={(e) => setCommentInput(e.target.value)}
                           type="text"
-                          className="text-sm p-1 not-last:w-full rounded-lg border "
+                          placeholder="Write a comment..."
+                          className="flex-1 p-2 text-sm border rounded-md"
                         />
                         <button
-                          onClick={() => handleAddComent(feed)}
-                          className="border px-4 py-1 bg-blue-400 text-white rounded-3xl"
+                          onClick={() => handleAddComment(feed)}
+                          className="px-4 py-1 bg-blue-500 text-white rounded-full"
                         >
-                          {" "}
                           Done
                         </button>
                       </div>
                     )}
-                    {feed.comment && feed.comment.length > 0 ? (
-                      <div className="px-4 pt-3 space-y-2">
+
+                    {/* Comment List */}
+                    {feed.comment?.length > 0 ? (
+                      <div className="space-y-2">
                         {feed.comment.map((c, i) => {
                           const commentUser = getPoster(c.commentBy);
                           return (
-                            <div
-                              className="flex gap-2 items-start text-sm"
-                              key={i}
-                            >
+                            <div key={i} className="flex gap-2 text-sm">
                               <img
                                 src={commentUser?.img || "/default-user.png"}
                                 alt={commentUser?.name || "User"}
                                 className="w-8 h-8 rounded-full object-cover"
                               />
-                              <div className="bg-gray-100 p-2 rounded-md w-full">
-                                <div className="flex items-center justify-between mb-1">
-                                  <span className="font-medium text-[13px] text-gray-800">
+                              <div className="bg-gray-100 px-3 py-2 rounded-lg w-full">
+                                <div className="flex justify-between mb-1">
+                                  <span className="font-medium text-gray-800 text-[13px]">
                                     {commentUser?.name || "Unknown"}
                                   </span>
-                                  <span className="text-[11px] text-gray-500">
-                                    {c.time
-                                      ? moment(c.time, "YYYYMMDD, h:mm").fromNow()
-                                      : ""}
+                                  <span className="text-gray-400 text-[11px]">
+                                    {moment(c.time, "YYYYMMDD, h:mm").fromNow()}
                                   </span>
                                 </div>
-                                <p className="text-[13px] text-gray-700">
-                                  {c.text}
-                                </p>
+                                <p className="text-gray-700 text-[13px]">{c.text}</p>
                               </div>
                             </div>
                           );
                         })}
                       </div>
                     ) : (
-                      <p className="px-4 pt-3 text-gray-400 text-sm italic">
+                      <p className="text-sm text-gray-400 italic">
                         No comments yet.
                       </p>
                     )}
