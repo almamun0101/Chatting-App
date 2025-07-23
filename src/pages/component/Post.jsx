@@ -85,22 +85,22 @@ const Post = () => {
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-[#f1f5f9] to-[#e2e8f0] flex flex-col lg:flex-row px-4 pt-3 gap-6">
       {/* Main Feed Section */}
-      <div className="lg:w-2/3 w-full space-y-4">
+      <div className="lg:w-2/3 w-full space-y-2">
         {/* Create Post */}
-        <div className="flex flex-col gap-3 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-4">
-          <h2 className="text-lg font-semibold text-gray-800">Create a Post</h2>
+        <div className="flex items-center flex-row gap-3 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-2">
+          <h2 className="text-sm font-semibold text-gray-800">Create Post</h2>
           <textarea
             value={postInput}
             onChange={(e) => setPostInput(e.target.value)}
             placeholder="What's on your mind?"
-            rows={3}
-            className="w-full border border-gray-300 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white bg-opacity-80"
+            rows={2}
+            className="w-full border border-gray-300 rounded-xl p-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white bg-opacity-80"
           />
           <div className="text-right">
             <button
               onClick={handlePost}
               disabled={!postInput.trim()}
-              className={`bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-2 rounded-full font-medium transition ${
+              className={`bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-1 rounded-full font-medium transition ${
                 !postInput.trim()
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:from-indigo-600 hover:to-purple-600"

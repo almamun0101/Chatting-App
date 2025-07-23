@@ -5,6 +5,7 @@ import useFirebaseData from "./useFirebaseData";
 import toast from "react-hot-toast";
 import date from "./date";
 import moment from "moment";
+import UserList from "./Userlist";
 
 const AddFriend = () => {
   const db = getDatabase();
@@ -120,6 +121,10 @@ const AddFriend = () => {
 
   return (
     <div className="h-full mx-auto py-10 px-4 grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="">
+        <UserList/>
+      </div>
+      
       <div className=" p-5">
         <h2 className="text-xl font-bold mb-4">Sent Requests</h2>
         <div className="space-y-4">

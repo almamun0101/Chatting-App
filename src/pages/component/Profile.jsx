@@ -33,14 +33,14 @@ const Profile = ({ userData }) => {
           <img
             src={currentUser?.img}
             alt="Avatar"
-            className="w-32 h-32 rounded-full object-cover ring-4 ring-cyan-300"
+            className="w-22 h-22 rounded-full object-cover ring-4 ring-cyan-300"
           />
 
           <div className="text-center md:text-left">
-            <h2 className="text-3xl font-bold text-gray-700">
+            <h2 className="text-2xl font-bold text-gray-700">
               {currentUser?.name}
             </h2>
-            <p className="text-gray-500 mb-4">{currentUser?.email}</p>
+            <p className="text-gray-500 mb-2">{currentUser?.email}</p>
             <div className="flex justify-center md:justify-start gap-8">
               <div className="text-center">
                 <h3 className="text-xl font-bold text-gray-700">{timeline?.length || 0}</h3>
@@ -56,7 +56,7 @@ const Profile = ({ userData }) => {
       </div>
 
       {/* Posts */}
-      <div className="px-6 py-10 max-w-3xl mx-auto space-y-8 h-[65vh] overflow-auto mt-4 lg:mt-10">
+      <div className="px-6 py-10 max-w-3xl mx-auto space-y-8 h-[50vh] overflow-auto mt-4 lg:mt-10">
         {timeline.reverse().map((p) => {
           const user = getUser(p.postBy);
 
