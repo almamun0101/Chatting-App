@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { getAuth, updateProfile } from "firebase/auth";
+import Profile from "./Profile";
 
 const Setting = () => {
   const auth = getAuth();
   const data = useSelector((state) => state.userLogin.value);
   const [userName, setUserName] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-
+  // const uid = auth.currentUser.uid;
+  // console.log(auth.currentUser.displayName)
   const handleUserName = (e) => {
     setUserName(e.target.value);
   };
@@ -30,7 +32,7 @@ const Setting = () => {
 
   return (
     <div>
-    <div className="max-w-md mx-auto mt-10 p-6 ">
+    {/* <div className="max-w-md mx-auto mt-10 p-6 ">
       <h1 className="text-3xl font-bold mb-6 text-left">Settings</h1>
 
       <div className="mb-6">
@@ -56,7 +58,8 @@ const Setting = () => {
           {successMsg}
         </p>
       )}
-    </div>
+    </div> */}
+    <Profile userData={"toRRCiTYkPccnrPCv7HpPZ2ywdN2"}/>
     </div>
   );
 };
