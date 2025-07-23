@@ -32,7 +32,7 @@ const Setting = () => {
 
   return (
     <div>
-    {/* <div className="max-w-md mx-auto mt-10 p-6 ">
+    <div className="max-w-md mx-auto mt-10 p-6 ">
       <h1 className="text-3xl font-bold mb-6 text-left">Settings</h1>
 
       <div className="mb-6">
@@ -58,9 +58,8 @@ const Setting = () => {
           {successMsg}
         </p>
       )}
-    </div> */}
-    <Profile userData={"toRRCiTYkPccnrPCv7HpPZ2ywdN2"}/>
     </div>
+     </div>
   );
 };
 

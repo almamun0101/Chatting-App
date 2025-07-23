@@ -14,7 +14,7 @@ import { userLoginInfo } from "../../slices/userslice";
 import { FiLogOut } from "react-icons/fi";
 import useFirebaseData from "./useFirebaseData";
 import { getDatabase, onValue, ref } from "firebase/database";
-
+import { FaUser } from "react-icons/fa";
 const options = [
   { name: "Home", value: "1", to: "/", icon: <Home size={20} /> },
   {
@@ -36,9 +36,10 @@ const options = [
     to: "/notifications",
     icon: <Bell size={20} />,
   },
+  
   {
     name: "Settings",
-    value: "6",
+    value: "6 ",
     to: "/setting",
     icon: <Settings size={20} />,
   },
@@ -85,7 +86,10 @@ const Sidebar = () => {
   const handlePage = (page) => {
     setIsPage(page);
   };
+  const handleProfile = (data)=>{
 
+      navigate("/profile", { state: { userData: data.uid } });
+  }
   useEffect(() => {
      const userListRef = ref(db, "notification/");
      onValue(userListRef, (snapshot) => {
@@ -109,6 +113,7 @@ const Sidebar = () => {
       <div className="bg-gradient-to-br from-teal-500 via-cyan-400 to-blue-500 h-screen w-20 lg:w-64 shadow-2xl text-white py-5 flex flex-col items-center  transition-all duration-300">
         <div className="flex flex-col items-center mb-8">
           <img
+          onClick={()=>handleProfile(data)}
             src={data.img ? data.img : "/avater.png"}
             alt="avatar"
             className="w-12 h-12 lg:w-20 lg:h-20 rounded-full object-cover ring-4 ring-white hover:scale-105 duration-300"

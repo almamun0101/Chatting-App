@@ -12,42 +12,42 @@ import Setting from "./pages/component/Setting";
 import SignIn from "./pages/SingIn";
 import SignUp from "./pages/SignUp";
 import Logout from "./pages/Logout";
+import Profile from "./pages/component/Profile";
 
 const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
       Component: RootLayout,
-      children: [{ index: true, Component: Home },
+      children: [
+        { index: true, Component: Home },
         {
-          path:"/messages",
-          element:<Messages/>
-
+          path: "/messages",
+          element: <Messages />,
         },
         {
-          path:"/friendlist",
-          element:<FriendsList/>
-
+          path: "/friendlist",
+          element: <FriendsList />,
         },
         {
-          path:"/notifications",
-          element:<Notifications/>
-
+          path: "/notifications",
+          element: <Notifications />,
         },
         {
-          path:"/addfriend",
-          element:<AddFriend/>
-
+          path: "/addfriend",
+          element: <AddFriend />,
         },
         {
-          path:"/setting",
-          element:<Setting/>
-
+          path: "/setting",
+          element: <Setting />,
         },
         {
-          path:"/logout",
-          element:<Logout/>
-
+          path: "/profile",
+          element: <Profile />,
+        },
+        {
+          path: "/logout",
+          element: <Logout />,
         },
       ],
     },
@@ -56,11 +56,11 @@ const App = () => {
       element: <SignIn />,
     },
 
-
     {
       path: "/signup",
       element: <SignUp />,
     },
+
     {
       path: "*",
       element: <NotFound />,

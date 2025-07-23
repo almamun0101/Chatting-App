@@ -1,34 +1,27 @@
-import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database";
-import React, { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaShare } from "react-icons/fa";
-import date from "./date";
 import useFirebaseData from "./useFirebaseData";
+import { useLocation } from "react-router";
+import moment from "moment";
 
-const Profile = ({ userData }) => {
-  const auth = getAuth();
-  const db = getDatabase();
-  const nowTime = date();
-  // const [timeline, setTimeline] = useState([]);
-
+const Profile = () => {
+  const location = useLocation();
+  const { userData } = location.state || {};
   const allUsers = useFirebaseData("userslist/");
   const allFeeds = useFirebaseData("feeds/");
   const allFriends = useFirebaseData("friendsList/");
-
   const getUser = (uid) => allUsers.find((user) => user?.uid === uid);
-  const getFriends = () => allFriends.filter((user) => user?.uid.includes(userData));
+  const getFriends = () =>
+    allFriends.filter((user) => user?.uid.includes(userData));
   const getPost = () => allFeeds.filter((user) => user?.postBy === userData);
   const timeline = getPost();
   const myFriends = getFriends();
   const currentUser = getUser(userData);
-  console.log(getFriends())
 
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
       {/* Profile Header */}
       <div className="bg-white flex items-center justify-center p-5 lg:p-5 rounded-b-full shadow-md border-b-4 border-cyan-300">
-       
         <div className="flex flex-col md:flex-row items-center gap-6">
           <img
             src={currentUser?.img}
@@ -43,11 +36,15 @@ const Profile = ({ userData }) => {
             <p className="text-gray-500 mb-2">{currentUser?.email}</p>
             <div className="flex justify-center md:justify-start gap-8">
               <div className="text-center">
-                <h3 className="text-xl font-bold text-gray-700">{timeline?.length || 0}</h3>
+                <h3 className="text-xl font-bold text-gray-700">
+                  {timeline?.length || 0}
+                </h3>
                 <p className="text-cyan-500">Posts</p>
               </div>
               <div className="text-center">
-                <h3 className="text-xl font-bold text-gray-700">{myFriends?.length}</h3>
+                <h3 className="text-xl font-bold text-gray-700">
+                  {myFriends?.length}
+                </h3>
                 <p className="text-cyan-500">Friends</p>
               </div>
             </div>
@@ -74,9 +71,9 @@ const Profile = ({ userData }) => {
                 />
                 <div>
                   <h4 className="font-semibold text-gray-700">{user.name}</h4>
-                  <p className="text-xs text-gray-400">{p.time}</p>
-                  {/* {console.log(userUid(p.id))} */}
-                  {/* {userUid} */}
+                  <p className="text-xs text-gray-400">
+                    {moment(p.time, "YYYYMMDD").fromNow()}
+                  </p>
                 </div>
               </div>
 
@@ -101,7 +98,6 @@ const Profile = ({ userData }) => {
           );
         })}
 
-        {/* Add more posts with map() or component */}
       </div>
     </div>
   );

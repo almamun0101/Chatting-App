@@ -3,12 +3,14 @@ import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import useFirebaseData from "./useFirebaseData";
-import date from "./date"
+import date from "./date";
+import { useNavigate } from "react-router";
 
 const UserList = () => {
   const db = getDatabase();
   const auth = getAuth();
   const nowTime = date();
+  const navigate = useNavigate();
   const [userList, setUserList] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
 
@@ -53,7 +55,7 @@ const UserList = () => {
       senderName: auth.currentUser.displayName,
       receiver: user.uid,
       receiverName: user.name,
-      date : nowTime,
+      date: nowTime,
     };
     const requestExists = allRequest?.some((item) => item.uid === key);
     if (!requestExists) {
@@ -63,8 +65,8 @@ const UserList = () => {
             id: user.uid,
             notifi: auth.currentUser.displayName,
             type: "SentRequest",
-            date:nowTime,
-            read:"unread"
+            date: nowTime,
+            read: "unread",
           };
           set(push(ref(db, `notification/`)), notifiData)
             .then(() => console.log())
@@ -114,13 +116,18 @@ const UserList = () => {
       !isBlock(user.uid)
   );
 
+  const handleUserProfile = (clickUser) => {
+    navigate("/profile", { state: { userData: clickUser.uid } });
+  };
+
   return (
     <div className="mx-auto w-full">
-         <ul className="space-y-4">
+      <ul className="space-y-4">
         <Toaster position="bottom-center" reverseOrder={false} />
         {filteredUsers.map((user) => (
           <li
             key={user.uid}
+            onClick={() => handleUserProfile(user)}
             className="flex items-center bg-white shadow rounded-lg py-4 px-2 hover:bg-gray-50 transition justify-between"
           >
             <div className="flex items-center">
@@ -140,7 +147,6 @@ const UserList = () => {
                 onClick={() => addFriend(user)}
                 className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm"
               >
-              
                 Add Friend
               </button>
             </div>
