@@ -102,13 +102,17 @@ const Sidebar = () => {
 
     const hasNotifi = notifi?.some((n)=>(n.id===auth.currentUser.uid) && (n.read === "unread"))
    
-    
+    const hanldeProfile = (data)=>{
+       navigate("/profile", { state: { userData: data.uid } });
+      // console.log(data)
+    }
 
   return (
     <div className="flex">
       <div className="bg-gradient-to-br from-teal-500 via-cyan-400 to-blue-500 h-screen w-20 lg:w-64 shadow-2xl text-white py-5 flex flex-col items-center  transition-all duration-300">
         <div className="flex flex-col items-center mb-8 ">
           <img
+          onClick={()=>hanldeProfile(data)}
             src={data.img ? data.img : "/avater.png"}
             alt="avatar"
             className="w-12 h-12 lg:w-20 lg:h-20 rounded-full object-cover ring-4 ring-white hover:scale-105 duration-300"

@@ -85,22 +85,22 @@ const Post = () => {
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-[#f1f5f9] to-[#e2e8f0] flex flex-col lg:flex-row px-4 pt-3 gap-6">
       {/* Main Feed Section */}
-      <div className="lg:w-2/3 w-full space-y-2">
+      <div className="lg:w-2/3 w-full space-y-4">
         {/* Create Post */}
-        <div className="flex items-center flex-row gap-5 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-2">
-          <h2 className="text-sm font-semibold text-gray-800">Create Post</h2>
+        <div className="flex flex-row items-center gap-3 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-4">
+          <h2 className="text-lg font-semibold text-gray-800">Create a Post</h2>
           <textarea
             value={postInput}
             onChange={(e) => setPostInput(e.target.value)}
             placeholder="What's on your mind?"
             rows={2}
-            className="w-full border border-gray-300 rounded-xl p-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white bg-opacity-80"
+            className="w-full border border-gray-300 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white bg-opacity-80"
           />
           <div className="text-right">
             <button
               onClick={handlePost}
               disabled={!postInput.trim()}
-              className={`bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-1 rounded-full font-medium transition ${
+              className={`bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-2 rounded-full font-medium transition ${
                 !postInput.trim()
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:from-indigo-600 hover:to-purple-600"
@@ -112,7 +112,7 @@ const Post = () => {
         </div>
 
         {/* Feed List */}
-        <div className="space-y-2 max-h-[78vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-indigo-300">
+        <div className="space-y-4 max-h-[78vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-indigo-300">
           {allFeeds.length === 0 ? (
             <p className="text-center text-gray-500 text-sm">No posts yet</p>
           ) : (
@@ -125,7 +125,7 @@ const Post = () => {
                 return (
                   <div
                     key={index}
-                    className="bg-white p-3 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition"
+                    className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition"
                   >
                     {/* Post Header */}
                     <div className="flex items-center gap-4 mb-3">

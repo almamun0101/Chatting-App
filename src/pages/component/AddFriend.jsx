@@ -23,8 +23,7 @@ const AddFriend = () => {
   const [loading, setLoading] = useState(true);
   const allUser = useFirebaseData("userslist/");
 
-  const generateKey = (uid1, uid2) =>
-    uid1 < uid2 ? uid1 + uid2 : uid2 + uid1;
+  const generateKey = (uid1, uid2) => (uid1 < uid2 ? uid1 + uid2 : uid2 + uid1);
 
   useEffect(() => {
     const dataFetch = ref(db, "friendRequest/");
@@ -90,8 +89,7 @@ const AddFriend = () => {
   const renderRequestCard = (user, status) => {
     const request = getRequest(user);
     const dateText =
-      request?.date &&
-      moment(request.date, "YYYYMMDD, h:mm").isValid()
+      request?.date && moment(request.date, "YYYYMMDD, h:mm").isValid()
         ? moment(request.date, "YYYYMMDD, h:mm").fromNow()
         : "Time not available";
 
@@ -149,9 +147,7 @@ const AddFriend = () => {
             <p className="text-gray-400 text-sm">Loading...</p>
           ) : sentRequests.length > 0 ? (
             <div className="space-y-4">
-              {sentRequests.map((user) =>
-                renderRequestCard(user, "sent")
-              )}
+              {sentRequests.map((user) => renderRequestCard(user, "sent"))}
             </div>
           ) : (
             <p className="text-gray-500">No sent requests</p>
