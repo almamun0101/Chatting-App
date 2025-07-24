@@ -48,7 +48,7 @@ const Notifications = () => {
   };
 
   return (
-    <div className="flex justify-center py-10 px-4  h-full">
+    <div className="flex justify-center py-10 px-2 lg:px-5  h-full">
       <div className="w-full max-w-2xl  overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <h1 className="text-xl font-semibold">Notifications</h1>

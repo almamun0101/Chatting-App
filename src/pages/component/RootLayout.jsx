@@ -10,7 +10,7 @@ const RootLayout = () => {
         <div className="">
           <Sidebar />
         </div>
-        <div className="w-full">
+        <div className="md:pl-22 lg:pl-54  w-full h-screen">
           <Outlet />
         </div>
       </div>

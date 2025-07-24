@@ -90,7 +90,7 @@ const FriendsList = () => {
               friends.map((user) => (
                 <div
                   key={user.uid}
-                  className="flex flex-col sm:flex-row lg:flex-row w-full items-center justify-between bg-gray-50 rounded-lg p-3 hover:shadow-md transition"
+                  className="flex gap-2 flex-col sm:flex-row lg:flex-row w-full items-center justify-between bg-gray-50 rounded-lg px-2 py-1 hover:shadow-md transition"
                 >
                   <div className="flex items-center w-full">
                     <img

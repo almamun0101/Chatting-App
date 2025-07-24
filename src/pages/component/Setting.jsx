@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { getAuth, updateProfile } from "firebase/auth";
 import { getDatabase, ref, update } from "firebase/database";
+import Logout from "../Logout";
 
 const Setting = () => {
   const auth = getAuth();
@@ -58,30 +59,7 @@ const Setting = () => {
               value={userName}
             />
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2 font-medium">
-              Update Name
-            </label>
-            <input
-              onChange={handleUserName}
-              type="text"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              placeholder={data.name}
-              value={userName}
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2 font-medium">
-              Update Name
-            </label>
-            <input
-              onChange={handleUserName}
-              type="text"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              placeholder={data.name}
-              value={userName}
-            />
-          </div>
+         
 
           <button
             onClick={handleUpdateProfile}
@@ -91,6 +69,7 @@ const Setting = () => {
           </button>
         </div>
 
+        <Logout/>
         {successMsg && (
           <p className="mt-4 text-green-600 text-center font-medium transition">
             {successMsg}

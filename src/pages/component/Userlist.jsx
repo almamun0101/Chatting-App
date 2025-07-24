@@ -122,7 +122,7 @@ const UserList = () => {
 
   return (
     <div className="mx-auto w-full">
-     <h2 className="text-xl font-bold mb-4 text-gray-800">Suggestion</h2>
+     <h2 className="text-xl font-bold py-2 text-gray-800">Suggestion</h2>
             <ul className="space-y-2">
         <Toaster position="bottom-center" reverseOrder={false} />
         {filteredUsers.map((user) => (
@@ -131,23 +131,23 @@ const UserList = () => {
             onClick={() => handleUserProfile(user)}
             className="flex items-center bg-white shadow rounded-lg py-4 px-2 hover:bg-gray-50 transition justify-between"
           >
-            <div className="flex items-center p-1">
+            <div className="flex items-center">
               <img
                 src={user.img}
                 alt={user.name}
-                className="w-12 h-12 rounded-full object-cover mr-4"
+                className="w-12 h-12 rounded-full object-cover mr-2"
               />
               <div>
-                <p className="font-semibold text-lg">{user.name}</p>
+                <p className="font-semibold text-base lg:text-lg">{user.name}</p>
               </div>
             </div>
 
             <div className="flex gap-2">
               <button
                 onClick={() => addFriend(user)}
-                className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm"
+                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
               >
-                Add Friend
+                Add 
               </button>
             </div>
           </li>

@@ -98,7 +98,7 @@ const AddFriend = () => {
     return (
       <div
         key={user.uid}
-        className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-2 shadow-sm hover:shadow-md transition duration-300"
+        className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl p-2 shadow-sm hover:shadow-md transition duration-300"
       >
         <img
           src={user.img || "https://via.placeholder.com/150"}
@@ -107,10 +107,10 @@ const AddFriend = () => {
         />
         <div className="flex-1">
           <h2 className="font-semibold text-lg text-gray-800">{user.name}</h2>
-          <p className="text-gray-500 text-sm">{user.email}</p>
+          <p className="text-gray-500 text-xs">{user.email}</p>
           
         </div>
-        <div className="flex flex-col gap-2 min-w-[80px]">
+        <div className="flex flex-col gap-2">
           {status === "sent" && (
             <button
               onClick={() => handleCancelRequest(user.uid)}
@@ -136,7 +136,7 @@ const AddFriend = () => {
   return (
     <div className="min-h-screen p-4 md:p-8 bg-gray-100">
       {/* Mobile tab buttons */}
-      <div className="flex gap-2 mb-4 lg:hidden">
+      <div className="flex gap-2 lg:mb-5 lg:hidden">
         <button
           onClick={() => setView("Sug")}
           className={`border rounded-2xl p-2 ${view === "Sug" ? "bg-gray-300" : ""}`}
@@ -158,10 +158,10 @@ const AddFriend = () => {
       </div>
 
       {/* Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 h-[80vh]">
+      <div className="grid grid-cols-1 lg:grid-cols-3 h-[80vh]">
         {/* Suggestion Panel */}
         {(view === "Sug" || !["sent", "rec"].includes(view)) && (
-          <div className="col-span-  p-1 h-fit">
+          <div className="">
             <UserList />
           </div>
         )}
@@ -169,7 +169,7 @@ const AddFriend = () => {
         {/* Sent Requests Panel */}
         {(view === "sent" || view === "Sug") && (
           <div className="col-span-1  p-1 ">
-            <h2 className="text-xl font-bold mb-4 text-gray-800">Sent Requests</h2>
+            <h2 className="text-xl font-bold mb-2 lg:mb-4 text-gray-800">Sent Requests</h2>
             {loading ? (
               <p className="text-gray-400 text-sm">Loading...</p>
             ) : sentRequests.length > 0 ? (
@@ -185,7 +185,7 @@ const AddFriend = () => {
         {/* Received Requests Panel */}
         {(view === "rec" || view === "Sug") && (
           <div className="col-span-1 ">
-            <h2 className="text-xl font-bold mb-4 text-gray-800">Received Requests</h2>
+            <h2 className="text-xl font-bold mb-2 lg:mb-4 text-gray-800">Received Requests</h2>
             {loading ? (
               <p className="text-gray-400 text-sm">Loading...</p>
             ) : receivedRequests.length > 0 ? (
