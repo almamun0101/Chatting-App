@@ -3,8 +3,11 @@ import { FaShare } from "react-icons/fa";
 import useFirebaseData from "./useFirebaseData";
 import { useLocation } from "react-router";
 import moment from "moment";
+import { getAuth } from "firebase/auth";
+import { h2 } from "framer-motion/m";
 
 const Profile = () => {
+  const auth = getAuth();
   const location = useLocation();
   const { userData } = location.state || {};
   const allUsers = useFirebaseData("userslist/");
@@ -17,7 +20,16 @@ const Profile = () => {
   const timeline = getPost();
   const myFriends = getFriends();
   const currentUser = getUser(userData);
+  const isFriend = (userId) => {
+    return allFriends.some(
+      (friend) =>
+        (friend.sender === auth.currentUser.uid &&
+          friend.receiver === userId) ||
+        (friend.receiver === auth.currentUser.uid && friend.sender === userId)
+    );
+  };
 
+  const friend = isFriend(userData);
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
       {/* Profile Header */}
@@ -28,11 +40,12 @@ const Profile = () => {
             alt="Avatar"
             className="w-22 h-22 rounded-full object-cover ring-4 ring-cyan-300"
           />
-
+  
           <div className="text-center md:text-left">
             <h2 className="text-2xl font-bold text-gray-700">
               {currentUser?.name}
             </h2>
+               <button className="text-sm px-5"> Edit </button>
             <p className="text-gray-500 mb-2">{currentUser?.email}</p>
             <div className="flex justify-center md:justify-start gap-8">
               <div className="text-center">
@@ -51,7 +64,10 @@ const Profile = () => {
           </div>
         </div>
       </div>
-
+      <div className="bg-white w-xl mx-auto mt-2 border rounded-xl shadow-lg p-6 transition hover:shadow-xl  ">
+        {friend && <h2>Hi</h2>}
+      </div>
+      {}
       {/* Posts */}
       <div className="px-6 max-w-3xl mx-auto space-y-5 h-[60vh] lg:h-[70vh] overflow-auto mt-2 lg:mt-5">
         {timeline.reverse().map((p) => {
@@ -97,7 +113,6 @@ const Profile = () => {
             </div>
           );
         })}
-
       </div>
     </div>
   );

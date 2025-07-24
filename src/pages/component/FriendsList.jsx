@@ -77,6 +77,9 @@ const FriendsList = () => {
     dispatch(chattingInfo(getUid));
     console.log(getUid)
   }
+  const handleUserProfile = (clickUser) => {
+    navigate("/profile", { state: { userData: clickUser.uid } });
+  };
  
 
   return (
@@ -90,6 +93,7 @@ const FriendsList = () => {
               friends.map((user) => (
                 <div
                   key={user.uid}
+                  onClick={()=>handleUserProfile(user)}
                   className="flex gap-2 flex-col sm:flex-row lg:flex-row w-full items-center justify-between bg-gray-50 rounded-lg px-2 py-1 hover:shadow-md transition"
                 >
                   <div className="flex items-center w-full">
