@@ -19,8 +19,10 @@ const AddFriend = () => {
   const auth = getAuth();
   const nowTime = date();
 
+  const [view, setView] = useState("Sug"); // default: Suggestion
   const [requestList, setRequestList] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const allUser = useFirebaseData("userslist/");
 
   const generateKey = (uid1, uid2) => (uid1 < uid2 ? uid1 + uid2 : uid2 + uid1);
@@ -96,17 +98,17 @@ const AddFriend = () => {
     return (
       <div
         key={user.uid}
-        className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition duration-300"
+        className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-2 shadow-sm hover:shadow-md transition duration-300"
       >
         <img
           src={user.img || "https://via.placeholder.com/150"}
           alt={user.name}
-          className="w-14 h-14 rounded-full object-cover"
+          className="w-12 h-12 rounded-full object-cover"
         />
         <div className="flex-1">
           <h2 className="font-semibold text-lg text-gray-800">{user.name}</h2>
           <p className="text-gray-500 text-sm">{user.email}</p>
-          <p className="text-gray-400 text-xs mt-1">{dateText}</p>
+          
         </div>
         <div className="flex flex-col gap-2 min-w-[80px]">
           {status === "sent" && (
@@ -125,6 +127,7 @@ const AddFriend = () => {
               Accept
             </button>
           )}
+          <p className="text-gray-400 text-xs mt-1">{dateText}</p>
         </div>
       </div>
     );
@@ -132,45 +135,68 @@ const AddFriend = () => {
 
   return (
     <div className="min-h-screen p-4 md:p-8 bg-gray-100">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* User list sidebar */}
-        <div className="col-span-1 bg-white rounded-xl shadow-md p-5 h-fit">
-          <UserList />
-        </div>
+      {/* Mobile tab buttons */}
+      <div className="flex gap-2 mb-4 lg:hidden">
+        <button
+          onClick={() => setView("Sug")}
+          className={`border rounded-2xl p-2 ${view === "Sug" ? "bg-gray-300" : ""}`}
+        >
+          Suggestion
+        </button>
+        <button
+          onClick={() => setView("sent")}
+          className={`border rounded-2xl p-2 ${view === "sent" ? "bg-gray-300" : ""}`}
+        >
+          Sent
+        </button>
+        <button
+          onClick={() => setView("rec")}
+          className={`border rounded-2xl p-2 ${view === "rec" ? "bg-gray-300" : ""}`}
+        >
+          Received
+        </button>
+      </div>
 
-        {/* Sent Requests */}
-        <div className="col-span-1 bg-white rounded-xl shadow-md p-5 max-h-[75vh] overflow-y-auto">
-          <h2 className="text-xl font-bold mb-4 text-gray-800">
-            Sent Requests
-          </h2>
-          {loading ? (
-            <p className="text-gray-400 text-sm">Loading...</p>
-          ) : sentRequests.length > 0 ? (
-            <div className="space-y-4">
-              {sentRequests.map((user) => renderRequestCard(user, "sent"))}
-            </div>
-          ) : (
-            <p className="text-gray-500">No sent requests</p>
-          )}
-        </div>
+      {/* Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 h-[80vh]">
+        {/* Suggestion Panel */}
+        {(view === "Sug" || !["sent", "rec"].includes(view)) && (
+          <div className="col-span-  p-1 h-fit">
+            <UserList />
+          </div>
+        )}
 
-        {/* Received Requests */}
-        <div className="col-span-1 bg-white rounded-xl shadow-md p-5 max-h-[75vh] overflow-y-auto">
-          <h2 className="text-xl font-bold mb-4 text-gray-800">
-            Received Requests
-          </h2>
-          {loading ? (
-            <p className="text-gray-400 text-sm">Loading...</p>
-          ) : receivedRequests.length > 0 ? (
-            <div className="space-y-4">
-              {receivedRequests.map((user) =>
-                renderRequestCard(user, "received")
-              )}
-            </div>
-          ) : (
-            <p className="text-gray-500">No received requests</p>
-          )}
-        </div>
+        {/* Sent Requests Panel */}
+        {(view === "sent" || view === "Sug") && (
+          <div className="col-span-1  p-1 ">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">Sent Requests</h2>
+            {loading ? (
+              <p className="text-gray-400 text-sm">Loading...</p>
+            ) : sentRequests.length > 0 ? (
+              <div className="space-y-1">
+                {sentRequests.map((user) => renderRequestCard(user, "sent"))}
+              </div>
+            ) : (
+              <p className="text-gray-500">No sent requests</p>
+            )}
+          </div>
+        )}
+
+        {/* Received Requests Panel */}
+        {(view === "rec" || view === "Sug") && (
+          <div className="col-span-1  p-4">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">Received Requests</h2>
+            {loading ? (
+              <p className="text-gray-400 text-sm">Loading...</p>
+            ) : receivedRequests.length > 0 ? (
+              <div className="space-y-1">
+                {receivedRequests.map((user) => renderRequestCard(user, "received"))}
+              </div>
+            ) : (
+              <p className="text-gray-500">No received requests</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

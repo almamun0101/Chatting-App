@@ -122,7 +122,7 @@ const UserList = () => {
 
   return (
     <div className="mx-auto w-full">
-      <ul className="space-y-4">
+      <ul className="space-y-1">
         <Toaster position="bottom-center" reverseOrder={false} />
         {filteredUsers.map((user) => (
           <li
@@ -138,7 +138,7 @@ const UserList = () => {
               />
               <div>
                 <p className="font-semibold text-lg">{user.name}</p>
-                <p className="text-gray-500 text-sm">{user.email}</p>
+                <p className="text-gray-500 text-xs">{user.email}</p>
               </div>
             </div>
 
