@@ -80,19 +80,19 @@ const FriendsList = () => {
  
 
   return (
-    <div className="h-full ">
-      <div className="h-full grid gap-6 grid-cols-1 lg:grid-cols-2">
+    <div className="h-screen p-2">
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
         {/* Friend List */}
-        <div className="bg-white  p-5 flex flex-col h-full">
+        <div className="bg-white rounded-2xl shadow-lg p-4 flex flex-col h-full">
           <h2 className="text-xl font-bold mb-4 text-blue-600">Friends</h2>
           <div className="overflow-y-auto space-y-4 flex-1">
             {friends.length ? (
               friends.map((user) => (
                 <div
                   key={user.uid}
-                  className="flex items-center justify-between bg-gray-50 rounded-lg p-3 hover:shadow-md transition"
+                  className="flex flex-col sm:flex-row lg:flex-row w-full items-center justify-between bg-gray-50 rounded-lg p-3 hover:shadow-md transition"
                 >
-                  <div className="flex items-center">
+                  <div className="flex items-center w-full">
                     <img
                       src={user.img}
                       alt={user.name}
@@ -103,7 +103,7 @@ const FriendsList = () => {
                       <p className="text-sm text-gray-500">{user.email}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 ">
                     <button
                       onClick={() => handleMessage(user)}
                       className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-xs"
@@ -132,7 +132,7 @@ const FriendsList = () => {
         </div>
 
         {/* Block List */}
-        <div className="bg-white rounded-xl shadow-lg p-5 flex flex-col  h-full ">
+        <div className="bg-white rounded-xl shadow-lg p-4 flex flex-col  h-full ">
           <h2 className="text-xl font-bold mb-4 text-blue-600">Blocked Users</h2>
           <div className="overflow-y-auto space-y-4 flex-1">
             {blockedUsers.length ? (

@@ -75,119 +75,132 @@ export default function MessagingUI() {
   }, [messages, activeFriend]);
 
   return (
-   // Inside return()
-<div className="rounded-2xl flex flex-col lg:flex-row h-full overflow-hidden bg-gradient-to-br from-teal-100 via-cyan-100 to-white shadow-lg">
-  {/* Sidebar */}
-  <div className="lg:w-1/3 w-full bg-white bg-opacity-90 py-5 border-r border-cyan-200 shadow-inner overflow-y-auto max-h-60vh lg:max-h-full">
-    <div className="flex px-5 items-center justify-between mb-5">
-      <h2 className="text-xl lg:text-2xl font-semibold text-teal-800 tracking-wide">
-        Friends
-      </h2>
-      <button
-        aria-label="Search friends"
-        className="p-2 rounded-full hover:bg-cyan-100 transition-colors"
-      >
-        <FiSearch className="text-teal-700 w-5 h-5 lg:w-6 lg:h-6" />
-      </button>
-    </div>
-    <ul className="space-y-4 px-3">
-      {friends.length === 0 ? (
-        <p className="text-gray-500 italic">No friends found</p>
-      ) : (
-        friends.map((friend) => (
-          <li
-            key={friend.uid}
-            onClick={() => handleActive(friend)}
-            className={`flex items-center cursor-pointer py-2 px-3 rounded-lg transition-colors
-              ${
-                activeFriend?.uid === friend.uid
-                  ? "bg-cyan-100 shadow-md ring-2 ring-teal-200"
-                  : "hover:bg-cyan-50"
-              }`}
+    // Inside return()
+    <div className="rounded-2xl flex flex-col lg:flex-row h-full overflow-hidden bg-gradient-to-br from-teal-100 via-cyan-100 to-white shadow-lg">
+      {/* Sidebar */}
+      <div className="lg:w-2/7  bg-white bg-opacity-90 py-5 border-r border-cyan-200 shadow-inner overflow-y-auto max-h-60vh lg:max-h-full">
+        <div className="flex px-5 items-center justify-between mb-5">
+          <h2 className="text-xl lg:text-2xl font-semibold text-teal-800 tracking-wide">
+            Friends
+          </h2>
+          <button
+            aria-label="Search friends"
+            className="p-2 rounded-full hover:bg-cyan-100 transition-colors"
           >
-            <img
-              src={friend.img || "https://via.placeholder.com/40"}
-              alt={friend.name}
-              className="w-10 h-10 lg:w-12 lg:h-12 rounded-full mr-3 border-2 border-cyan-300"
-            />
-            <p className="text-teal-900 font-medium truncate">
-              {friend.name}
-            </p>
-          </li>
-        ))
-      )}
-    </ul>
-  </div>
-
-  {/* Chat Area */}
-  <div className="flex flex-col flex-1 bg-white bg-opacity-90 pb-5">
-    <h2 className="text-lg lg:text-2xl font-semibold text-teal-900 p-3 select-none truncate">
-      {friends.length && activeFriend
-        ? activeFriend.name
-        : "Select a friend to start chatting"}
-    </h2>
-
-    <div className="flex-1 rounded-2xl bg-cyan-100 overflow-y-auto pl-2 pt-5 pr-4 space-y-2 max-h-[60vh] lg:max-h-full">
-      {friends.length > 0 && activeFriend ? (
-        messages
-          .filter(
-            (msg) =>
-              (msg.receiver === activeFriend.uid &&
-                msg.sender === auth.currentUser.uid) ||
-              (msg.sender === activeFriend.uid &&
-                msg.receiver === auth.currentUser.uid)
-          )
-          .map((msg, idx) => (
-            <div
-              key={idx}
-              className={`flex ${
-                msg.sender === auth.currentUser.uid
-                  ? "justify-end"
-                  : "justify-start"
-              }`}
-            >
-              <div
-                className={`px-5 py-2 rounded-3xl max-w-[80%] md:max-w-lg shadow ${
-                  msg.sender === auth.currentUser.uid
-                    ? "bg-gradient-to-tr from-teal-600 to-cyan-600 text-white text-right"
-                    : "bg-white text-gray-900 text-left"
-                }`}
-                style={{ wordBreak: "break-word" }}
+            <FiSearch className="text-teal-700 w-5 h-5 lg:w-6 lg:h-6" />
+          </button>
+        </div>
+        <ul className="space-y-4 px-3 flex lg:flex-col gap-2 ">
+          {friends.length === 0 ? (
+            <li>
+              <p className="text-gray-500 italic text-center">
+                No friends found
+              </p>
+            </li>
+          ) : (
+            friends.map((friend) => (
+              <li
+                key={friend.uid}
+                onClick={() => handleActive(friend)}
+                className={`flex h-20 items-center gap-4 cursor-pointer py-2 px-3 rounded-xl transition-colors 
+          ${
+            activeFriend?.uid === friend.uid
+              ? "bg-cyan-100 shadow-md ring-2 ring-teal-200"
+              : "hover:bg-cyan-50"
+          }`}
               >
-                <p className="text-sm md:text-base font-medium">{msg.messages}</p>
-                <p className="text-[10px] pt-1 opacity-50">
-                  {moment(msg.date, "YYYYMMDD,h:mm").fromNow()}
-                </p>
-              </div>
-            </div>
-          ))
-      ) : (
-        <p className="text-gray-500 italic pl-3">No messages yet</p>
-      )}
-      <div ref={messagesEndRef} />
-    </div>
+                <div className="flex flex-col lg:flex-row lg:gap-3 items-center">
+                  
+                    <img
+                      src={friend.img || "https://via.placeholder.com/40"}
+                      alt={friend.name}
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-cyan-300 object-cover"
+                    />
 
-    {/* Input */}
-    <div className="flex mt-2 bg-white rounded-full border border-cyan-300 shadow-sm p-2 mx-2">
-      <input
-        type="text"
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-        onKeyDown={handleKeyDown}
-        className="flex-1 bg-transparent focus:outline-none px-4 text-teal-900 placeholder-teal-400 text-sm md:text-base"
-        placeholder="Type your message..."
-        disabled={!activeFriend}
-      />
-      <button
-        onClick={handleSend}
-        disabled={!activeFriend}
-        className="ml-2 md:ml-3 bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-500 hover:from-teal-700 hover:to-cyan-700 text-white px-4 md:px-6 py-2 rounded-full font-semibold transition disabled:opacity-50 text-sm md:text-base"
-      >
-        Send
-      </button>
-    </div>
-  </div>
-</div>
+              
+                 
+                      <p className="text-teal-900 font-medium text-sm sm:text-base truncate">
+                        {friend.name}
+                      </p>
+                    
+                </div>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
 
+      {/* Chat Area */}
+      <div className="flex flex-col flex-1 bg-white bg-opacity-90 pb-5">
+        <h2 className="text-lg lg:text-2xl font-semibold text-teal-900 p-3 select-none truncate">
+          {friends.length && activeFriend
+            ? activeFriend.name
+            : "Select a friend to start chatting"}
+        </h2>
+
+        <div className="flex-1 rounded-2xl bg-cyan-100 overflow-y-auto pl-2 pt-5 pr-4 space-y-2 max-h-[60vh] lg:max-h-full">
+          {friends.length > 0 && activeFriend ? (
+            messages
+              .filter(
+                (msg) =>
+                  (msg.receiver === activeFriend.uid &&
+                    msg.sender === auth.currentUser.uid) ||
+                  (msg.sender === activeFriend.uid &&
+                    msg.receiver === auth.currentUser.uid)
+              )
+              .map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`flex ${
+                    msg.sender === auth.currentUser.uid
+                      ? "justify-end"
+                      : "justify-start"
+                  }`}
+                >
+                  <div
+                    className={`px-5 py-2 rounded-3xl max-w-[80%] md:max-w-lg shadow ${
+                      msg.sender === auth.currentUser.uid
+                        ? "bg-gradient-to-tr from-teal-600 to-cyan-600 text-white text-right"
+                        : "bg-white text-gray-900 text-left"
+                    }`}
+                    style={{ wordBreak: "break-word" }}
+                  >
+                    <p className="text-sm md:text-base font-medium">
+                      {msg.messages}
+                    </p>
+                    <p className="text-[10px] pt-1 opacity-50">
+                      {moment(msg.date, "YYYYMMDD,h:mm").fromNow()}
+                    </p>
+                    {console.log(messages?.length ? messages.length : 0)}
+                  </div>
+                </div>
+              ))
+          ) : (
+            <p className="text-gray-500 italic pl-3">No messages yet</p>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Input */}
+        <div className="flex mt-2 bg-white rounded-full border border-cyan-300 shadow-sm p-2 mx-2">
+          <input
+            type="text"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="flex-1 bg-transparent focus:outline-none px-4 text-teal-900 placeholder-teal-400 text-sm md:text-base"
+            placeholder="Type your message..."
+            disabled={!activeFriend}
+          />
+          <button
+            onClick={handleSend}
+            disabled={!activeFriend}
+            className="ml-2 md:ml-3 bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-500 hover:from-teal-700 hover:to-cyan-700 text-white px-4 md:px-6 py-2 rounded-full font-semibold transition disabled:opacity-50 text-sm md:text-base"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

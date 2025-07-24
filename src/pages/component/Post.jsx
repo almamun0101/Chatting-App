@@ -81,7 +81,7 @@ const Post = () => {
       {/* Main Feed Section */}
       <div className="lg:w-2/3 w-full space-y-4">
         {/* Create Post */}
-        <div className="flex  lg:flex-row items-center gap-3 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-2">
+        <div className="flex  lg:flex-row items-center gap-3 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-2 lg:p-5">
           <textarea
             value={postInput}
             onChange={(e) => setPostInput(e.target.value)}

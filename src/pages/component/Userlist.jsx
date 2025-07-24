@@ -122,7 +122,8 @@ const UserList = () => {
 
   return (
     <div className="mx-auto w-full">
-      <ul className="space-y-1">
+     <h2 className="text-xl font-bold mb-4 text-gray-800">Suggestion</h2>
+            <ul className="space-y-2">
         <Toaster position="bottom-center" reverseOrder={false} />
         {filteredUsers.map((user) => (
           <li
@@ -130,7 +131,7 @@ const UserList = () => {
             onClick={() => handleUserProfile(user)}
             className="flex items-center bg-white shadow rounded-lg py-4 px-2 hover:bg-gray-50 transition justify-between"
           >
-            <div className="flex items-center">
+            <div className="flex items-center p-1">
               <img
                 src={user.img}
                 alt={user.name}
