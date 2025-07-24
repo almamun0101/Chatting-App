@@ -1,11 +1,5 @@
 import { getAuth } from "firebase/auth";
-import {
-  getDatabase,
-  push,
-  ref,
-  update,
-  set,
-} from "firebase/database";
+import { getDatabase, push, ref, update, set } from "firebase/database";
 import React, { useState } from "react";
 import date from "./date";
 import useFirebaseData from "./useFirebaseData";
@@ -87,8 +81,7 @@ const Post = () => {
       {/* Main Feed Section */}
       <div className="lg:w-2/3 w-full space-y-4">
         {/* Create Post */}
-        <div className="flex flex-row items-center gap-3 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-4">
-          <h2 className="text-lg font-semibold text-gray-800">Create a Post</h2>
+        <div className="flex  lg:flex-row items-center gap-3 bg-gradient-to-br from-[#e0f2fe] via-[#f0f0ff] to-[#fef2f2] rounded-2xl shadow-md p-2">
           <textarea
             value={postInput}
             onChange={(e) => setPostInput(e.target.value)}
@@ -217,7 +210,9 @@ const Post = () => {
                                     {moment(c.time, "YYYYMMDD, h:mm").fromNow()}
                                   </span>
                                 </div>
-                                <p className="text-gray-700 text-[13px]">{c.text}</p>
+                                <p className="text-gray-700 text-[13px]">
+                                  {c.text}
+                                </p>
                               </div>
                             </div>
                           );

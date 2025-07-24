@@ -138,7 +138,6 @@ const UserList = () => {
               />
               <div>
                 <p className="font-semibold text-lg">{user.name}</p>
-                <p className="text-gray-500 text-xs">{user.email}</p>
               </div>
             </div>
 

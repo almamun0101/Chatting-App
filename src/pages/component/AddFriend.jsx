@@ -184,7 +184,7 @@ const AddFriend = () => {
 
         {/* Received Requests Panel */}
         {(view === "rec" || view === "Sug") && (
-          <div className="col-span-1  p-4">
+          <div className="col-span-1 ">
             <h2 className="text-xl font-bold mb-4 text-gray-800">Received Requests</h2>
             {loading ? (
               <p className="text-gray-400 text-sm">Loading...</p>

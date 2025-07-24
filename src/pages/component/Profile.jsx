@@ -53,7 +53,7 @@ const Profile = () => {
       </div>
 
       {/* Posts */}
-      <div className="px-6 py-10 max-w-3xl mx-auto space-y-8 h-[50vh] overflow-auto mt-4 lg:mt-10">
+      <div className="px-6 max-w-3xl mx-auto space-y-5 h-[60vh] lg:h-[70vh] overflow-auto mt-2 lg:mt-5">
         {timeline.reverse().map((p) => {
           const user = getUser(p.postBy);
 
