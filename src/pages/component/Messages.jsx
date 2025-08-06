@@ -77,8 +77,8 @@ export default function Messages() {
   return (
     <div className="rounded-2xl flex flex-col lg:flex-row h-full overflow-hidden bg-gradient-to-br from-teal-100 via-cyan-100 to-white shadow-lg">
       {/* Sidebar */}
-      <div className="lg:w-[28%] bg-white bg-opacity-90 py-2 border-r border-cyan-200 shadow-inner overflow-y-auto" style={{ maxHeight: "60vh", lg: { maxHeight: "100%" } }}>
-        <div className="flex px-5 items-center justify-between p-1">
+      <div className="lg:w-[28%] bg-white bg-opacity-90 py-2 border-r border-cyan-200 shadow-inner overflow-y-auto " >
+        <div className="flex px-5 items-center justify-between p-1 ">
           <h2 className="text-xl lg:text-2xl font-semibold text-teal-800 tracking-wide">
             Friends
           </h2>
@@ -89,7 +89,7 @@ export default function Messages() {
             <FiSearch className="text-teal-700 w-5 h-5 lg:w-6 lg:h-6" />
           </button>
         </div>
-        <ul className="px-3 flex lg:flex-col gap-2">
+        <ul className="px-3 flex lg:flex-col gap-2  ">
           {friends.length === 0 ? (
             <li>
               <p className="text-gray-500 italic text-center">
@@ -108,13 +108,13 @@ export default function Messages() {
                       : "hover:bg-cyan-50"
                   }`}
               >
-                <div className="flex flex-col lg:flex-row lg:gap-3 items-center">
+                <div className="flex flex-col lg:flex-row lg:gap-3 items-center ">
                   <img
                     src={friend.img || "https://via.placeholder.com/40"}
                     alt={friend.name}
                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-cyan-300 object-cover"
                   />
-                  <p className="text-teal-900 font-medium text-sm sm:text-base truncate">
+                  <p className="text-teal-900 font-medium text-sm sm:text-base truncate ">
                     {friend.name}
                   </p>
                 </div>
@@ -125,14 +125,14 @@ export default function Messages() {
       </div>
 
       {/* Chat Area */}
-      <div className="flex flex-col flex-1 px-2 pb-22 bg-white bg-opacity-90">
+      <div className="flex flex-col flex-1 px-2 pb-22 md:pb-10 bg-white bg-opacity-90">
         <h2 className="hidden lg:block text-lg lg:text-2xl font-semibold text-teal-900 p-3 select-none truncate">
           {friends.length && activeFriend
             ? activeFriend.name
             : "Select a friend to start chatting"}
         </h2>
 
-        <div className="flex-1 rounded-2xl bg-cyan-100 overflow-y-auto pl-2 pt-5 pr-4 space-y-2" style={{ maxHeight: "60vh" }}>
+        <div className="flex-1 rounded-2xl bg-cyan-100 overflow-y-auto pl-2 pt-5 pr-4 space-y-2 max-h-[60vh] md:max-h-full">
           {friends.length > 0 && activeFriend ? (
             messages
               .filter(
